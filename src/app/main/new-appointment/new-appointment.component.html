@@ -1,3 +1,14 @@
 @if (!appointmentType()) {
 <app-appointment-type (appointmentType)="appointmentType.set($event)"></app-appointment-type>
 }
+@switch (appointmentType()) {
+@case ('routine') {
+<p>Routine appointment</p>
+}
+@case ('emergency') {
+  <app-emergency></app-emergency>
+}
+@case ('psychologist') {
+<p>Psychologist appointment</p>
+}
+}
