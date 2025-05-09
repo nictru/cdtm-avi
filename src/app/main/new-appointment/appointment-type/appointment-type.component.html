@@ -1,0 +1,51 @@
+<div class="cards-container">
+  <div class="card" (click)="appointmentType.emit('routine')">
+    <div class="icon-container">
+      <i class="fas fa-calendar"></i>
+    </div>
+    <h2>Routine</h2>
+    <div class="card-content">
+      <p>Regular check-up appointment</p>
+    </div>
+  </div>
+
+  <div class="card" (click)="appointmentType.emit('psychologist')">
+    <div class="icon-container">
+      <i class="fas fa-brain"></i>
+    </div>
+    <h2>Psychologist</h2>
+    <div class="card-content">
+      <p>Mental health consultation</p>
+    </div>
+  </div>
+
+  <div class="card" (click)="appointmentType.emit('emergency')">
+    <div class="icon-container">
+      <i class="fas fa-ambulance"></i>
+    </div>
+    <h2>Emergency</h2>
+    <div class="card-content">
+      <p>Urgent medical attention needed</p>
+    </div>
+  </div>
+
+  <div class="card" (click)="appointmentType.emit('unwell')">
+    <div class="icon-container">
+      <i class="fas fa-thermometer"></i>
+    </div>
+    <h2>Unwell</h2>
+    <div class="card-content">
+      <p>Feeling sick or experiencing symptoms</p>
+    </div>
+  </div>
+
+  <div class="card" (click)="appointmentType.emit('specialist')">
+    <div class="icon-container">
+      <i class="fas fa-user-md"></i>
+    </div>
+    <h2>Specialist</h2>
+    <div class="card-content">
+      <p>Specialized medical consultation</p>
+    </div>
+  </div>
+</div>

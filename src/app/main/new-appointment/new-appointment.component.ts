@@ -1,11 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { AppointmentTypeComponent } from './appointment-type/appointment-type.component';
 
 @Component({
   selector: 'app-new-appointment',
-  imports: [],
+  imports: [AppointmentTypeComponent],
   templateUrl: './new-appointment.component.html',
-  styleUrl: './new-appointment.component.css'
+  styleUrl: './new-appointment.component.css',
 })
 export class NewAppointmentComponent {
-
+  appointmentType = signal<
+    | 'routine'
+    | 'psychologist'
+    | 'emergency'
+    | 'unwell'
+    | 'specialist'
+    | undefined
+  >(undefined);
 }

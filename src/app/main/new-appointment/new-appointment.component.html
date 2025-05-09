@@ -1,1 +1,3 @@
-<p>new-appointment works!</p>
+@if (!appointmentType()) {
+<app-appointment-type (appointmentType)="appointmentType.set($event)"></app-appointment-type>
+}
