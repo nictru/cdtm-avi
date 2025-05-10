@@ -1,13 +1,17 @@
 import { Component, computed, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { AppointmentTypeComponent } from './appointment-type/appointment-type.component';
 import { fields } from './questioning/fields';
 import { NgClass } from '@angular/common';
 import { TimePlacePickerComponent } from './time-place-picker/time-place-picker.component';
-
+import { ConfirmAppointmentComponent } from './confirm-appointment/confirm-appointment.component';
 @Component({
   selector: 'app-new-appointment',
-  imports: [AppointmentTypeComponent, NgClass, TimePlacePickerComponent],
+  imports: [
+    AppointmentTypeComponent,
+    NgClass,
+    TimePlacePickerComponent,
+    ConfirmAppointmentComponent,
+  ],
   templateUrl: './new-appointment.component.html',
   styleUrl: './new-appointment.component.css',
   standalone: true,
@@ -30,20 +34,26 @@ export class NewAppointmentComponent {
     | undefined
   >(undefined);
 
-  currentStep$ = computed<0 | 1 | 2 | 3>(() => {
+  // Signal for personal information step
+  personalInfo$ = signal<boolean>(false);
+
+  currentStep$ = computed<0 | 1 | 2 | 3 | 4>(() => {
     // Step 0: Reason for visit (appointmentType not selected)
     // Step 1: Date and time (appointmentType selected, but not yet date/time)
-    // Step 2: Personal information
-    // Step 3: Authentication
+    // Step 2: Confirm appointment
+    // Step 3: Personal information
+    // Step 4: Authentication
     if (!this.appointmentType$()) {
       return 0;
     }
     if (!this.appointmentInfo$()) {
       return 1;
     }
-    // You can expand this logic to check for other step completions
-    // For now, just move to step 1 if appointmentType is selected
-    return 2;
+    if (!this.personalInfo$()) {
+      return 2;
+    }
+    // Step 3 when personal info completed (for now we don't have the auth step yet)
+    return 3;
   });
 
   steps = [
@@ -61,6 +71,10 @@ export class NewAppointmentComponent {
       description: () => 'Choose your preferred date and time.',
     },
     {
+      label: 'Confirm appointment',
+      description: () => 'Review and confirm your appointment details.',
+    },
+    {
       label: 'Personal information',
       description: () => 'Enter your personal details.',
     },
@@ -74,10 +88,30 @@ export class NewAppointmentComponent {
     // Example: only allow going back to step 0 (reset appointmentType)
     if (step === 0) {
       this.appointmentType$.set(undefined);
+      this.appointmentInfo$.set(undefined);
+      this.personalInfo$.set(false);
     }
     if (step === 1) {
       this.appointmentInfo$.set(undefined);
+      this.personalInfo$.set(false);
+    }
+    if (step === 2) {
+      this.personalInfo$.set(false);
     }
     // Expand this as you add more step logic
+  }
+
+  confirmAppointment() {
+    // Move to the personal information step
+    this.personalInfo$.set(true);
+    console.log('Appointment confirmed! Moving to personal information step.', {
+      type: this.appointmentType$(),
+      info: this.appointmentInfo$(),
+    });
+  }
+
+  declineAppointment() {
+    // Reset appointment data and go back to date/time selection
+    this.goToStep(1);
   }
 }

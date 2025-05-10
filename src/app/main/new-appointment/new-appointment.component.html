@@ -49,4 +49,26 @@
   @if (currentStep$() === 1) {
   <app-time-place-picker (appointmentInfo)="appointmentInfo$.set($event)"></app-time-place-picker>
   }
+  @if (currentStep$() === 2) {
+  <app-confirm-appointment [appointmentType]="appointmentType$()" [appointmentInfo]="appointmentInfo$()"
+    (acceptAppointment)="confirmAppointment()" (declineAppointment)="declineAppointment()">
+  </app-confirm-appointment>
+  }
+  @if (currentStep$() === 3) {
+  <div class="personal-info-container">
+    <h2>Personal Information</h2>
+    <p>Please enter your personal details to complete the appointment booking.</p>
+
+    <!-- Placeholder for personal information form -->
+    <div class="form-placeholder">
+      <p>Personal information form would go here.</p>
+      <!-- This would be replaced with an actual form component -->
+    </div>
+
+    <div class="action-buttons">
+      <button class="back-btn" (click)="goToStep(2)">Back</button>
+      <button class="continue-btn">Complete Booking</button>
+    </div>
+  </div>
+  }
 </div>

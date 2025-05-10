@@ -1,0 +1,60 @@
+<div class="confirm-container">
+    <h2>Please Confirm Your Appointment</h2>
+
+    <div class="appointment-details">
+        <div class="appointment-type-section">
+            <h3>Reason for Visit</h3>
+            <div class="info-card">
+                @if (appointmentType(); as appointmentType) {
+                <div class="icon-container">
+                    <i class="fas" [ngClass]="getAppointmentTypeIcon(appointmentType)"></i>
+                </div>
+                <div class="appointment-type-info">
+                    <h4>{{ getAppointmentTypeName(appointmentType) }}</h4>
+                    <p>{{ getAppointmentTypeDescription(appointmentType) }}</p>
+                </div>
+                } @else {
+                <p class="no-data">No appointment type selected</p>
+                }
+            </div>
+        </div>
+
+        <div class="appointment-schedule-section">
+            <h3>Date & Time Details</h3>
+            <div class="info-card">
+                @if (appointmentInfo(); as appointmentInfo) {
+                <div class="appointment-info-grid">
+                    <div class="info-item">
+                        <span class="label">Appointment Type:</span>
+                        <span class="value">{{ appointmentInfo.mode === 'on-site' ? 'In-Person Visit' : 'Video
+                            Consultation' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Practice:</span>
+                        <span class="value">{{ getPracticeName(appointmentInfo.practice) }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Doctor:</span>
+                        <span class="value">{{ getDoctorName(appointmentInfo.doctor) }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Date:</span>
+                        <span class="value">{{ appointmentInfo.date | date:'EEEE, MMMM d, y' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Time:</span>
+                        <span class="value">{{ appointmentInfo.date | date:'h:mm a' }}</span>
+                    </div>
+                </div>
+                } @else {
+                <p class="no-data">No appointment details available</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="decline-btn" (click)="onDecline()">Decline</button>
+        <button class="accept-btn" (click)="onAccept()">Accept</button>
+    </div>
+</div>
