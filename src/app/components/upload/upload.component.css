@@ -65,6 +65,7 @@
   display: flex;
   justify-content: center;
   margin: var(--spacing-4) 0;
+  gap: var(--spacing-3);
 }
 
 .camera-btn {
@@ -96,6 +97,7 @@
   display: flex;
   justify-content: flex-end;
   margin: var(--spacing-4) 0;
+  gap: var(--spacing-3);
 }
 
 .upload-btn {
