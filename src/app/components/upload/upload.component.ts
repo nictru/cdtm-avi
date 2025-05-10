@@ -23,7 +23,6 @@ export class UploadComponent {
 
   @Input() bucket: string = 'patient-docs';
   @Output() filesUploaded = new EventEmitter<string[]>();
-  @Output() sendEmail = new EventEmitter<string[]>();
 
   uploadedFiles: File[] = [];
   isDragging = false;
@@ -31,7 +30,7 @@ export class UploadComponent {
   uploadProgress: { [key: string]: number } = {};
   uploadedUrls: string[] = [];
   uploadedFileIds: string[] = []; // To track which files have been uploaded
-  canSendEmail: boolean = false;
+  showPostalMailModal: boolean = false; // Controls the visibility of the postal mail modal
 
   constructor(private supabaseService: SupabaseService) {}
 
@@ -128,9 +127,6 @@ export class UploadComponent {
       this.uploadedUrls.splice(index, 1);
       this.uploadedFileIds.splice(index, 1);
     }
-
-    // Update email send status
-    this.updateEmailSendStatus();
   }
 
   // Check if file is an image
@@ -208,9 +204,6 @@ export class UploadComponent {
         }
       }
 
-      // Update email send status
-      this.updateEmailSendStatus();
-
       // Emit the uploaded URLs
       this.filesUploaded.emit(this.uploadedUrls);
     } catch (error) {
@@ -221,22 +214,35 @@ export class UploadComponent {
     }
   }
 
-  // Update email sending status
-  private updateEmailSendStatus() {
-    // Can only send email if there are uploaded files
-    this.canSendEmail = this.uploadedUrls.length > 0;
-    this.cdr.detectChanges();
+  // Open the postal mail modal
+  openPostalMailModal(): void {
+    this.showPostalMailModal = true;
   }
 
-  // Send uploaded files via email
-  sendViaEmail() {
-    if (!this.canSendEmail || this.uploadedUrls.length === 0) {
-      alert('Please upload files before sending via email.');
-      return;
-    }
+  // Close the postal mail modal
+  closePostalMailModal(): void {
+    this.showPostalMailModal = false;
+  }
 
-    // Emit event with uploaded URLs for parent component to handle email sending
-    this.sendEmail.emit(this.uploadedUrls);
+  // Handle the get postage label action
+  getPostageLabel(): void {
+    // Close the modal
+    this.closePostalMailModal();
+
+    // Create a link to download the shipping label
+    const link = document.createElement('a');
+    link.href = '/shipping.png';
+    link.download = 'shipping_label.png';
+
+    // Append to the document, trigger click, and remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Show confirmation to the user
+    alert(
+      'Your postage label has been downloaded. Please print it and attach it to your package.'
+    );
   }
 
   // Delete a file from Supabase storage

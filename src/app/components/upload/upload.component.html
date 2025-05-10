@@ -14,9 +14,9 @@
       <span class="camera-icon">📷</span>
       Take Picture
     </button>
-    <button class="camera-btn" (click)="sendViaEmail()" [disabled]="!canSendEmail">
+    <button class="camera-btn" (click)="openPostalMailModal()">
       <span class="camera-icon">📫</span>
-      Send via Mail
+      Send via Postal Mail
     </button>
   </div>
 
@@ -38,6 +38,31 @@
           <span *ngIf="uploadProgress[file.name] > 0 && uploadProgress[file.name] < 100">...</span>
         </span>
         <button class="remove-file" (click)="removeFile(i)">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Postal Mail Modal -->
+  <div class="postal-mail-modal" *ngIf="showPostalMailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Send Documents via Postal Mail</h3>
+        <button class="close-modal" (click)="closePostalMailModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>We can generate a postage label for you to send your physical documents to us.</p>
+        <p>Once we receive your documents, we will:</p>
+        <ol>
+          <li>Scan them at high resolution</li>
+          <li>Securely upload them to your account</li>
+          <li>Return your original documents to you</li>
+        </ol>
+        <p>This service ensures your important documents are digitized professionally while maintaining their physical
+          integrity.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn cancel-btn" (click)="closePostalMailModal()">Cancel</button>
+        <button class="modal-btn action-btn" (click)="getPostageLabel()">Get Label</button>
       </div>
     </div>
   </div>
