@@ -20,6 +20,16 @@ export class NewAppointmentComponent {
     return field?.name;
   });
 
+  appointmentInfo$ = signal<
+    | {
+        mode: 'on-site' | 'video';
+        practice: string;
+        doctor: string;
+        date: Date;
+      }
+    | undefined
+  >(undefined);
+
   currentStep$ = computed<0 | 1 | 2 | 3>(() => {
     // Step 0: Reason for visit (appointmentType not selected)
     // Step 1: Date and time (appointmentType selected, but not yet date/time)
@@ -28,9 +38,12 @@ export class NewAppointmentComponent {
     if (!this.appointmentType$()) {
       return 0;
     }
+    if (!this.appointmentInfo$()) {
+      return 1;
+    }
     // You can expand this logic to check for other step completions
     // For now, just move to step 1 if appointmentType is selected
-    return 1;
+    return 2;
   });
 
   steps = [
@@ -61,6 +74,9 @@ export class NewAppointmentComponent {
     // Example: only allow going back to step 0 (reset appointmentType)
     if (step === 0) {
       this.appointmentType$.set(undefined);
+    }
+    if (step === 1) {
+      this.appointmentInfo$.set(undefined);
     }
     // Expand this as you add more step logic
   }

@@ -47,6 +47,6 @@
   <app-appointment-type (appointmentType)="appointmentType$.set($event)"></app-appointment-type>
   }
   @if (currentStep$() === 1) {
-  <app-time-place-picker></app-time-place-picker>
+  <app-time-place-picker (appointmentInfo)="appointmentInfo$.set($event)"></app-time-place-picker>
   }
 </div>

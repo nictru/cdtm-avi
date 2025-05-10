@@ -1,1 +1,49 @@
-<p>time-place-picker works!</p>
+<div class="picker-container">
+  <h2>When is the best time for you?</h2>
+  <div class="mode-toggle">
+    <button [class.selected]="mode() === 'on-site'" (click)="mode.set('on-site')">On-Site</button>
+    <button [class.selected]="mode() === 'video'" (click)="mode.set('video')">Video</button>
+  </div>
+
+  <div class="dropdowns">
+    <label>
+      Practice
+      <select [ngModel]="practice()" (ngModelChange)="practice.set($event)">
+        @for (p of availablePractices(); track p.id) {
+        <option [ngValue]="p.id">{{ p.name }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      Doctor
+      <select [ngModel]="doctor()" (ngModelChange)="doctor.set($event)">
+        @for (d of availableDoctors(); track d.id) {
+        <option [ngValue]="d.id">{{ d.name }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  <div class="calendar-time-section">
+    <label>
+      Date
+      <input type="date" [ngModel]="date()" (ngModelChange)="date.set($event)" />
+    </label>
+    <div class="time-slots">
+      <div class="time-group">
+        <div>In the morning</div>
+        @for (t of morningTimes(); track t) {
+        <button [class.selected]="time() === t" (click)="selectTime(t)">{{ formatTime(t) }}</button>
+        }
+      </div>
+      <div class="time-group">
+        <div>In the afternoon</div>
+        @for (t of afternoonTimes(); track t) {
+        <button [class.selected]="time() === t" (click)="selectTime(t)">{{ formatTime(t) }}</button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <button class="continue-btn" (click)="emitSelection()" [disabled]="!time()">Continue</button>
+</div>
