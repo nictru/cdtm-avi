@@ -7,11 +7,11 @@
       </div>
     </div>
     }
-
-    @if (streamingResponse()) {
+    @let pendingAssistantMessage = pendingAssistantMessage$();
+    @if (pendingAssistantMessage !== null) {
     <div class="message assistant">
       <div class="message-content">
-        {{ streamingResponse() }}
+        {{ pendingAssistantMessage }}<span class="streaming-cursor">█</span>
       </div>
     </div>
     }
