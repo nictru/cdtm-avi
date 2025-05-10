@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-start',
-  imports: [RouterModule],
+  standalone: true,
+  imports: [RouterLink],
   templateUrl: './start.component.html',
   styleUrl: './start.component.css',
-  standalone: true,
 })
 export class StartComponent {}
