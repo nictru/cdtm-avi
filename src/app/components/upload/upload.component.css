@@ -338,6 +338,23 @@
   box-shadow: var(--shadow);
 }
 
+/* QR Code Styles */
+.qr-code-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+}
+
+.qr-instructions {
+  text-align: center;
+  color: var(--gray-600);
+  font-size: var(--font-size-sm);
+  max-width: 300px;
+  margin: 0;
+}
+
 /* Camera Modal Styles */
 .modal.camera-modal, .modal.camera-popup {
   position: fixed;

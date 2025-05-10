@@ -63,6 +63,18 @@
         </div>
     </div>
 
+    <!-- QR Code Modal -->
+    <div class="modal camera-modal" *ngIf="showQRCode">
+        <div class="modal-content camera-modal-content">
+            <button class="close-btn top-right" (click)="showQRCode = false">×</button>
+            <h2>Scan QR Code with Your Smartphone</h2>
+            <div class="qr-code-container">
+                <qrcode [qrdata]="qrCodeUrl" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+                <p class="qr-instructions">Scan this QR code with your smartphone's camera to upload photos directly from your device.</p>
+            </div>
+        </div>
+    </div>
+
   <div class="files-actions" *ngIf="uploadedFiles.length > 0">
     <button class="upload-btn" (click)="uploadFilesToSupabase()" [disabled]="isUploading || uploadedFiles.length === 0">
       {{isUploading ? 'Uploading...' : 'Upload Files'}}

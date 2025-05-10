@@ -11,11 +11,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../services/supabase.service';
 import { StorageService } from '../../services/storage/storage.service';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 @Component({
   selector: 'app-upload',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, QRCodeComponent],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css',
 })
@@ -504,8 +505,35 @@ export class UploadComponent {
     }
   }
 
-  useSmartphoneOption() {
+  async useSmartphoneOption() {
     this.showCameraOptions = false;
-    alert('To use your smartphone, please upload photos from your phone or use a future QR code feature.');
+    try {
+      const supabase = this.supabaseService.supabase;
+      if (!supabase) {
+        throw new Error('Supabase client not found');
+      }
+
+      // Create a new session in the upload_picture_session table
+      const { data, error } = await supabase
+        .from('upload_picture_session')
+        .insert([{ created_at: new Date().toISOString() }])
+        .select('session_id')
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data?.session_id) {
+        this.qrCodeUrl = `${window.location.origin}/mobile-upload/${data.session_id}`;
+        this.showQRCode = true;
+        this.cdr.detectChanges();
+      } else {
+        throw new Error('No session ID returned');
+      }
+    } catch (error) {
+      console.error('Error creating session:', error);
+      alert('Failed to create session for smartphone upload. Please try again.');
+    }
   }
 }
