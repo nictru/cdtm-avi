@@ -50,12 +50,37 @@ export class ChatComponent implements OnInit {
   currentMessage = signal<string>('');
   pendingAssistantMessage$ = signal<string | null>(null);
 
+  private getSessionStorageKey(): string {
+    return `chat-messages-${this.appointmentType$()}`;
+  }
+
+  constructor() {
+    // Effect to sync messages$ to sessionStorage
+    effect(() => {
+      const key = this.getSessionStorageKey();
+      sessionStorage.setItem(key, JSON.stringify(this.messages$()));
+    });
+  }
+
   ngOnInit(): void {
-    this.sendMessage(
-      'Hello, I would like to make a ' +
-        this.appointmentType$() +
-        ' appointment'
-    );
+    // Try to load messages from sessionStorage
+    const key = this.getSessionStorageKey();
+    const stored = sessionStorage.getItem(key);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          this.messages$.set(parsed);
+        }
+      } catch {}
+    }
+    if (this.messages$().length === 0) {
+      this.sendMessage(
+        'Hello, I would like to make a ' +
+          this.appointmentType$() +
+          ' appointment'
+      );
+    }
   }
 
   async sendMessage(message: string) {
