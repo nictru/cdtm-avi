@@ -4,6 +4,8 @@ import { fields } from './questioning/fields';
 import { NgClass } from '@angular/common';
 import { TimePlacePickerComponent } from './time-place-picker/time-place-picker.component';
 import { ConfirmAppointmentComponent } from './confirm-appointment/confirm-appointment.component';
+import { PersonalInformationComponent } from './personal-information/personal-information.component';
+
 @Component({
   selector: 'app-new-appointment',
   imports: [
@@ -11,6 +13,7 @@ import { ConfirmAppointmentComponent } from './confirm-appointment/confirm-appoi
     NgClass,
     TimePlacePickerComponent,
     ConfirmAppointmentComponent,
+    PersonalInformationComponent,
   ],
   templateUrl: './new-appointment.component.html',
   styleUrl: './new-appointment.component.css',
@@ -113,5 +116,12 @@ export class NewAppointmentComponent {
   declineAppointment() {
     // Reset appointment data and go back to date/time selection
     this.goToStep(1);
+  }
+
+  completePersonalInfo() {
+    console.log('Personal information completed!');
+    // Here you would typically handle the final step
+    // For example, saving the appointment to a database
+    // and navigating to a confirmation page
   }
 }

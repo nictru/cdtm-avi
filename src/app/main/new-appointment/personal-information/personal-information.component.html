@@ -1,0 +1,45 @@
+<div class="personal-info-container">
+    <h2>Personal Information</h2>
+    <p>Please enter your personal details to complete the appointment booking.</p>
+
+    <!-- Placeholder for personal information form -->
+    <div class="form-placeholder">
+        <div class="file-upload-section">
+            <h3>Upload Documents</h3>
+            <p>Please upload any relevant documents (PDF) or images (JPG, PNG).</p>
+
+            <div class="drag-drop-area" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)" [class.drag-over]="isDragging">
+                <div class="drag-drop-content">
+                    <span class="drag-icon">📁</span>
+                    <p>Drag and drop your files here</p>
+                    <p>or</p>
+                    <label for="file-upload" class="file-upload-label">
+                        <span>Choose File</span>
+                        <input type="file" id="file-upload" accept=".pdf,.jpg,.jpeg,.png"
+                            (change)="onFileSelected($event)">
+                    </label>
+                </div>
+            </div>
+
+            <div class="file-info" *ngIf="selectedFile">
+                <span class="file-name">{{ selectedFile.name }}</span>
+                <button class="remove-file" (click)="removeFile()">✕</button>
+            </div>
+
+            <div class="file-preview" *ngIf="selectedFile">
+                <div *ngIf="isImage(selectedFile)" class="image-preview">
+                    <img [src]="previewUrl" alt="Preview">
+                </div>
+                <div *ngIf="isPdf(selectedFile)" class="pdf-preview">
+                    <span>PDF Document: {{ selectedFile.name }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="back-btn" (click)="onGoBack()">Back</button>
+        <button class="continue-btn" (click)="onCompleteBooking()">Complete Booking</button>
+    </div>
+</div>
