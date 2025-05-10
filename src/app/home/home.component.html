@@ -1,0 +1,108 @@
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>avi is your modern<br>family doctor nearby</h1>
+      <p>
+        avi offers you first-class family doctor care in a central location. Our
+        medical practices in Berlin, Munich, Hamburg and Stuttgart are spread
+        across the city, so you can always find a qualified family doctor near you.
+        Or even via online consultation.
+      </p>
+      <div class="hero-buttons">
+        <a routerLink="/app/new-appointment" class="btn btn-primary">Book an appointment now</a>
+        <a routerLink="/app" class="btn btn-text">Log in</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CSS to be moved to a separate stylesheet -->
+<style>
+  .hero-section {
+    display: flex;
+    height: 100vh;
+    min-height: 600px;
+    position: relative;
+    background-image: url('https://cdn.prod.website-files.com/664c568a845fa3579e2156ba/6667eb160165db165ff07eec_home-hero.webp');
+    background-size: cover;
+    background-position: center right;
+    overflow: hidden;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .hero-text {
+    max-width: 600px;
+    padding: 60px 0;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 30px;
+    color: #000;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 40px;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .btn {
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 14px 28px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background-color: #6b2aff;
+    color: white;
+    border: 1px solid #6b2aff;
+  }
+
+  .btn-primary:hover {
+    background-color: #5a23d5;
+  }
+
+  .btn-text {
+    color: #6b2aff;
+    background: transparent;
+  }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .hero-text {
+      padding: 40px 0;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
