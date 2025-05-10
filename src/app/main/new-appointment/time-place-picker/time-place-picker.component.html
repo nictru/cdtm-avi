@@ -10,7 +10,7 @@
     <div class="dropdowns">
       <label>
         Practice
-        <select [ngModel]="practice()" (ngModelChange)="practice.set($event)">
+        <select [(ngModel)]="practice">
           @for (p of availablePractices(); track p.id) {
           <option [ngValue]="p.id">{{ p.name }}</option>
           }
@@ -18,7 +18,7 @@
       </label>
       <label>
         Doctor
-        <select [ngModel]="doctor()" (ngModelChange)="doctor.set($event)">
+        <select [(ngModel)]="doctor">
           @for (d of availableDoctors(); track d.id) {
           <option [ngValue]="d.id">{{ d.name }}</option>
           }
@@ -31,7 +31,7 @@
     <div class="date-column">
       <label>
         Date
-        <input type="date" [ngModel]="date()" (ngModelChange)="date.set($event)" />
+        <input type="date" [ngModel]="dateString()" (ngModelChange)="onDateInputChange($event)" />
       </label>
 
       <button class="continue-btn" (click)="emitSelection()" [disabled]="!time()">Continue</button>
