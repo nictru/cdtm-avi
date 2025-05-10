@@ -31,6 +31,10 @@ export const routes: Routes = [
         path: 'medical-data',
         component: MedicalDataComponent,
       },
+      {
+        path: 'mobile-upload/:session_id',
+        loadComponent: () => import('./components/mobile-camera/mobile-camera.component').then(m => m.MobileCameraComponent)
+      },
     ],
   },
 ];
