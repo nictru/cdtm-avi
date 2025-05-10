@@ -5,6 +5,7 @@ import { NgClass } from '@angular/common';
 import { TimePlacePickerComponent } from './time-place-picker/time-place-picker.component';
 import { ConfirmAppointmentComponent } from './confirm-appointment/confirm-appointment.component';
 import { RelevantDocumentsComponent } from './relevant-documents/relevant-documents.component';
+import { PersonalInformationComponent } from './personal-information/personal-information.component';
 
 @Component({
   selector: 'app-new-appointment',
@@ -14,6 +15,7 @@ import { RelevantDocumentsComponent } from './relevant-documents/relevant-docume
     TimePlacePickerComponent,
     ConfirmAppointmentComponent,
     RelevantDocumentsComponent,
+    PersonalInformationComponent,
   ],
   templateUrl: './new-appointment.component.html',
   styleUrl: './new-appointment.component.css',
@@ -38,25 +40,33 @@ export class NewAppointmentComponent {
   >(undefined);
 
   // Signal for personal information step
-  personalInfo$ = signal<boolean>(false);
+  relevantDocuments$ = signal<boolean>(false);
 
-  currentStep$ = computed<0 | 1 | 2 | 3 | 4>(() => {
+  // Signal for personal data step
+  personalData$ = signal<boolean>(false);
+
+  currentStep$ = computed<0 | 1 | 2 | 3 | 4 | 5>(() => {
     // Step 0: Reason for visit (appointmentType not selected)
     // Step 1: Date and time (appointmentType selected, but not yet date/time)
     // Step 2: Confirm appointment
-    // Step 3: Personal information
-    // Step 4: Authentication
+    // Step 3: Relevant documents
+    // Step 4: Personal information
+    // Step 5: Authentication
     if (!this.appointmentType$()) {
       return 0;
     }
     if (!this.appointmentInfo$()) {
       return 1;
     }
-    if (!this.personalInfo$()) {
+
+    if (!this.relevantDocuments$()) {
       return 2;
     }
-    // Step 3 when personal info completed (for now we don't have the auth step yet)
-    return 3;
+    if (!this.personalData$()) {
+      return 3;
+    }
+    // Step 4 when personal data completed
+    return 4;
   });
 
   steps = [
@@ -82,6 +92,10 @@ export class NewAppointmentComponent {
       description: () => 'Upload any relevant documents for your appointment.',
     },
     {
+      label: 'Personal information',
+      description: () => 'Provide your personal information.',
+    },
+    {
       label: 'Authentication',
       description: () => 'Verify your identity to continue.',
     },
@@ -92,22 +106,28 @@ export class NewAppointmentComponent {
     if (step === 0) {
       this.appointmentType$.set(undefined);
       this.appointmentInfo$.set(undefined);
-      this.personalInfo$.set(false);
+      this.relevantDocuments$.set(false);
+      this.personalData$.set(false);
     }
     if (step === 1) {
       this.appointmentInfo$.set(undefined);
-      this.personalInfo$.set(false);
+      this.relevantDocuments$.set(false);
+      this.personalData$.set(false);
     }
     if (step === 2) {
-      this.personalInfo$.set(false);
+      this.relevantDocuments$.set(false);
+      this.personalData$.set(false);
+    }
+    if (step === 3) {
+      this.personalData$.set(false);
     }
     // Expand this as you add more step logic
   }
 
   confirmAppointment() {
-    // Move to the personal information step
-    this.personalInfo$.set(true);
-    console.log('Appointment confirmed! Moving to personal information step.', {
+    // Move to the relevant documents step
+    this.relevantDocuments$.set(true);
+    console.log('Appointment confirmed! Moving to relevant documents step.', {
       type: this.appointmentType$(),
       info: this.appointmentInfo$(),
     });
@@ -118,10 +138,19 @@ export class NewAppointmentComponent {
     this.goToStep(1);
   }
 
-  completePersonalInfo() {
-    console.log('Document upload completed!');
-    // Here you would typically handle the final step
-    // For example, saving the appointment to a database
-    // and navigating to a confirmation page
+  completeRelevantDocuments() {
+    console.log(
+      'Relevant documents completed! Moving to personal information step.'
+    );
+    // Move to the personal information step by setting personalData$ to true
+    this.personalData$.set(true);
+  }
+
+  // Method to complete the personal data step
+  completePersonalData() {
+    console.log('Personal information completed!');
+    this.personalData$.set(true);
+    // Here you would typically save the personal data
+    // and potentially navigate to a confirmation page
   }
 }

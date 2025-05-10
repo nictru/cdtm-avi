@@ -55,8 +55,12 @@
     </app-confirm-appointment>
     }
     @if (currentStep$() === 3) {
-    <app-relevant-documents (goBack)="goToStep(2)" (completeBooking)="completePersonalInfo()">
+    <app-relevant-documents (goBack)="goToStep(2)" (continueToNext)="completeRelevantDocuments()">
     </app-relevant-documents>
+    }
+    @if (currentStep$() === 4) {
+    <app-personal-information (goBack)="goToStep(3)" (completeBooking)="completePersonalData()">
+    </app-personal-information>
     }
   </div>
 </div>
