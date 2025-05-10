@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AbstractApiService } from '../supabase.service';
-import { StorageObject } from 'src/app/interfaces';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageService extends AbstractApiService {
+  private authService = inject(AuthService);
+
   async getStorageContent(bucketName: string, path: string) {
     const { data, error } = await this._supabase.storage
       .from(bucketName)
@@ -15,7 +17,7 @@ export class StorageService extends AbstractApiService {
   }
 
   async getStorageObject(id: string) {
-    return this.request<StorageObject>(
+    return this.request(
       this._supabase.rpc('get_storage_object', {
         object_id: id,
       })
@@ -41,11 +43,51 @@ export class StorageService extends AbstractApiService {
     return data.publicUrl;
   }
 
-  async uploadFile(bucketName: string, path: string, file: File) {
-    const { data, error } = await this._supabase.storage
-      .from(bucketName)
-      .upload(path, file);
-    if (error) throw error;
-    return data;
+  async uploadFile(
+    bucketName: string,
+    file: File,
+    onProgress?: (progress: number) => void
+  ) {
+    const filePath =
+      this.authService.userId() +
+      '/' +
+      Date.now() +
+      '_' +
+      Math.random().toString(36).substring(2, 15) +
+      '_' +
+      file.name;
+
+    // Using XMLHttpRequest to manually handle upload with progress
+    return new Promise<any>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.upload.onprogress = (event) => {
+        if (onProgress && event.total) {
+          const progressPercent = Math.round(
+            (event.loaded / event.total) * 100
+          );
+          onProgress(progressPercent);
+        }
+      };
+
+      // Initiate simple upload first to get the URL
+      this._supabase.storage
+        .from(bucketName)
+        .upload(filePath, file)
+        .then(({ data, error }) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          // Final progress update
+          if (onProgress) {
+            onProgress(100);
+          }
+
+          resolve(data);
+        })
+        .catch(reject);
+    });
   }
 }

@@ -1,6 +1,8 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, output, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SupabaseService } from '../../../services/supabase.service';
+import { StorageService } from '../../../services/storage/storage.service';
 
 @Component({
   selector: 'app-personal-information',
@@ -10,6 +12,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './personal-information.component.css',
 })
 export class PersonalInformationComponent {
+  private storageService = inject(StorageService);
+  private cdr = inject(ChangeDetectorRef);
   // Output event for when the user wants to go back
   goBack = output<void>();
 
@@ -19,6 +23,12 @@ export class PersonalInformationComponent {
   // File upload properties
   uploadedFiles: File[] = [];
   isDragging = false;
+  isUploading = false;
+  uploadProgress: { [key: string]: number } = {};
+  uploadedUrls: string[] = [];
+  uploadedFileIds: string[] = []; // To track which files have been uploaded
+
+  constructor(private supabaseService: SupabaseService) {}
 
   // Method to emit go back event
   onGoBack() {
@@ -26,7 +36,15 @@ export class PersonalInformationComponent {
   }
 
   // Method to emit complete booking event
-  onCompleteBooking() {
+  async onCompleteBooking() {
+    // Upload any remaining files before completing the booking
+    if (
+      this.uploadedFiles.length > 0 &&
+      this.uploadedFileIds.length < this.uploadedFiles.length
+    ) {
+      await this.uploadFilesToSupabase();
+    }
+
     // Here you would typically validate the form first
     this.completeBooking.emit();
   }
@@ -84,6 +102,11 @@ export class PersonalInformationComponent {
   private processFiles(files: File[]) {
     // Add new files to the existing array
     this.uploadedFiles = [...this.uploadedFiles, ...files];
+
+    // Initialize progress tracking for each file
+    files.forEach((file) => {
+      this.uploadProgress[file.name] = 0;
+    });
   }
 
   // Format file size to human-readable format
@@ -99,7 +122,26 @@ export class PersonalInformationComponent {
 
   // Remove a file at specified index
   removeFile(index: number) {
+    const file = this.uploadedFiles[index];
+
+    // Check if this file was uploaded
+    const wasUploaded = this.uploadedFileIds[index];
+
+    // Remove from arrays
     this.uploadedFiles.splice(index, 1);
+
+    // Also remove from progress tracking
+    if (file && this.uploadProgress[file.name] !== undefined) {
+      delete this.uploadProgress[file.name];
+    }
+
+    // If file was already uploaded to Supabase, delete it
+    if (wasUploaded) {
+      // For now, just remove from our tracking arrays
+      // Actual deletion from storage would require additional API support
+      this.uploadedUrls.splice(index, 1);
+      this.uploadedFileIds.splice(index, 1);
+    }
   }
 
   // Check if file is an image
@@ -110,5 +152,86 @@ export class PersonalInformationComponent {
   // Check if file is a PDF
   isPdf(file: File): boolean {
     return file.type === 'application/pdf';
+  }
+
+  // Get upload status text for a file
+  getUploadStatus(file: File): string {
+    const progress = this.uploadProgress[file.name] || 0;
+    if (progress === 100) {
+      return 'Uploaded';
+    } else if (progress > 0) {
+      return `Uploading: ${progress}%`;
+    }
+    return '';
+  }
+
+  // Check if a file has been uploaded
+  isFileUploaded(index: number): boolean {
+    return !!this.uploadedFileIds[index];
+  }
+
+  // Upload files to Supabase storage
+  async uploadFilesToSupabase() {
+    if (this.uploadedFiles.length === 0 || this.isUploading) return;
+
+    this.isUploading = true;
+
+    try {
+      for (let i = 0; i < this.uploadedFiles.length; i++) {
+        const file = this.uploadedFiles[i];
+
+        // Skip if already uploaded
+        if (this.uploadedFileIds[i]) continue;
+
+        // Update UI to show progress starting
+        this.uploadProgress[file.name] = 10;
+        this.cdr.detectChanges();
+
+        // Determine storage bucket based on file type
+        const bucket = 'patient-docs';
+
+        try {
+          // Upload the file with progress callback
+          const data = await this.storageService.uploadFile(
+            bucket,
+            file,
+            (progress: number) => {
+              this.uploadProgress[file.name] = progress;
+              // Force change detection to update UI
+              this.cdr.detectChanges();
+            }
+          );
+
+          // Get the public URL for the file
+          const publicUrl = await this.storageService.getPublicUrl(
+            bucket,
+            data.path
+          );
+
+          // Store the URL and mark as uploaded
+          this.uploadedUrls[i] = publicUrl;
+          this.uploadedFileIds[i] = data.path; // Store the path as an ID
+
+          // Ensure final progress is set to 100%
+          this.uploadProgress[file.name] = 100;
+          this.cdr.detectChanges();
+        } catch (err) {
+          console.error('Error uploading file:', err);
+          this.uploadProgress[file.name] = 0;
+          this.cdr.detectChanges();
+        }
+      }
+    } catch (error) {
+      console.error('Error in upload process:', error);
+    } finally {
+      this.isUploading = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  // Delete a file from Supabase storage
+  async deleteFileFromSupabase(path: string) {
+    // This would require additional API support in the StorageService
+    console.log('Would delete file:', path);
   }
 }

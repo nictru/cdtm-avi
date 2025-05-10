@@ -22,13 +22,34 @@
                 </div>
             </div>
 
+            <div class="files-actions" *ngIf="uploadedFiles.length > 0">
+                <button class="upload-btn" (click)="uploadFilesToSupabase()"
+                    [disabled]="isUploading || uploadedFiles.length === 0">
+                    <span *ngIf="!isUploading">Upload Files</span>
+                    <span *ngIf="isUploading">Uploading...</span>
+                </button>
+            </div>
+
             <div class="files-list" *ngIf="uploadedFiles.length > 0">
                 <h4>Uploaded Files ({{uploadedFiles.length}})</h4>
-                <div class="file-item" *ngFor="let file of uploadedFiles; let i = index">
+                <div class="file-item" *ngFor="let file of uploadedFiles; let i = index"
+                    [class.uploaded]="isFileUploaded(i)">
                     <div class="file-info">
                         <span class="file-icon">{{isPdf(file) ? '📄' : '🖼️'}}</span>
                         <span class="file-name">{{ file.name }}</span>
                         <span class="file-size">{{ formatFileSize(file.size) }}</span>
+
+                        <!-- Upload status indicator -->
+                        <span class="upload-status" *ngIf="uploadProgress[file.name] > 0">
+                            <span *ngIf="uploadProgress[file.name] === 100" class="status-success">
+                                ✓ Uploaded
+                            </span>
+                            <span *ngIf="uploadProgress[file.name] > 0 && uploadProgress[file.name] < 100"
+                                class="status-progress">
+                                Uploading...
+                            </span>
+                        </span>
+
                         <button class="remove-file" (click)="removeFile(i)">✕</button>
                     </div>
                 </div>
