@@ -17,6 +17,7 @@ interface PersonalInfo {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   birthDay: string;
   birthMonth: string;
   birthYear: string;
@@ -45,6 +46,7 @@ export class PersonalInformationComponent {
   firstName = signal<string>('');
   lastName = signal<string>('');
   email = signal<string>('');
+  phoneNumber = signal<string>('');
   birthDay = signal<string>('');
   birthMonth = signal<string>('');
   birthYear = signal<string>('');
@@ -59,6 +61,7 @@ export class PersonalInformationComponent {
     firstName: this.firstName(),
     lastName: this.lastName(),
     email: this.email(),
+    phoneNumber: this.phoneNumber(),
     birthDay: this.birthDay(),
     birthMonth: this.birthMonth(),
     birthYear: this.birthYear(),
@@ -78,6 +81,14 @@ export class PersonalInformationComponent {
     if (!this.email()) return true; // Don't show error when empty
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(this.email());
+  });
+
+  // Computed signal for phone validation
+  isPhoneValid = computed(() => {
+    if (!this.phoneNumber()) return true; // Don't show error when empty
+    const phoneRegex =
+      /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$/;
+    return phoneRegex.test(this.phoneNumber());
   });
 
   // Computed signal for date validation
@@ -112,6 +123,7 @@ export class PersonalInformationComponent {
       !this.firstName() ||
       !this.lastName() ||
       !this.email() ||
+      !this.phoneNumber() ||
       !this.birthDay() ||
       !this.birthMonth() ||
       !this.birthYear() ||
@@ -121,8 +133,8 @@ export class PersonalInformationComponent {
       return false;
     }
 
-    // Email and date validation
-    return this.isEmailValid() && this.isDateValid();
+    // Email, phone, and date validation
+    return this.isEmailValid() && this.isPhoneValid() && this.isDateValid();
   });
 
   constructor(private supabaseService: SupabaseService) {}

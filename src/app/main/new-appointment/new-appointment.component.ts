@@ -42,24 +42,23 @@ export class NewAppointmentComponent {
   // Signal for relevant documents step
   relevantDocuments$ = signal<boolean>(false);
 
-  // Signal for personal data step
-  personalData$ = signal<boolean>(false);
-
   // Signal for Google Fit connection step
   googleFitConnected$ = signal<boolean>(false);
+
+  // Signal for personal data step
+  personalData$ = signal<boolean>(false);
 
   constructor(private router: Router, private authService: AuthService) {
     // Check if Google Fit is already connected
     this.googleFitConnected$.set(this.authService.isGoogleFitConnected());
   }
 
-  currentStep$ = computed<0 | 1 | 2 | 3 | 4 | 5>(() => {
+  currentStep$ = computed<0 | 1 | 2 | 3 | 4>(() => {
     // Step 0: Reason for visit (appointmentType not selected)
     // Step 1: Date and time selection (includes confirmation)
     // Step 2: Relevant documents
-    // Step 3: Personal information
-    // Step 4: Google Fit connection
-    // Step 5: Authentication
+    // Step 3: Google Fit connection
+    // Step 4: Personal information
     if (!this.appointmentType$()) {
       return 0;
     }
@@ -70,14 +69,14 @@ export class NewAppointmentComponent {
     if (!this.relevantDocuments$()) {
       return 2;
     }
-    if (!this.personalData$()) {
+    if (!this.googleFitConnected$()) {
       return 3;
     }
-    if (!this.googleFitConnected$()) {
+    if (!this.personalData$()) {
       return 4;
     }
-    // Step 5 when Google Fit connection completed
-    return 5;
+    // Final step is personal information
+    return 4;
   });
 
   steps = [
@@ -105,19 +104,15 @@ export class NewAppointmentComponent {
       description: () => 'Upload any relevant documents for your appointment.',
     },
     {
-      label: 'Personal information',
-      description: () => 'Provide your personal information.',
-    },
-    {
       label: 'Health data',
-      description: () => 
-        this.googleFitConnected$() 
+      description: () =>
+        this.googleFitConnected$()
           ? 'Google Fit connected'
           : 'Connect your Google Fit account.',
     },
     {
-      label: 'Authentication',
-      description: () => 'Verify your identity to continue.',
+      label: 'Personal information',
+      description: () => 'Provide your personal information.',
     },
   ];
 
@@ -127,26 +122,26 @@ export class NewAppointmentComponent {
       this.appointmentType$.set(undefined);
       this.appointmentInfo$.set(undefined);
       this.relevantDocuments$.set(false);
-      this.personalData$.set(false);
       this.googleFitConnected$.set(false);
+      this.personalData$.set(false);
     }
     if (step === 1) {
       this.appointmentInfo$.set(undefined);
       this.relevantDocuments$.set(false);
-      this.personalData$.set(false);
       this.googleFitConnected$.set(false);
+      this.personalData$.set(false);
     }
     if (step === 2) {
       this.relevantDocuments$.set(false);
-      this.personalData$.set(false);
       this.googleFitConnected$.set(false);
+      this.personalData$.set(false);
     }
     if (step === 3) {
-      this.personalData$.set(false);
       this.googleFitConnected$.set(false);
+      this.personalData$.set(false);
     }
     if (step === 4) {
-      this.googleFitConnected$.set(false);
+      this.personalData$.set(false);
     }
   }
 
@@ -161,26 +156,27 @@ export class NewAppointmentComponent {
   }
 
   completeRelevantDocuments() {
-    console.log(
-      'Relevant documents completed! Moving to personal information step.'
-    );
-    // Move to the personal information step by setting personalData$ to true
-    this.personalData$.set(true);
-  }
+    console.log('Relevant documents completed! Moving to Google Fit step.');
+    // Move to the Google Fit step
+    this.relevantDocuments$.set(true);
 
-  // Method to complete the personal data step
-  completePersonalData() {
-    console.log('Personal information completed! Moving to Google Fit step.');
-    this.personalData$.set(true);
-    
-    // Navigate to Google Fit connection step
+    // Move to Google Fit connection step
     this.router.navigate(['/app/googlefit']);
   }
 
   // Method to complete the Google Fit step
   completeGoogleFitStep() {
-    console.log('Google Fit step completed!');
+    console.log(
+      'Google Fit step completed! Moving to personal information step.'
+    );
     this.googleFitConnected$.set(true);
-    // Here you would typically proceed to the final authentication step
+    // Now the personal data step should be shown
+    this.personalData$.set(false);
+  }
+
+  // Method to complete the personal data step
+  completePersonalData() {
+    console.log('Personal information completed!');
+    this.personalData$.set(true);
   }
 }

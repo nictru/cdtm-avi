@@ -1,8 +1,15 @@
-import { Component, inject, output } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SupabaseService } from '../../../services/supabase.service';
 import { UploadComponent } from '../../../components/upload/upload.component';
+import { DocsService } from '../../../services/docs/docs.service';
 
 @Component({
   selector: 'app-relevant-documents',
@@ -12,14 +19,40 @@ import { UploadComponent } from '../../../components/upload/upload.component';
   styleUrl: './relevant-documents.component.css',
 })
 export class RelevantDocumentsComponent {
+  private docsService = inject(DocsService);
+  private docsResource = this.docsService.userDocsResource;
+
+  uploadedFileUrls = signal<string[]>([]);
+
   // Output event for when the user wants to go back
   goBack = output<void>();
 
+  constructor() {
+    effect(() => {
+      console.log('Resource:', this.docsResource.value());
+    });
+
+    effect(() => {
+      console.log('Uploaded files:', this.uploadedFileUrls());
+    });
+
+    effect(() => {
+      console.log('All processed:', this.allProcessed());
+    });
+  }
+
+  allProcessed = computed(() => {
+    const currentURLs = this.uploadedFileUrls();
+    const existingNames = this.docsResource.value().map((doc) => doc.doc_name);
+
+    // Check if for every currentURL there is an existingName that is a suffix of the currentURL
+    return currentURLs.every((url) =>
+      existingNames.some((name) => url.endsWith(name))
+    );
+  });
+
   // Output event for when the user continues to the next step
   continueToNext = output<void>();
-
-  // Store uploaded file URLs
-  uploadedFileUrls: string[] = [];
 
   // Method to emit go back event
   onGoBack() {
@@ -34,7 +67,6 @@ export class RelevantDocumentsComponent {
 
   // Handle files uploaded event from UploadComponent
   onFilesUploaded(fileUrls: string[]) {
-    this.uploadedFileUrls = fileUrls;
-    console.log('Files uploaded:', fileUrls);
+    this.uploadedFileUrls.set(fileUrls);
   }
 }

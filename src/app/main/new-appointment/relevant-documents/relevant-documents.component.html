@@ -18,9 +18,16 @@
         </app-upload>
     </div>
 
+    <!-- Loading overlay when files are being processed -->
+    <div class="loading-overlay" *ngIf="!allProcessed() && uploadedFileUrls().length > 0">
+        <div class="spinner"></div>
+        <p>Processing your documents...</p>
+    </div>
+
     <div class="action-buttons">
         <button class="back-btn" (click)="onGoBack()">Back</button>
-        <button class="continue-btn" (click)="onContinue()">Continue</button>
+        <button class="continue-btn" [disabled]="!allProcessed() && uploadedFileUrls().length > 0"
+            (click)="onContinue()">Continue</button>
     </div>
 </div>
 
