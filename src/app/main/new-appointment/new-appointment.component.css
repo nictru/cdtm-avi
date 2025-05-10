@@ -3,19 +3,19 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  height: calc(100vh - 64px);
+  height: calc(100vh - var(--header-height));
   position: fixed;
   left: 0;
-  top: 64px;
-  width: 320px; /* or adjust as needed for your stepper */
-  background: white; /* optional: to separate from main content */
+  top: var(--header-height);
+  width: var(--stepper-width);
+  background: var(--surface-card);
   z-index: 10;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Optional: add some padding to the stepper */
 .stepper-layout-container nav {
-  padding: 32px 24px;
+  padding: var(--spacing-8) var(--spacing-6);
   width: 100%;
 }
 
@@ -24,13 +24,13 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 64px;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  height: var(--header-height);
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow);
   display: flex;
   align-items: center;
   z-index: 100;
-  padding-left: 24px;
+  padding-left: var(--spacing-6);
 }
 
 .top-bar-logo {
@@ -41,27 +41,27 @@
 
 .main-content {
   position: fixed;
-  top: 64px;
-  left: 320px;
-  width: calc(100vw - 320px);
-  height: calc(100vh - 64px);
+  top: var(--header-height);
+  left: var(--stepper-width);
+  width: calc(100vw - var(--stepper-width));
+  height: calc(100vh - var(--header-height));
   display: flex;
   overflow: hidden;
-  background: #fafbfc;
+  background: var(--gray-50);
   z-index: 1;
 }
 
 .content-left-column {
   width: 50%;
   height: 100%;
-  padding: 32px 40px;
+  padding: var(--spacing-8) var(--spacing-10);
   overflow-y: auto;
 }
 
 .content-right-column {
   width: 50%;
   height: 100%;
-  border-left: 1.5px solid #e5e7eb;
+  border-left: 1.5px solid var(--gray-200);
   overflow: hidden;
 }
 
@@ -83,9 +83,44 @@ ol button:disabled {
 }
 
 ol button.cursor-pointer:hover .text-sm:first-child {
-  color: #4f46e5; /* Indigo-600 on hover for previous steps */
+  color: var(--primary-600); /* Indigo-600 on hover for previous steps */
 }
 
 ol button.cursor-pointer:hover .bg-indigo-600 {
-  background-color: #4338ca; /* Indigo-700 on hover */
+  background-color: var(--primary-700); /* Indigo-700 on hover */
+}
+
+/* Replace hard-coded colors in the component template with CSS classes */
+.step-line-active {
+  background-color: var(--primary-600);
+}
+
+.step-line-inactive {
+  background-color: var(--gray-300);
+}
+
+.step-indicator-active {
+  background-color: var(--primary-600);
+}
+
+.step-indicator-current {
+  border: 2px solid var(--primary-600);
+  background-color: white;
+}
+
+.step-indicator-inactive {
+  border: 2px solid var(--gray-300);
+  background-color: white;
+}
+
+.step-dot-current {
+  background-color: var(--primary-600);
+}
+
+.step-text-current {
+  color: var(--primary-600);
+}
+
+.step-text-inactive {
+  color: var(--gray-500);
 }

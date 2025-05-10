@@ -8,7 +8,7 @@
       @for (stepDef of steps; track $index) {
       <li class="relative pb-10" [ngClass]="{ 'pb-10': $index < steps.length - 1 }">
         @if ($index < steps.length - 1) { <div class="absolute top-4 left-4 mt-0.5 -ml-px h-full w-0.5"
-          [ngClass]="step > $index ? 'bg-indigo-600' : 'bg-gray-300'" aria-hidden="true">
+          [ngClass]="step > $index ? 'step-line-active' : 'step-line-inactive'" aria-hidden="true">
 </div>
 }
 <button class="group relative flex items-start" [attr.aria-current]="step === $index ? 'step' : null"
@@ -16,7 +16,7 @@
   [class.cursor-not-allowed]="$index > step" [class.cursor-default]="$index === step">
   <span class="flex h-9 items-center">
     <span class="relative z-10 flex size-8 items-center justify-center rounded-full"
-      [ngClass]="step > $index ? 'bg-indigo-600 group-hover:bg-indigo-800' : step === $index ? 'border-2 border-indigo-600 bg-white' : 'border-2 border-gray-300 bg-white'">
+      [ngClass]="step > $index ? 'step-indicator-active' : step === $index ? 'step-indicator-current' : 'step-indicator-inactive'">
       @if (step > $index) {
       <!-- Tick for completed step -->
       <svg class="size-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -26,7 +26,7 @@
       </svg>
       }
       @if (step === $index) {
-      <span class="size-2.5 rounded-full bg-indigo-600"></span>
+      <span class="size-2.5 rounded-full step-dot-current"></span>
       }
       @if (step < $index) { <span class="size-2.5 rounded-full bg-transparent"></span>
     }
@@ -34,7 +34,8 @@
   </span>
   <span class="ml-4 flex min-w-0 flex-col">
     <span class="text-sm font-medium"
-      [ngClass]="step === $index ? 'text-indigo-600' : step > $index ? '' : 'text-gray-500'">{{ stepDef.label }}</span>
+      [ngClass]="step === $index ? 'step-text-current' : step > $index ? '' : 'step-text-inactive'">{{ stepDef.label
+      }}</span>
     <span class="text-sm text-gray-500">{{ stepDef.description() }}</span>
   </span>
 </button>

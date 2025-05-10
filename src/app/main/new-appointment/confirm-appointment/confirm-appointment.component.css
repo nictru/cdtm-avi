@@ -1,16 +1,16 @@
 .confirm-container {
   max-width: 720px;
-  margin: 40px auto;
+  margin: var(--spacing-10) auto;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: var(--spacing-8);
 }
 
 .confirm-container h2 {
-  font-size: 2.2rem;
+  font-size: var(--font-size-4xl);
   font-weight: 700;
-  margin-bottom: 12px;
-  color: #1a2328;
+  margin-bottom: var(--spacing-3);
+  color: var(--gray-900);
   text-align: left;
   letter-spacing: -0.5px;
 }
@@ -18,22 +18,22 @@
 .appointment-details {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--spacing-6);
 }
 
 .appointment-type-section h3,
 .appointment-schedule-section h3 {
-  font-size: 1.4rem;
+  font-size: var(--font-size-xl);
   font-weight: 600;
-  margin-bottom: 12px;
-  color: #333;
+  margin-bottom: var(--spacing-3);
+  color: var(--gray-700);
 }
 
 .info-card {
-  background: #fff;
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 4px 18px rgba(23, 105, 106, 0.07), 0 1.5px 8px rgba(0,0,0,0.03);
+  background: var(--surface-card);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
 }
 
 .icon-container {
@@ -42,95 +42,95 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  border-radius: 50%;
-  background: #e6f2f2;
-  margin-bottom: 16px;
+  border-radius: var(--radius-full);
+  background: var(--primary-100);
+  margin-bottom: var(--spacing-4);
 }
 
 .icon-container i {
-  font-size: 24px;
-  color: #17696a;
+  font-size: var(--font-size-2xl);
+  color: var(--primary-600);
 }
 
 .appointment-type-info h4 {
-  font-size: 1.3rem;
+  font-size: var(--font-size-xl);
   font-weight: 600;
-  margin-bottom: 8px;
-  color: #1a2328;
+  margin-bottom: var(--spacing-2);
+  color: var(--gray-900);
 }
 
 .appointment-type-info p {
-  font-size: 1rem;
-  color: #555;
+  font-size: var(--font-size-base);
+  color: var(--gray-600);
   line-height: 1.5;
 }
 
 .appointment-info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 18px;
+  gap: var(--spacing-4);
 }
 
 .info-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--spacing-1);
 }
 
 .info-item .label {
-  font-size: 0.9rem;
-  color: #666;
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
   font-weight: 500;
 }
 
 .info-item .value {
-  font-size: 1.15rem;
-  color: #1a2328;
+  font-size: var(--font-size-lg);
+  color: var(--gray-900);
   font-weight: 600;
 }
 
 .no-data {
-  color: #888;
+  color: var(--gray-400);
   font-style: italic;
   text-align: center;
-  padding: 12px;
+  padding: var(--spacing-3);
 }
 
 .action-buttons {
   display: flex;
-  gap: 16px;
-  margin-top: 8px;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-2);
 }
 
 .decline-btn, .accept-btn {
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-size: 1.1rem;
+  padding: var(--spacing-4) var(--spacing-8);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-lg);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
   flex: 1;
 }
 
 .decline-btn {
-  background: #f5f5f5;
-  color: #555;
-  border: 1px solid #ddd;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  border: 1px solid var(--gray-200);
 }
 
 .accept-btn {
-  background: #17696a;
+  background: var(--primary-600);
   color: white;
   border: none;
-  box-shadow: 0 4px 18px rgba(23, 105, 106, 0.13);
+  box-shadow: var(--shadow);
 }
 
 .decline-btn:hover {
-  background: #eee;
+  background: var(--gray-200);
 }
 
 .accept-btn:hover {
-  background: #14585a;
+  background: var(--primary-700);
   transform: scale(1.02);
-  box-shadow: 0 8px 32px rgba(23, 105, 106, 0.18);
+  box-shadow: var(--shadow-lg);
 }

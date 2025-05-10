@@ -1,10 +1,10 @@
 .titlebar {
   display: flex;
   align-items: center;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  padding: 0 24px;
-  height: 64px;
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow);
+  padding: 0 var(--spacing-6);
+  height: var(--header-height);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -13,7 +13,7 @@
 .main-scrollable-content {
   flex: 1 1 auto;
   overflow-y: auto;
-  height: calc(100vh - 64px);
+  height: calc(100vh - var(--header-height));
   min-height: 0;
   width: 100%;
   display: flex;
@@ -25,24 +25,25 @@ body, app-main, .main-container {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: var(--gray-50);
 }
 
 .logo {
   height: 40px;
   width: auto;
-  margin-right: 16px;
+  margin-right: var(--spacing-4);
 }
 
 .app-title {
-  font-size: 1.6rem;
+  font-size: var(--font-size-xl);
   font-weight: 600;
-  color: #222;
+  color: var(--gray-800);
   letter-spacing: 1px;
 }
 
 @media (max-width: 600px) {
   .titlebar {
-    padding: 0 12px;
+    padding: 0 var(--spacing-3);
     height: 52px;
   }
   .main-scrollable-content {
@@ -50,9 +51,9 @@ body, app-main, .main-container {
   }
   .logo {
     height: 28px;
-    margin-right: 10px;
+    margin-right: var(--spacing-2);
   }
   .app-title {
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
   }
 }
