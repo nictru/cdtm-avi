@@ -1,20 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { AppointmentTypeComponent } from './appointment-type/appointment-type.component';
-import { EmergencyComponent } from './emergency/emergency.component';
-import { QuestioningComponent } from './questioning/questioning.component';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
 @Component({
   selector: 'app-new-appointment',
-  imports: [AppointmentTypeComponent, EmergencyComponent, QuestioningComponent],
+  imports: [RouterOutlet],
   templateUrl: './new-appointment.component.html',
   styleUrl: './new-appointment.component.css',
+  standalone: true,
 })
-export class NewAppointmentComponent {
-  appointmentType = signal<
-    | 'routine'
-    | 'psychologist'
-    | 'emergency'
-    | 'unwell'
-    | 'specialist'
-    | undefined
-  >(undefined);
-}
+export class NewAppointmentComponent {}

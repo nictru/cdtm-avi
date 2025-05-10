@@ -1,4 +1,5 @@
-import { Component, output } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-appointment-type',
@@ -8,12 +9,11 @@ import { Component, output } from '@angular/core';
   standalone: true,
 })
 export class AppointmentTypeComponent {
-  appointmentType = output<
-    | 'routine'
-    | 'psychologist'
-    | 'emergency'
-    | 'unwell'
-    | 'specialist'
-    | undefined
-  >();
+  constructor(private router: Router) {}
+
+  navigateToAppointmentType(
+    type: 'routine' | 'psychologist' | 'emergency' | 'unwell' | 'specialist'
+  ) {
+    this.router.navigate(['/app/new-appointment/' + type]);
+  }
 }

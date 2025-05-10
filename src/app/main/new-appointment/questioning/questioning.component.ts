@@ -1,16 +1,13 @@
-import { Component, signal } from '@angular/core';
-import { QuestioningTypeSelectorComponent } from './questioning-type-selector/questioning-type-selector.component';
-import { ChatComponent } from './chat/chat.component';
-import { AudioComponent } from './audio/audio.component';
-import { VideoComponent } from './video/video.component';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-questioning',
   standalone: true,
-  imports: [QuestioningTypeSelectorComponent, ChatComponent, AudioComponent, VideoComponent],
+  imports: [RouterOutlet],
   templateUrl: './questioning.component.html',
   styleUrl: './questioning.component.css',
 })
 export class QuestioningComponent {
-  questioning_type = signal<'chat' | 'voice' | 'video' | undefined>(undefined);
+  // Removed signal-based routing in favor of Angular Router
 }

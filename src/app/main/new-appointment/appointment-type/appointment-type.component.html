@@ -1,5 +1,5 @@
 <div class="cards-container">
-  <div class="card" (click)="appointmentType.emit('routine')">
+  <div class="card" (click)="navigateToAppointmentType('routine')">
     <div class="icon-container">
       <i class="fas fa-calendar"></i>
     </div>
@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <div class="card" (click)="appointmentType.emit('psychologist')">
+  <div class="card" (click)="navigateToAppointmentType('psychologist')">
     <div class="icon-container">
       <i class="fas fa-brain"></i>
     </div>
@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="card" (click)="appointmentType.emit('emergency')">
+  <div class="card" (click)="navigateToAppointmentType('emergency')">
     <div class="icon-container">
       <i class="fas fa-ambulance"></i>
     </div>
@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <div class="card" (click)="appointmentType.emit('unwell')">
+  <div class="card" (click)="navigateToAppointmentType('unwell')">
     <div class="icon-container">
       <i class="fas fa-thermometer"></i>
     </div>
@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  <div class="card" (click)="appointmentType.emit('specialist')">
+  <div class="card" (click)="navigateToAppointmentType('specialist')">
     <div class="icon-container">
       <i class="fas fa-user-md"></i>
     </div>

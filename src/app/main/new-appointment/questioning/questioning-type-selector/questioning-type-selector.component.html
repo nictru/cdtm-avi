@@ -2,7 +2,7 @@
   <h1>We have some questions for you. How would you like to discuss them?</h1>
 
   <div class="cards-container">
-    <div class="card" (click)="questioning_type.emit('chat')">
+    <div class="card" (click)="navigateToQuestioningType('chat')">
       <div class="icon-container">
         <i class="fas fa-comments"></i>
       </div>
@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div class="card" (click)="questioning_type.emit('voice')">
+    <div class="card" (click)="navigateToQuestioningType('voice')">
       <div class="icon-container">
         <i class="fas fa-phone-alt"></i>
       </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="card" (click)="questioning_type.emit('video')">
+    <div class="card" (click)="navigateToQuestioningType('video')">
       <div class="icon-container">
         <i class="fas fa-video"></i>
       </div>
