@@ -10,11 +10,52 @@
         </div>
     </div>
 
-    <div class="camera-button-container">
-        <button class="camera-btn" (click)="openCamera()">
+    <div class="camera-section">
+        <button class="camera-btn" (click)="showCameraOptionsDialog()">
             <span class="camera-icon">📷</span>
-            Take Picture
+            Use Camera
         </button>
+    </div>
+
+    <!-- Camera options modal (centered popup) -->
+    <div class="modal camera-modal" *ngIf="showCameraOptions">
+        <div class="modal-content camera-modal-content">
+            <button class="close-btn top-right" (click)="showCameraOptions = false">×</button>
+            <h2>Choose Camera Option</h2>
+            <div class="camera-options">
+                <button class="option-btn" (click)="openDirectCamera()">
+                    <span class="icon">💻</span>
+                    Use Current Device
+                </button>
+                <button class="option-btn" (click)="useSmartphoneOption()">
+                    <span class="icon">📱</span>
+                    Use Smartphone
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera interface modal (popup) -->
+    <div class="modal camera-popup" *ngIf="showCamera">
+        <div class="modal-content camera-popup-content">
+            <button class="close-btn top-right" (click)="stopCamera(); showCamera = false">×</button>
+            <div class="camera-preview" *ngIf="!isCapturing">
+                <video #cameraVideo autoplay playsinline></video>
+                <div class="camera-controls">
+                    <button class="capture-btn" (click)="captureImage()">
+                        <span class="capture-icon">●</span>
+                    </button>
+                </div>
+            </div>
+            <div class="preview-container" *ngIf="isCapturing">
+                <img [src]="previewImage" alt="Captured photo">
+                <div class="preview-controls">
+                    <button class="retake-btn" (click)="retakePhoto()">Retake</button>
+                    <button class="delete-btn" (click)="deletePhoto()">Delete</button>
+                    <button class="accept-btn" (click)="acceptPhoto()">Add</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="files-actions" *ngIf="uploadedFiles.length > 0">

@@ -6,7 +6,7 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root',
 })
 export class StorageService extends AbstractApiService {
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
 
   async getStorageContent(bucketName: string, path: string) {
     const { data, error } = await this._supabase.storage

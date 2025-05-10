@@ -5,6 +5,8 @@ import {
   Output,
   EventEmitter,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../services/supabase.service';
@@ -30,6 +32,14 @@ export class UploadComponent {
   uploadProgress: { [key: string]: number } = {};
   uploadedUrls: string[] = [];
   uploadedFileIds: string[] = []; // To track which files have been uploaded
+  showCameraOptions = false;
+  showCamera = false;
+  showQRCode = false;
+  isCapturing = false;
+  previewImage: string | null = null;
+  qrCodeUrl = '';
+  currentStream: MediaStream | null = null;
+  @ViewChild('cameraVideo') cameraVideoRef!: ElementRef<HTMLVideoElement>;
 
   constructor(private supabaseService: SupabaseService) {}
 
@@ -156,6 +166,17 @@ export class UploadComponent {
 
   // Upload files to Supabase storage
   async uploadFilesToSupabase() {
+    // Ensure user is authenticated before upload
+    let userId = this.storageService.authService.userId();
+    if (!userId) {
+      // Try to sign in anonymously
+      await this.storageService.authService.signInAnonymously();
+      userId = this.storageService.authService.userId();
+      if (!userId) {
+        alert('Could not authenticate user. Please try again.');
+        return;
+      }
+    }
     if (this.uploadedFiles.length === 0 || this.isUploading) return;
 
     this.isUploading = true;
@@ -361,5 +382,98 @@ export class UploadComponent {
         'Your browser does not support camera access. Please use the file upload option instead.'
       );
     }
+  }
+
+  showCameraOptionsDialog() {
+    this.showCameraOptions = true;
+  }
+
+  openDirectCamera() {
+    this.showCameraOptions = false;
+    this.showCamera = true;
+    this.initializeCamera();
+  }
+
+  showQRCodeOption() {
+    this.showCameraOptions = false;
+    this.showQRCode = true;
+  }
+
+  async initializeCamera() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      this.currentStream = stream;
+      // Use the ViewChild reference to set the video source
+      if (this.cameraVideoRef && this.cameraVideoRef.nativeElement) {
+        this.cameraVideoRef.nativeElement.srcObject = stream;
+      }
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      alert('Could not access camera. Please check camera permissions.');
+    }
+  }
+
+  captureImage() {
+    if (!this.currentStream) return;
+    const video = document.querySelector('video') as HTMLVideoElement;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      this.previewImage = canvas.toDataURL('image/jpeg');
+      this.isCapturing = true;
+    }
+  }
+
+  async retakePhoto() {
+    this.previewImage = null;
+    this.isCapturing = false;
+    setTimeout(() => {
+      this.initializeCamera();
+    }, 100);
+  }
+
+  deletePhoto() {
+    this.previewImage = null;
+    this.isCapturing = false;
+    this.showCamera = false;
+    this.stopCamera();
+  }
+
+  async acceptPhoto() {
+    if (!this.previewImage) return;
+    try {
+      const response = await fetch(this.previewImage);
+      const blob = await response.blob();
+      const now = new Date();
+      const fileName = `photo_${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}.jpg`;
+      const file = new File([blob], fileName, { type: 'image/jpeg' });
+      this.uploadedFiles.push(file);
+      this.uploadProgress[file.name] = 0;
+      this.previewImage = null;
+      this.isCapturing = false;
+      setTimeout(() => {
+        this.initializeCamera();
+      }, 100);
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error processing photo:', error);
+      alert('Failed to process photo. Please try again.');
+    }
+  }
+
+  public stopCamera(): void {
+    if (this.currentStream) {
+      this.currentStream.getTracks().forEach(track => track.stop());
+      this.currentStream = null;
+    }
+  }
+
+  useSmartphoneOption() {
+    this.showCameraOptions = false;
+    alert('To use your smartphone, please upload photos from your phone or use a future QR code feature.');
   }
 }

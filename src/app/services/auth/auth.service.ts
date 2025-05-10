@@ -103,7 +103,7 @@ export class AuthService extends AbstractApiService {
   async signInAnonymously(returnUrl?: string) {
     const res = await this._supabase.auth.signInAnonymously();
     this._session.set(res.data.session);
-    if (res.data.session) {
+    if (res.data.session && returnUrl) {
       this.redirectAfterAuth(returnUrl);
     }
     return res;
