@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { fields } from '../appointment-type/fields';
+import { fields } from '../../appointment-type/fields';
 
 @Component({
   selector: 'app-confirm-appointment',
@@ -13,6 +13,9 @@ export class ConfirmAppointmentComponent {
   // Events for Accept/Decline actions
   acceptAppointment = output<void>();
   declineAppointment = output<void>();
+
+  // Input to control modal visibility
+  isVisible = input<boolean>(false);
 
   // Inputs for appointment data
   appointmentType = input<string | undefined>(undefined);

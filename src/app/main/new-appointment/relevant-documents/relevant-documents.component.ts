@@ -15,24 +15,21 @@ export class RelevantDocumentsComponent {
   // Output event for when the user wants to go back
   goBack = output<void>();
 
-  // Output event for when the user completes the form
-  completeBooking = output<void>();
+  // Output event for when the user continues to the next step
+  continueToNext = output<void>();
 
   // Store uploaded file URLs
   uploadedFileUrls: string[] = [];
-
-  constructor(private supabaseService: SupabaseService) {}
 
   // Method to emit go back event
   onGoBack() {
     this.goBack.emit();
   }
 
-  // Method to emit complete booking event
-  async onCompleteBooking() {
-    // Here you would typically validate the form first
-    // And do something with the uploadedFileUrls
-    this.completeBooking.emit();
+  // Method to emit continue event
+  onContinue() {
+    // We don't need to process the files here, just emit the event
+    this.continueToNext.emit();
   }
 
   // Handle files uploaded event from UploadComponent

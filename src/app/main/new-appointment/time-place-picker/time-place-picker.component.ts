@@ -1,13 +1,26 @@
-import { Component, computed, effect, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ConfirmAppointmentComponent } from './confirm-appointment/confirm-appointment.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-time-place-picker',
-  imports: [FormsModule],
+  imports: [FormsModule, ConfirmAppointmentComponent, CommonModule],
   templateUrl: './time-place-picker.component.html',
   styleUrl: './time-place-picker.component.css',
+  standalone: true,
 })
 export class TimePlacePickerComponent {
+  // Input for appointment type from parent
+  appointmentType = input<string | undefined>(undefined);
+
   appointmentInfo = output<{
     mode: 'on-site' | 'video';
     practice: string;
@@ -21,6 +34,17 @@ export class TimePlacePickerComponent {
   date = signal<Date>(new Date());
   dateString = computed(() => this.formatDateForInput(this.date()));
   time = signal<Date | null>(null);
+
+  // Signal to control confirmation modal visibility
+  showConfirmModal = signal<boolean>(false);
+
+  // Current appointment details to show in the modal
+  currentAppointmentDetails = signal<{
+    mode: 'on-site' | 'video';
+    practice: string;
+    doctor: string;
+    date: Date;
+  } | null>(null);
 
   // Available options as signals
   availablePractices = signal<{ id: string | null; name: string }[]>([
@@ -130,7 +154,8 @@ export class TimePlacePickerComponent {
     this.time.set(t);
   }
 
-  emitSelection() {
+  // Open the confirmation modal
+  openConfirmModal() {
     const currentTime = this.time();
 
     if (currentTime) {
@@ -157,12 +182,34 @@ export class TimePlacePickerComponent {
         0
       );
 
-      this.appointmentInfo.emit({
+      // Set the current appointment details for the modal
+      this.currentAppointmentDetails.set({
         mode: this.mode(),
         practice: practiceValue,
         doctor: doctorValue,
         date: selectedDate,
       });
+
+      // Show the modal
+      this.showConfirmModal.set(true);
     }
+  }
+
+  // Handle confirmation accept
+  onConfirmAccept() {
+    // Hide the modal
+    this.showConfirmModal.set(false);
+
+    // Emit the appointment info to parent component
+    const details = this.currentAppointmentDetails();
+    if (details) {
+      this.appointmentInfo.emit(details);
+    }
+  }
+
+  // Handle confirmation decline
+  onConfirmDecline() {
+    // Just hide the modal
+    this.showConfirmModal.set(false);
   }
 }

@@ -47,16 +47,16 @@
     <app-appointment-type (appointmentType)="appointmentType$.set($event)"></app-appointment-type>
     }
     @if (currentStep$() === 1) {
-    <app-time-place-picker (appointmentInfo)="appointmentInfo$.set($event)"></app-time-place-picker>
+    <app-time-place-picker [appointmentType]="appointmentType$()" (appointmentInfo)="handleAppointmentInfoSet($event)">
+    </app-time-place-picker>
     }
     @if (currentStep$() === 2) {
-    <app-confirm-appointment [appointmentType]="appointmentType$()" [appointmentInfo]="appointmentInfo$()"
-      (acceptAppointment)="confirmAppointment()" (declineAppointment)="declineAppointment()">
-    </app-confirm-appointment>
+    <app-relevant-documents (goBack)="goToStep(1)" (continueToNext)="completeRelevantDocuments()">
+    </app-relevant-documents>
     }
     @if (currentStep$() === 3) {
-    <app-relevant-documents (goBack)="goToStep(2)" (completeBooking)="completePersonalInfo()">
-    </app-relevant-documents>
+    <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalData()">
+    </app-personal-information>
     }
   </div>
 </div>

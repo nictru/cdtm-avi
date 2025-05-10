@@ -1,14 +1,76 @@
 <div class="personal-info-container">
-  <h2>Relevant Documents</h2>
+  <h1>Welcome to avi. Nice to meet you.</h1>
 
-  <!-- Placeholder for personal information form -->
-  <div class="form-placeholder">
-    <app-upload [bucket]="'patient-docs'" (filesUploaded)="onFilesUploaded($event)">
-    </app-upload>
+  <div class="form-row">
+    <div class="form-group">
+      <select class="form-control" id="title" name="title" [ngModel]="title()" (ngModelChange)="title.set($event)">
+        <option value="" disabled selected>Title (Optional)</option>
+        <option *ngFor="let option of titleOptions()" [value]="option">{{ option }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" id="salutation" name="salutation" [ngModel]="salutation()"
+        (ngModelChange)="salutation.set($event)">
+        <option value="" disabled selected>Salutation</option>
+        <option *ngFor="let option of salutationOptions()" [value]="option">{{ option }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First name"
+        [ngModel]="firstName()" (ngModelChange)="firstName.set($event)">
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last name"
+        [ngModel]="lastName()" (ngModelChange)="lastName.set($event)">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="email" class="form-control" id="email" name="email" placeholder="Email address" [ngModel]="email()"
+      (ngModelChange)="email.set($event)">
+  </div>
+
+  <div class="form-group">
+    <label>Your date of birth:</label>
+    <div class="date-inputs">
+      <input type="text" class="form-control date-input" id="day" name="birthDay" placeholder="Day"
+        [ngModel]="birthDay()" (ngModelChange)="birthDay.set($event)">
+      <input type="text" class="form-control date-input" id="month" name="birthMonth" placeholder="Month"
+        [ngModel]="birthMonth()" (ngModelChange)="birthMonth.set($event)">
+      <input type="text" class="form-control date-input" id="year" name="birthYear" placeholder="Year"
+        [ngModel]="birthYear()" (ngModelChange)="birthYear.set($event)">
+    </div>
+  </div>
+
+  <div class="checkbox-group">
+    <div class="checkbox-item">
+      <input type="checkbox" id="termsCheckbox" name="acceptTerms" [ngModel]="acceptTerms()"
+        (ngModelChange)="acceptTerms.set($event)">
+      <label for="termsCheckbox">Yes, I hereby accept the <a href="#">terms and conditions</a>.*</label>
+    </div>
+
+    <div class="checkbox-item">
+      <input type="checkbox" id="treatmentCheckbox" name="allowTreatmentInfo" [ngModel]="allowTreatmentInfo()"
+        (ngModelChange)="allowTreatmentInfo.set($event)">
+      <label for="treatmentCheckbox">I allow avi to provide me with treatment information (e.g. lab results) via
+        app.*</label>
+      <a href="#" class="more-link">More</a>
+    </div>
+
+    <div class="checkbox-item">
+      <input type="checkbox" id="reminderCheckbox" name="allowReminders" [ngModel]="allowReminders()"
+        (ngModelChange)="allowReminders.set($event)">
+      <label for="reminderCheckbox">I allow avi to remind me of screenings and vaccinations based on my health data.
+        <span class="optional-text">Optional</span></label>
+      <a href="#" class="more-link">More</a>
+    </div>
   </div>
 
   <div class="action-buttons">
     <button class="back-btn" (click)="onGoBack()">Back</button>
-    <button class="continue-btn" (click)="onCompleteBooking()">Complete Booking</button>
+    <button class="continue-btn" (click)="onCompleteBooking()" [disabled]="!isFormValid()">Continue</button>
   </div>
 </div>

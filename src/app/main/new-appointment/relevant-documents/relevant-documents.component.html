@@ -1,6 +1,17 @@
 <div class="personal-info-container">
     <h2>Relevant Documents</h2>
 
+    <div class="document-info">
+        <p>Please upload any documents that may be relevant to your appointment:</p>
+        <div class="document-chip-grid">
+            <span class="document-chip">Vaccination pass</span>
+            <span class="document-chip">Recent hospital letters</span>
+            <span class="document-chip">Important medical reports</span>
+            <span class="document-chip">Referral letters</span>
+            <span class="document-chip">Medication lists</span>
+        </div>
+    </div>
+
     <!-- Placeholder for document upload -->
     <div class="form-placeholder">
         <app-upload [bucket]="'patient-docs'" (filesUploaded)="onFilesUploaded($event)">
@@ -9,6 +20,51 @@
 
     <div class="action-buttons">
         <button class="back-btn" (click)="onGoBack()">Back</button>
-        <button class="continue-btn" (click)="onCompleteBooking()">Complete Booking</button>
+        <button class="continue-btn" (click)="onContinue()">Continue</button>
     </div>
 </div>
+
+<style>
+    .document-chip-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 5px;
+        justify-content: center;
+    }
+
+    .document-chip {
+        display: inline-block;
+        background-color: #e0e0e0;
+        border-radius: 16px;
+        padding: 6px 10px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .personal-info-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .personal-info-container h2 {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .document-info {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .form-placeholder {
+        margin-bottom: 15px;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+</style>
