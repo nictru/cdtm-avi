@@ -7,7 +7,7 @@
   padding: 10px;
   max-width: 740px;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .card {

@@ -2,7 +2,7 @@
   @for (field of fields; track field.id) {
   <div
     class="card"
-    (click)="navigateToAppointmentType(field.id)"
+    (click)="setAppointmentType(field.id)"
   >
     <div class="icon-container">
       <i class="fas" [ngClass]="field.icon"></i>

@@ -1,7 +1,7 @@
 export const fields = [
   {
     id: 'unwell',
-    name: 'Complaints',
+    name: 'Health complaints',
     description: 'For any complaints you would like to have clarified',
     icon: 'fa-notes-medical',
     fields: [

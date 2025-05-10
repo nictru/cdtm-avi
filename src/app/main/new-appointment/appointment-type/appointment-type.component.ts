@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { fields } from '../questioning/fields';
@@ -11,11 +11,10 @@ import { fields } from '../questioning/fields';
   standalone: true,
 })
 export class AppointmentTypeComponent {
+  appointmentType = output<string>();
   public fields = fields;
 
-  constructor(private router: Router) {}
-
-  navigateToAppointmentType(type: string) {
-    this.router.navigate(['/app/new-appointment/' + type]);
+  setAppointmentType(type: string) {
+    this.appointmentType.emit(type);
   }
 }
