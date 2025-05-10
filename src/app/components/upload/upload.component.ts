@@ -525,7 +525,7 @@ export class UploadComponent {
       }
 
       if (data?.session_id) {
-        this.qrCodeUrl = `https://avi-cdtm.netlify.app/app/mobile-upload/${data.session_id}`;
+        this.qrCodeUrl = `https://effulgent-meringue-9fc8f2.netlify.app/app/mobile-upload/${data.session_id}`;
         this.showQRCode = true;
         this.cdr.detectChanges();
       } else {

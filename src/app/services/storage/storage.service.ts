@@ -46,11 +46,11 @@ export class StorageService extends AbstractApiService {
   async uploadFile(
     bucketName: string,
     file: File,
-    onProgress?: (progress: number) => void
+    onProgress?: (progress: number) => void,
+    customPathPrefix?: string
   ) {
     const filePath =
-      this.authService.userId() +
-      '/' +
+      (customPathPrefix ? customPathPrefix + '/' : this.authService.userId() + '/') +
       Date.now() +
       '_' +
       Math.random().toString(36).substring(2, 15) +
