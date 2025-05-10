@@ -147,6 +147,10 @@ export class PersonalInformationComponent {
   // Method to emit complete booking event
   onCompleteBooking() {
     if (this.isFormValid()) {
+      console.log(
+        'Form is valid, completing booking with:',
+        this.personalInfo()
+      );
       this.completeBooking.emit(this.personalInfo());
     } else {
       // Handle validation error

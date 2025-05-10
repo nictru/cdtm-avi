@@ -1,0 +1,67 @@
+<div class="summary-container">
+    <h2>Appointment Summary</h2>
+
+    <div class="summary-section">
+        <h3>Reason for Visit</h3>
+        <p>{{ prettyAppointmentType || 'Not specified' }}</p>
+    </div>
+
+    <div class="summary-section">
+        <h3>Appointment Details</h3>
+        <div *ngIf="appointmentInfo">
+            <div class="detail-row">
+                <span class="label">Date:</span>
+                <span class="value">{{ appointmentDate }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Time:</span>
+                <span class="value">{{ appointmentTime }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Appointment Type:</span>
+                <span class="value">{{ appointmentMode }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Practice:</span>
+                <span class="value">{{ appointmentInfo.practice }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Doctor:</span>
+                <span class="value">{{ appointmentInfo.doctor }}</span>
+            </div>
+        </div>
+        <p *ngIf="!appointmentInfo" class="missing-info">Appointment details not available</p>
+    </div>
+
+    <div class="documents-note">
+        <p>All required documents have been submitted.</p>
+    </div>
+
+    <div class="summary-section personal-info">
+        <h3>Personal Information</h3>
+        <div *ngIf="personalInfo">
+            <div class="detail-row">
+                <span class="label">Name:</span>
+                <span class="value">{{ fullName }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Email:</span>
+                <span class="value">{{ personalInfo.email }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Phone:</span>
+                <span class="value">{{ personalInfo.phoneNumber }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Date of Birth:</span>
+                <span class="value">{{ dateOfBirth }}</span>
+            </div>
+        </div>
+        <p *ngIf="!personalInfo" class="missing-info">Personal information not available</p>
+    </div>
+
+    <div class="action-buttons">
+        <button class="book-button" (click)="onBookNow()">Book Now</button>
+        <button class="cancel-button" (click)="onCancel()">Cancel</button>
+    </div>
+</div>
