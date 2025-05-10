@@ -43,21 +43,25 @@
 </ol>
 </nav>
 </div>
-<div class="vertical-divider"></div>
 <div class="main-content">
-  @if (currentStep$() === 0) {
-  <app-appointment-type (appointmentType)="appointmentType$.set($event)"></app-appointment-type>
-  }
-  @if (currentStep$() === 1) {
-  <app-time-place-picker (appointmentInfo)="appointmentInfo$.set($event)"></app-time-place-picker>
-  }
-  @if (currentStep$() === 2) {
-  <app-confirm-appointment [appointmentType]="appointmentType$()" [appointmentInfo]="appointmentInfo$()"
-    (acceptAppointment)="confirmAppointment()" (declineAppointment)="declineAppointment()">
-  </app-confirm-appointment>
-  }
-  @if (currentStep$() === 3) {
-  <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalInfo()">
-  </app-personal-information>
-  }
+  <div class="content-left-column">
+    @if (currentStep$() === 0) {
+    <app-appointment-type (appointmentType)="appointmentType$.set($event)"></app-appointment-type>
+    }
+    @if (currentStep$() === 1) {
+    <app-time-place-picker (appointmentInfo)="appointmentInfo$.set($event)"></app-time-place-picker>
+    }
+    @if (currentStep$() === 2) {
+    <app-confirm-appointment [appointmentType]="appointmentType$()" [appointmentInfo]="appointmentInfo$()"
+      (acceptAppointment)="confirmAppointment()" (declineAppointment)="declineAppointment()">
+    </app-confirm-appointment>
+    }
+    @if (currentStep$() === 3) {
+    <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalInfo()">
+    </app-personal-information>
+    }
+  </div>
+  <div class="content-right-column">
+    <app-chat></app-chat>
+  </div>
 </div>

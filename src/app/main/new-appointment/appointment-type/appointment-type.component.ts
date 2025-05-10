@@ -1,7 +1,7 @@
 import { Component, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgClass } from '@angular/common';
-import { fields } from '../questioning/fields';
+import { fields } from './fields';
 
 @Component({
   selector: 'app-appointment-type',

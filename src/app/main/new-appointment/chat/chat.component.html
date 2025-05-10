@@ -1,0 +1,49 @@
+<div class="chat-container">
+  <div class="chat-messages-container">
+    <div class="chat-messages">
+      @if (selectedField(); as selectedField) {
+      <div class="card selected-appointment-type">
+        <div class="selected-appointment-type-content">
+          <div class="icon-container">
+            <i class="fas" [ngClass]="selectedField.icon"></i>
+          </div>
+          <div class="selected-appointment-type-text">
+            <h2>{{ selectedField.name }}</h2>
+            <div class="card-content">
+              <p>{{ selectedField.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+      @for (message of messagesToShow$(); track message) {
+      <div class="message" [ngClass]="message.role">
+        <div class="message-content">
+          {{ message.content }}
+        </div>
+      </div>
+      }
+      @let pendingAssistantMessage = pendingAssistantMessage$();
+      @if (pendingAssistantMessage !== null) {
+      <div class="message assistant">
+        <div class="message-content">
+          {{ pendingAssistantMessage }}<span class="streaming-cursor">█</span>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="chat-input-wrapper">
+    @if (isFinished$()) {
+    <button class="continue-btn">Continue</button>
+    }
+    <div class="chat-input">
+      <input type="text" placeholder="Type your message..." [ngModel]="currentMessage()"
+        (ngModelChange)="currentMessage.set($event)" (keyup.enter)="sendMessage(currentMessage())" />
+      <button (click)="sendMessage(currentMessage())" [disabled]="!currentMessage()">
+        Send
+      </button>
+    </div>
+  </div>
+</div>

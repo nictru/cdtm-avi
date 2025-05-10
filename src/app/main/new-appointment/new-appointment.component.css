@@ -39,27 +39,30 @@
   display: block;
 }
 
-.vertical-divider {
-  position: fixed;
-  top: 64px;
-  left: calc(320px + (100vw - 320px) / 2);
-  transform: translateX(-50%);
-  width: 1.5px;
-  height: calc(100vh - 64px);
-  background: #e5e7eb; /* Tailwind gray-200 */
-  z-index: 20;
-}
-
 .main-content {
   position: fixed;
   top: 64px;
   left: 320px;
-  width: calc((100vw - 320px) / 2);
+  width: calc(100vw - 320px);
   height: calc(100vh - 64px);
-  padding: 32px 40px 32px 40px;
-  overflow-y: auto;
+  display: flex;
+  overflow: hidden;
   background: #fafbfc;
   z-index: 1;
+}
+
+.content-left-column {
+  width: 50%;
+  height: 100%;
+  padding: 32px 40px;
+  overflow-y: auto;
+}
+
+.content-right-column {
+  width: 50%;
+  height: 100%;
+  border-left: 1.5px solid #e5e7eb;
+  overflow: hidden;
 }
 
 /* Stepper button styles */

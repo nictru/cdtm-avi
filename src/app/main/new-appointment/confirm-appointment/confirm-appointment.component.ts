@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { fields } from '../questioning/fields';
+import { fields } from '../appointment-type/fields';
 
 @Component({
   selector: 'app-confirm-appointment',

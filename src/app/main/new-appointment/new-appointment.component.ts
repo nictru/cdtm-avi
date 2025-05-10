@@ -1,10 +1,11 @@
 import { Component, computed, signal } from '@angular/core';
 import { AppointmentTypeComponent } from './appointment-type/appointment-type.component';
-import { fields } from './questioning/fields';
+import { fields } from './appointment-type/fields';
 import { NgClass } from '@angular/common';
 import { TimePlacePickerComponent } from './time-place-picker/time-place-picker.component';
 import { ConfirmAppointmentComponent } from './confirm-appointment/confirm-appointment.component';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
+import { ChatComponent } from './chat/chat.component';
 
 @Component({
   selector: 'app-new-appointment',
@@ -14,6 +15,7 @@ import { PersonalInformationComponent } from './personal-information/personal-in
     TimePlacePickerComponent,
     ConfirmAppointmentComponent,
     PersonalInformationComponent,
+    ChatComponent,
   ],
   templateUrl: './new-appointment.component.html',
   styleUrl: './new-appointment.component.css',

@@ -6,16 +6,16 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { ChatService, Message } from '../../../../services/chat/chat.service';
+import { ChatService, Message } from '../../../services/chat/chat.service';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { fields } from '../fields';
-import { CalendarComponent } from '../calendar/calendar.component';
+import { fields } from '../appointment-type/fields';
+
 @Component({
   selector: 'app-chat',
-  imports: [NgClass, FormsModule, CalendarComponent],
+  imports: [NgClass, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
   standalone: true,
