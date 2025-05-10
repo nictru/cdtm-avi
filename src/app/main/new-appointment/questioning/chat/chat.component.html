@@ -1,1 +1,27 @@
-<p>chat works!</p>
+<div class="chat-container">
+  <div class="chat-messages">
+    @for (message of messages$(); track message) {
+    <div class="message" [ngClass]="message.role">
+      <div class="message-content">
+        {{ message.content }}
+      </div>
+    </div>
+    }
+
+    @if (streamingResponse()) {
+    <div class="message assistant">
+      <div class="message-content">
+        {{ streamingResponse() }}
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="chat-input">
+    <input type="text" placeholder="Type your message..." [ngModel]="currentMessage()"
+      (ngModelChange)="currentMessage.set($event)" (keyup.enter)="sendMessage(currentMessage())" />
+    <button (click)="sendMessage(currentMessage())" [disabled]="!currentMessage()">
+      Send
+    </button>
+  </div>
+</div>

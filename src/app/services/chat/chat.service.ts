@@ -2,17 +2,10 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { AbstractApiService } from '../supabase.service';
 
-export type Message = {
+export interface Message {
   role: 'user' | 'assistant' | 'system';
   content: string;
 };
-
-// Interface for formatted messages sent to AI SDK
-interface CoreMessage {
-  role: string;
-  content: string;
-  experimental_attachments?: any[];
-}
 
 @Injectable({
   providedIn: 'root',
@@ -32,17 +25,6 @@ export class ChatService extends AbstractApiService {
     if (!messages || messages.length === 0) {
       throw new Error('No messages to send to AI');
     }
-
-    // Simple format for messages - use directly from our Message type
-    const formattedMessages = messages.map((msg) => {
-      // Return a simplified message format that the AI SDK can process
-      const formattedMessage: CoreMessage = {
-        role: msg.role,
-        content: msg.content,
-      };
-
-      return formattedMessage;
-    });
 
     // Supabase Project and Function details
     const functionUrl = `${environment.supabaseUrl}/functions/v1/ai-chat`;
@@ -85,7 +67,7 @@ export class ChatService extends AbstractApiService {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify({ messages: formattedMessages }),
+          body: JSON.stringify({ messages }),
         },
         timeout
       );
@@ -160,7 +142,7 @@ export class ChatService extends AbstractApiService {
           Authorization: `Bearer ${accessToken}`,
           Accept: 'text/event-stream',
         },
-        body: JSON.stringify({ messages: formattedMessages }),
+        body: JSON.stringify({ messages }),
       },
       timeout
     );
