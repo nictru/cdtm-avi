@@ -5,141 +5,48 @@
   <nav aria-label="Progress">
     @let step = currentStep$();
     <ol role="list" class="overflow-hidden">
-      <li class="relative pb-10">
-        <div class="absolute top-4 left-4 mt-0.5 -ml-px h-full w-0.5"
-          [ngClass]="step > 0 ? 'bg-indigo-600' : 'bg-gray-300'" aria-hidden="true"></div>
-        <!-- Step 0: Reason for visit -->
-        <a href="#" class="group relative flex items-start" [ngClass]="step > 0 ? '' : ''"
-          [attr.aria-current]="step === 0 ? 'step' : null">
-          <span class="flex h-9 items-center">
-            <span class="relative z-10 flex size-8 items-center justify-center rounded-full"
-              [ngClass]="step > 0 ? 'bg-indigo-600 group-hover:bg-indigo-800' : step === 0 ? 'border-2 border-indigo-600 bg-white' : 'border-2 border-gray-300 bg-white group-hover:border-gray-400'">
-              <ng-container *ngIf="step > 0">
-                <!-- Tick for completed step -->
-                <svg class="size-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-                  data-slot="icon">
-                  <path fill-rule="evenodd"
-                    d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                    clip-rule="evenodd" />
-                </svg>
-              </ng-container>
-              <ng-container *ngIf="step === 0">
-                <span class="size-2.5 rounded-full bg-indigo-600"></span>
-              </ng-container>
-              <ng-container *ngIf="step < 0">
-                <span class="size-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
-              </ng-container>
-            </span>
-          </span>
-          <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium"
-              [ngClass]="step === 0 ? 'text-indigo-600' : step > 0 ? '' : 'text-gray-500'">Reason for visit</span>
-            @let appointmentType = appointmentType$();
-            <span class="text-sm text-gray-500">{{ appointmentType ? prettyAppointmentType$() : 'Select the reason for
-              your appointment.'}}</span>
-          </span>
-        </a>
-      </li>
-      <li class="relative pb-10">
-        <div class="absolute top-4 left-4 mt-0.5 -ml-px h-full w-0.5"
-          [ngClass]="step > 1 ? 'bg-indigo-600' : 'bg-gray-300'" aria-hidden="true"></div>
-        <!-- Step 1: Date and time -->
-        <a href="#" class="group relative flex items-start" [attr.aria-current]="step === 1 ? 'step' : null">
-          <span class="flex h-9 items-center" aria-hidden="true">
-            <span class="relative z-10 flex size-8 items-center justify-center rounded-full"
-              [ngClass]="step > 1 ? 'bg-indigo-600 group-hover:bg-indigo-800' : step === 1 ? 'border-2 border-indigo-600 bg-white' : 'border-2 border-gray-300 bg-white group-hover:border-gray-400'">
-              <ng-container *ngIf="step > 1">
-                <!-- Tick for completed step -->
-                <svg class="size-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-                  data-slot="icon">
-                  <path fill-rule="evenodd"
-                    d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                    clip-rule="evenodd" />
-                </svg>
-              </ng-container>
-              <ng-container *ngIf="step === 1">
-                <span class="size-2.5 rounded-full bg-indigo-600"></span>
-              </ng-container>
-              <ng-container *ngIf="step < 1">
-                <span class="size-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
-              </ng-container>
-            </span>
-          </span>
-          <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium"
-              [ngClass]="step === 1 ? 'text-indigo-600' : step > 1 ? '' : 'text-gray-500'">Date and time</span>
-            <span class="text-sm text-gray-500">Choose your preferred date and time.</span>
-          </span>
-        </a>
-      </li>
-      <li class="relative pb-10">
-        <div class="absolute top-4 left-4 mt-0.5 -ml-px h-full w-0.5"
-          [ngClass]="step > 2 ? 'bg-indigo-600' : 'bg-gray-300'" aria-hidden="true"></div>
-        <!-- Step 2: Personal information -->
-        <a href="#" class="group relative flex items-start" [attr.aria-current]="step === 2 ? 'step' : null">
-          <span class="flex h-9 items-center" aria-hidden="true">
-            <span class="relative z-10 flex size-8 items-center justify-center rounded-full"
-              [ngClass]="step > 2 ? 'bg-indigo-600 group-hover:bg-indigo-800' : step === 2 ? 'border-2 border-indigo-600 bg-white' : 'border-2 border-gray-300 bg-white group-hover:border-gray-400'">
-              <ng-container *ngIf="step > 2">
-                <!-- Tick for completed step -->
-                <svg class="size-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-                  data-slot="icon">
-                  <path fill-rule="evenodd"
-                    d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                    clip-rule="evenodd" />
-                </svg>
-              </ng-container>
-              <ng-container *ngIf="step === 2">
-                <span class="size-2.5 rounded-full bg-indigo-600"></span>
-              </ng-container>
-              <ng-container *ngIf="step < 2">
-                <span class="size-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
-              </ng-container>
-            </span>
-          </span>
-          <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium"
-              [ngClass]="step === 2 ? 'text-indigo-600' : step > 2 ? '' : 'text-gray-500'">Personal information</span>
-            <span class="text-sm text-gray-500">Enter your personal details.</span>
-          </span>
-        </a>
-      </li>
-      <li class="relative">
-        <!-- Step 3: Authentication -->
-        <a href="#" class="group relative flex items-start" [attr.aria-current]="step === 3 ? 'step' : null">
-          <span class="flex h-9 items-center" aria-hidden="true">
-            <span class="relative z-10 flex size-8 items-center justify-center rounded-full"
-              [ngClass]="step > 3 ? 'bg-indigo-600 group-hover:bg-indigo-800' : step === 3 ? 'border-2 border-indigo-600 bg-white' : 'border-2 border-gray-300 bg-white group-hover:border-gray-400'">
-              <ng-container *ngIf="step > 3">
-                <!-- Tick for completed step -->
-                <svg class="size-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-                  data-slot="icon">
-                  <path fill-rule="evenodd"
-                    d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                    clip-rule="evenodd" />
-                </svg>
-              </ng-container>
-              <ng-container *ngIf="step === 3">
-                <span class="size-2.5 rounded-full bg-indigo-600"></span>
-              </ng-container>
-              <ng-container *ngIf="step < 3">
-                <span class="size-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
-              </ng-container>
-            </span>
-          </span>
-          <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium"
-              [ngClass]="step === 3 ? 'text-indigo-600' : step > 3 ? '' : 'text-gray-500'">Authentication</span>
-            <span class="text-sm text-gray-500">Verify your identity to continue.</span>
-          </span>
-        </a>
-      </li>
-    </ol>
-  </nav>
+      @for (stepDef of steps; track $index) {
+      <li class="relative pb-10" [ngClass]="{ 'pb-10': $index < steps.length - 1 }">
+        @if ($index < steps.length - 1) { <div class="absolute top-4 left-4 mt-0.5 -ml-px h-full w-0.5"
+          [ngClass]="step > $index ? 'bg-indigo-600' : 'bg-gray-300'" aria-hidden="true">
+</div>
+}
+<a href="#" class="group relative flex items-start" [attr.aria-current]="step === $index ? 'step' : null">
+  <span class="flex h-9 items-center">
+    <span class="relative z-10 flex size-8 items-center justify-center rounded-full"
+      [ngClass]="step > $index ? 'bg-indigo-600 group-hover:bg-indigo-800' : step === $index ? 'border-2 border-indigo-600 bg-white' : 'border-2 border-gray-300 bg-white group-hover:border-gray-400'">
+      @if (step > $index) {
+      <!-- Tick for completed step -->
+      <svg class="size-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+        <path fill-rule="evenodd"
+          d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+          clip-rule="evenodd" />
+      </svg>
+      }
+      @if (step === $index) {
+      <span class="size-2.5 rounded-full bg-indigo-600"></span>
+      }
+      @if (step < $index) { <span class="size-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
+    }
+  </span>
+  </span>
+  <span class="ml-4 flex min-w-0 flex-col">
+    <span class="text-sm font-medium"
+      [ngClass]="step === $index ? 'text-indigo-600' : step > $index ? '' : 'text-gray-500'">{{ stepDef.label }}</span>
+    <span class="text-sm text-gray-500">{{ stepDef.description() }}</span>
+  </span>
+</a>
+</li>
+}
+</ol>
+</nav>
 </div>
 <div class="vertical-divider"></div>
 <div class="main-content">
-  @if(!appointmentType$()) {
+  @if (currentStep$() === 0) {
   <app-appointment-type (appointmentType)="appointmentType$.set($event)"></app-appointment-type>
+  }
+  @if (currentStep$() === 1) {
+  <app-time-place-picker></app-time-place-picker>
   }
 </div>

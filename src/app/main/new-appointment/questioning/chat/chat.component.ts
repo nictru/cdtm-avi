@@ -20,7 +20,7 @@ import { CalendarComponent } from '../calendar/calendar.component';
   styleUrl: './chat.component.css',
   standalone: true,
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent {
   chatService = inject(ChatService);
   route = inject(ActivatedRoute);
   routeParams = toSignal(this.route.params);
@@ -65,40 +65,12 @@ export class ChatComponent implements OnInit {
     return fields.find((field) => field.id === this.appointmentType$());
   });
 
-  private getSessionStorageKey(): string {
-    return `chat-messages-${this.appointmentType$()}`;
-  }
-
   constructor() {
     // Effect to sync messages$ to sessionStorage
-    effect(() => {
-      const key = this.getSessionStorageKey();
-      sessionStorage.setItem(key, JSON.stringify(this.messages$()));
-    });
+
     effect(() => {
       console.log(this.isFinished$());
     });
-  }
-
-  ngOnInit(): void {
-    // Try to load messages from sessionStorage
-    const key = this.getSessionStorageKey();
-    const stored = sessionStorage.getItem(key);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          this.messages$.set(parsed);
-        }
-      } catch {}
-    }
-    if (this.messages$().length === 0) {
-      this.sendMessage(
-        'Hello, I would like to make a ' +
-          this.appointmentType$() +
-          ' appointment'
-      );
-    }
   }
 
   async sendMessage(message: string) {

@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { AppointmentTypeComponent } from './appointment-type/appointment-type.component';
 import { fields } from './questioning/fields';
 import { NgClass } from '@angular/common';
+import { TimePlacePickerComponent } from './time-place-picker/time-place-picker.component';
 
 @Component({
   selector: 'app-new-appointment',
-  imports: [AppointmentTypeComponent, NgClass],
+  imports: [AppointmentTypeComponent, NgClass, TimePlacePickerComponent],
   templateUrl: './new-appointment.component.html',
   styleUrl: './new-appointment.component.css',
   standalone: true,
@@ -31,6 +32,30 @@ export class NewAppointmentComponent {
     // For now, just move to step 1 if appointmentType is selected
     return 1;
   });
+
+  steps = [
+    {
+      label: 'Reason for visit',
+      description: () => {
+        const appointmentType = this.appointmentType$();
+        return appointmentType
+          ? this.prettyAppointmentType$()
+          : 'Select the reason for your appointment.';
+      },
+    },
+    {
+      label: 'Date and time',
+      description: () => 'Choose your preferred date and time.',
+    },
+    {
+      label: 'Personal information',
+      description: () => 'Enter your personal details.',
+    },
+    {
+      label: 'Authentication',
+      description: () => 'Verify your identity to continue.',
+    },
+  ];
 
   goToStep(step: number) {
     // Example: only allow going back to step 0 (reset appointmentType)
