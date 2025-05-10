@@ -1,19 +1,19 @@
 .picker-container {
   max-width: 720px;
-  margin: var(--spacing-10) auto;
+  margin: var(--spacing-5) auto;
   background: none;
   border-radius: 0;
   box-shadow: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  gap: var(--spacing-5);
 }
 
 .picker-container h2 {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-3xl);
   font-weight: 700;
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
   color: var(--gray-900);
   text-align: left;
   letter-spacing: -0.5px;
@@ -22,8 +22,8 @@
 .top-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--spacing-6);
+  align-items: center;
+  margin-bottom: var(--spacing-4);
   gap: var(--spacing-6);
 }
 
@@ -33,7 +33,7 @@
   background: var(--gray-200);
   border-radius: var(--radius-full);
   width: 240px;
-  margin-bottom: var(--spacing-2);
+  margin-bottom: 0;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
 }
@@ -59,7 +59,7 @@
 .dropdowns {
   display: flex;
   gap: var(--spacing-4);
-  margin-bottom: var(--spacing-2);
+  margin-bottom: 0;
   flex: 1;
 }
 .dropdowns label {
@@ -89,7 +89,7 @@
 .calendar-time-section {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-12);
+  gap: var(--spacing-8);
   align-items: flex-start;
   position: relative;
 }
@@ -97,7 +97,7 @@
 .date-column {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  gap: var(--spacing-5);
   min-width: 220px;
 }
 
@@ -142,9 +142,9 @@
 .time-slots {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-6);
-  margin-left: var(--spacing-6);
-  padding-left: var(--spacing-8);
+  gap: var(--spacing-4);
+  margin-left: var(--spacing-4);
+  padding-left: var(--spacing-6);
 }
 .time-group {
   display: flex;
