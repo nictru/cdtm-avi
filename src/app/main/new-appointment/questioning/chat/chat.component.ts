@@ -47,8 +47,17 @@ export class ChatComponent implements OnInit {
   });
 
   messages$ = signal<Message[]>([]);
+  messagesToShow$ = computed(() => {
+    // Filter out the first message
+    return this.messages$().slice(1);
+  });
+
   currentMessage = signal<string>('');
   pendingAssistantMessage$ = signal<string | null>(null);
+
+  selectedField = computed(() => {
+    return fields.find((field) => field.id === this.appointmentType$());
+  });
 
   private getSessionStorageKey(): string {
     return `chat-messages-${this.appointmentType$()}`;

@@ -1,6 +1,21 @@
 <div class="chat-container">
+  @if (selectedField(); as selectedField) {
+  <div class="card selected-appointment-type">
+    <div class="selected-appointment-type-content">
+      <div class="icon-container">
+        <i class="fas" [ngClass]="selectedField.icon"></i>
+      </div>
+      <div class="selected-appointment-type-text">
+        <h2>{{ selectedField.name }}</h2>
+        <div class="card-content">
+          <p>{{ selectedField.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
   <div class="chat-messages">
-    @for (message of messages$(); track message) {
+    @for (message of messagesToShow$(); track message) {
     <div class="message" [ngClass]="message.role">
       <div class="message-content">
         {{ message.content }}

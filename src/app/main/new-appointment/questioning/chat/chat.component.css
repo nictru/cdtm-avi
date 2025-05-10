@@ -80,3 +80,68 @@
 .message-content {
   white-space: pre-wrap;
 }
+
+.selected-appointment-type {
+  margin: 48px auto 0 auto; /* Lower the card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 420px;
+  min-height: 120px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 24px 30px;
+  background-color: white;
+  color: inherit;
+}
+
+.selected-appointment-type-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.selected-appointment-type .icon-container {
+  margin-bottom: 0;
+  margin-right: 24px;
+  background-color: #f0f7ff;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.selected-appointment-type .icon-container i {
+  font-size: 32px;
+  color: #3498db;
+}
+
+.selected-appointment-type-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.selected-appointment-type h2 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 22px;
+  text-align: left;
+}
+
+.selected-appointment-type .card-content {
+  padding: 0;
+  width: 100%;
+}
+
+.selected-appointment-type .card-content p {
+  color: #7f8c8d;
+  text-align: left;
+  font-size: 15px;
+  margin: 0;
+}
