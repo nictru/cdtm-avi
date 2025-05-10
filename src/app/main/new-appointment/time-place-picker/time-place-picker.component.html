@@ -34,7 +34,7 @@
         <input type="date" [ngModel]="dateString()" (ngModelChange)="onDateInputChange($event)" />
       </label>
 
-      <button class="continue-btn" (click)="emitSelection()" [disabled]="!time()">Continue</button>
+      <button class="continue-btn" (click)="openConfirmModal()" [disabled]="!time()">Continue</button>
     </div>
 
     <div class="time-slots">
@@ -53,3 +53,11 @@
     </div>
   </div>
 </div>
+
+<!-- Confirmation Modal -->
+@if (showConfirmModal()) {
+<app-confirm-appointment [isVisible]="showConfirmModal()" [appointmentType]="appointmentType()"
+  [appointmentInfo]="currentAppointmentDetails() ?? undefined" (acceptAppointment)="onConfirmAccept()"
+  (declineAppointment)="onConfirmDecline()">
+</app-confirm-appointment>
+}

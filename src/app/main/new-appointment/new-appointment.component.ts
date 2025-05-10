@@ -3,7 +3,6 @@ import { AppointmentTypeComponent } from './appointment-type/appointment-type.co
 import { fields } from './appointment-type/fields';
 import { NgClass } from '@angular/common';
 import { TimePlacePickerComponent } from './time-place-picker/time-place-picker.component';
-import { ConfirmAppointmentComponent } from './confirm-appointment/confirm-appointment.component';
 import { RelevantDocumentsComponent } from './relevant-documents/relevant-documents.component';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 
@@ -13,7 +12,6 @@ import { PersonalInformationComponent } from './personal-information/personal-in
     AppointmentTypeComponent,
     NgClass,
     TimePlacePickerComponent,
-    ConfirmAppointmentComponent,
     RelevantDocumentsComponent,
     PersonalInformationComponent,
   ],
@@ -39,19 +37,18 @@ export class NewAppointmentComponent {
     | undefined
   >(undefined);
 
-  // Signal for personal information step
+  // Signal for relevant documents step
   relevantDocuments$ = signal<boolean>(false);
 
   // Signal for personal data step
   personalData$ = signal<boolean>(false);
 
-  currentStep$ = computed<0 | 1 | 2 | 3 | 4 | 5>(() => {
+  currentStep$ = computed<0 | 1 | 2 | 3 | 4>(() => {
     // Step 0: Reason for visit (appointmentType not selected)
-    // Step 1: Date and time (appointmentType selected, but not yet date/time)
-    // Step 2: Confirm appointment
-    // Step 3: Relevant documents
-    // Step 4: Personal information
-    // Step 5: Authentication
+    // Step 1: Date and time selection (includes confirmation)
+    // Step 2: Relevant documents
+    // Step 3: Personal information
+    // Step 4: Authentication
     if (!this.appointmentType$()) {
       return 0;
     }
@@ -81,11 +78,13 @@ export class NewAppointmentComponent {
     },
     {
       label: 'Date and time',
-      description: () => 'Choose your preferred date and time.',
-    },
-    {
-      label: 'Confirm appointment',
-      description: () => 'Review and confirm your appointment details.',
+      description: () =>
+        this.appointmentInfo$()
+          ? `${this.appointmentInfo$()?.date.toLocaleDateString()} at ${this.appointmentInfo$()?.date.toLocaleTimeString(
+              [],
+              { hour: '2-digit', minute: '2-digit' }
+            )}`
+          : 'Choose your preferred date and time.',
     },
     {
       label: 'Relevant documents',
@@ -121,21 +120,16 @@ export class NewAppointmentComponent {
     if (step === 3) {
       this.personalData$.set(false);
     }
-    // Expand this as you add more step logic
   }
 
-  confirmAppointment() {
-    // Move to the relevant documents step
+  // When appointmentInfo is set (after confirmation), proceed to relevant documents
+  handleAppointmentInfoSet(info: any) {
+    this.appointmentInfo$.set(info);
     this.relevantDocuments$.set(true);
     console.log('Appointment confirmed! Moving to relevant documents step.', {
       type: this.appointmentType$(),
       info: this.appointmentInfo$(),
     });
-  }
-
-  declineAppointment() {
-    // Reset appointment data and go back to date/time selection
-    this.goToStep(1);
   }
 
   completeRelevantDocuments() {
