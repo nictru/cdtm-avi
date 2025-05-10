@@ -1,51 +1,16 @@
 <div class="cards-container">
-  <div class="card" (click)="navigateToAppointmentType('routine')">
+  @for (field of fields; track field.id) {
+  <div
+    class="card"
+    (click)="navigateToAppointmentType(field.id)"
+  >
     <div class="icon-container">
-      <i class="fas fa-calendar"></i>
+      <i class="fas" [ngClass]="field.icon"></i>
     </div>
-    <h2>Routine</h2>
+    <h2>{{ field.name }}</h2>
     <div class="card-content">
-      <p>Regular check-up appointment</p>
+      <p>{{ field.description }}</p>
     </div>
   </div>
-
-  <div class="card" (click)="navigateToAppointmentType('psychologist')">
-    <div class="icon-container">
-      <i class="fas fa-brain"></i>
-    </div>
-    <h2>Psychologist</h2>
-    <div class="card-content">
-      <p>Mental health consultation</p>
-    </div>
-  </div>
-
-  <div class="card" (click)="navigateToAppointmentType('emergency')">
-    <div class="icon-container">
-      <i class="fas fa-ambulance"></i>
-    </div>
-    <h2>Emergency</h2>
-    <div class="card-content">
-      <p>Urgent medical attention needed</p>
-    </div>
-  </div>
-
-  <div class="card" (click)="navigateToAppointmentType('unwell')">
-    <div class="icon-container">
-      <i class="fas fa-thermometer"></i>
-    </div>
-    <h2>Unwell</h2>
-    <div class="card-content">
-      <p>Feeling sick or experiencing symptoms</p>
-    </div>
-  </div>
-
-  <div class="card" (click)="navigateToAppointmentType('specialist')">
-    <div class="icon-container">
-      <i class="fas fa-user-md"></i>
-    </div>
-    <h2>Specialist</h2>
-    <div class="card-content">
-      <p>Specialized medical consultation</p>
-    </div>
-  </div>
+  }
 </div>

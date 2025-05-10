@@ -12,6 +12,20 @@ import { QuestioningTypeSelectorComponent } from './main/new-appointment/questio
 import { ChatComponent } from './main/new-appointment/questioning/chat/chat.component';
 import { AudioComponent } from './main/new-appointment/questioning/audio/audio.component';
 import { VideoComponent } from './main/new-appointment/questioning/video/video.component';
+import { fields } from './main/new-appointment/questioning/fields';
+
+const questioningChildren = [
+  { path: '', component: QuestioningTypeSelectorComponent },
+  { path: 'chat', component: ChatComponent },
+  { path: 'voice', component: AudioComponent },
+  { path: 'video', component: VideoComponent },
+];
+
+const appointmentTypeRoutes = fields.map((field) => ({
+  path: field.id,
+  component: QuestioningComponent,
+  children: questioningChildren,
+}));
 
 export const routes: Routes = [
   {
@@ -41,113 +55,9 @@ export const routes: Routes = [
           {
             path: 'questioning',
             component: QuestioningComponent,
-            children: [
-              {
-                path: '',
-                component: QuestioningTypeSelectorComponent,
-              },
-              {
-                path: 'chat',
-                component: ChatComponent,
-              },
-              {
-                path: 'voice',
-                component: AudioComponent,
-              },
-              {
-                path: 'video',
-                component: VideoComponent,
-              },
-            ],
+            children: questioningChildren,
           },
-          {
-            path: 'routine',
-            component: QuestioningComponent,
-            children: [
-              {
-                path: '',
-                component: QuestioningTypeSelectorComponent,
-              },
-              {
-                path: 'chat',
-                component: ChatComponent,
-              },
-              {
-                path: 'voice',
-                component: AudioComponent,
-              },
-              {
-                path: 'video',
-                component: VideoComponent,
-              },
-            ],
-          },
-          {
-            path: 'psychologist',
-            component: QuestioningComponent,
-            children: [
-              {
-                path: '',
-                component: QuestioningTypeSelectorComponent,
-              },
-              {
-                path: 'chat',
-                component: ChatComponent,
-              },
-              {
-                path: 'voice',
-                component: AudioComponent,
-              },
-              {
-                path: 'video',
-                component: VideoComponent,
-              },
-            ],
-          },
-          {
-            path: 'unwell',
-            component: QuestioningComponent,
-            children: [
-              {
-                path: '',
-                component: QuestioningTypeSelectorComponent,
-              },
-              {
-                path: 'chat',
-                component: ChatComponent,
-              },
-              {
-                path: 'voice',
-                component: AudioComponent,
-              },
-              {
-                path: 'video',
-                component: VideoComponent,
-              },
-            ],
-          },
-          {
-            path: 'specialist',
-            component: QuestioningComponent,
-            children: [
-              {
-                path: '',
-                component: QuestioningTypeSelectorComponent,
-              },
-              {
-                path: 'chat',
-                component: ChatComponent,
-              },
-              {
-                path: 'voice',
-                component: AudioComponent,
-              },
-              {
-                path: 'video',
-                component: VideoComponent,
-              },
-            ],
-          },
+          ...appointmentTypeRoutes,
         ],
       },
       {
