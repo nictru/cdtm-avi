@@ -11,6 +11,8 @@ import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { fields } from '../fields';
+
 @Component({
   selector: 'app-chat',
   imports: [NgClass, FormsModule],
@@ -39,6 +41,11 @@ export class ChatComponent implements OnInit {
     return appointmentType;
   });
 
+  requiredFields$ = computed(() => {
+    const field = fields.find((field) => field.id === this.appointmentType$());
+    return field?.fields || [];
+  });
+
   messages$ = signal<Message[]>([]);
   currentMessage = signal<string>('');
   pendingAssistantMessage$ = signal<string | null>(null);
@@ -60,6 +67,7 @@ export class ChatComponent implements OnInit {
     this.pendingAssistantMessage$.set('');
 
     const response = await this.chatService.getAiResponse(
+      this.requiredFields$(),
       this.messages$(),
       (partialResponse) => {
         this.pendingAssistantMessage$.set(partialResponse);

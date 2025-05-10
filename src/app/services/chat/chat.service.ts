@@ -5,7 +5,7 @@ import { AbstractApiService } from '../supabase.service';
 export interface Message {
   role: 'user' | 'assistant' | 'system';
   content: string;
-};
+}
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +18,7 @@ export class ChatService extends AbstractApiService {
    * @returns Promise with the complete AI response
    */
   async getAiResponse(
+    requiredFields: string[],
     messages: Message[],
     onProgress?: (partialResponse: string) => void
   ): Promise<string> {
@@ -67,7 +68,7 @@ export class ChatService extends AbstractApiService {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify({ messages }),
+          body: JSON.stringify({ messages, requiredFields }),
         },
         timeout
       );
@@ -142,7 +143,7 @@ export class ChatService extends AbstractApiService {
           Authorization: `Bearer ${accessToken}`,
           Accept: 'text/event-stream',
         },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages, requiredFields }),
       },
       timeout
     );
