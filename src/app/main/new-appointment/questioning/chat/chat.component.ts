@@ -12,10 +12,10 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { fields } from '../fields';
-
+import { CalendarComponent } from '../calendar/calendar.component';
 @Component({
   selector: 'app-chat',
-  imports: [NgClass, FormsModule],
+  imports: [NgClass, FormsModule, CalendarComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
   standalone: true,
@@ -52,6 +52,12 @@ export class ChatComponent implements OnInit {
     return this.messages$().slice(1);
   });
 
+  isFinished$ = computed(() => {
+    return this.messages$().some((message) =>
+      message.content.includes('#finished')
+    );
+  });
+
   currentMessage = signal<string>('');
   pendingAssistantMessage$ = signal<string | null>(null);
 
@@ -68,6 +74,9 @@ export class ChatComponent implements OnInit {
     effect(() => {
       const key = this.getSessionStorageKey();
       sessionStorage.setItem(key, JSON.stringify(this.messages$()));
+    });
+    effect(() => {
+      console.log(this.isFinished$());
     });
   }
 
