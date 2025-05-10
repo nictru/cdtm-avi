@@ -1,64 +1,14 @@
 <div class="personal-info-container">
-    <h2>Personal Information</h2>
-    <p>Please enter your personal details to complete the appointment booking.</p>
+  <h2>Relevant Documents</h2>
 
-    <!-- Placeholder for personal information form -->
-    <div class="form-placeholder">
-        <div class="file-upload-section">
-            <h3>Upload Documents</h3>
-            <p>Please upload any relevant documents (PDF) or images (JPG, PNG).</p>
+  <!-- Placeholder for personal information form -->
+  <div class="form-placeholder">
+    <app-upload [bucket]="'patient-docs'" (filesUploaded)="onFilesUploaded($event)">
+    </app-upload>
+  </div>
 
-            <div class="drag-drop-area" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
-                (drop)="onDrop($event)" [class.drag-over]="isDragging">
-                <div class="drag-drop-content">
-                    <span class="drag-icon">📁</span>
-                    <p>Drag and drop your files here</p>
-                    <p>or</p>
-                    <label for="file-upload" class="file-upload-label">
-                        <span>Choose Files</span>
-                        <input type="file" id="file-upload" accept=".pdf,.jpg,.jpeg,.png" multiple
-                            (change)="onFileSelected($event)">
-                    </label>
-                </div>
-            </div>
-
-            <div class="files-actions" *ngIf="uploadedFiles.length > 0">
-                <button class="upload-btn" (click)="uploadFilesToSupabase()"
-                    [disabled]="isUploading || uploadedFiles.length === 0">
-                    <span *ngIf="!isUploading">Upload Files</span>
-                    <span *ngIf="isUploading">Uploading...</span>
-                </button>
-            </div>
-
-            <div class="files-list" *ngIf="uploadedFiles.length > 0">
-                <h4>Uploaded Files ({{uploadedFiles.length}})</h4>
-                <div class="file-item" *ngFor="let file of uploadedFiles; let i = index"
-                    [class.uploaded]="isFileUploaded(i)">
-                    <div class="file-info">
-                        <span class="file-icon">{{isPdf(file) ? '📄' : '🖼️'}}</span>
-                        <span class="file-name">{{ file.name }}</span>
-                        <span class="file-size">{{ formatFileSize(file.size) }}</span>
-
-                        <!-- Upload status indicator -->
-                        <span class="upload-status" *ngIf="uploadProgress[file.name] > 0">
-                            <span *ngIf="uploadProgress[file.name] === 100" class="status-success">
-                                ✓ Uploaded
-                            </span>
-                            <span *ngIf="uploadProgress[file.name] > 0 && uploadProgress[file.name] < 100"
-                                class="status-progress">
-                                Uploading...
-                            </span>
-                        </span>
-
-                        <button class="remove-file" (click)="removeFile(i)">✕</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="action-buttons">
-        <button class="back-btn" (click)="onGoBack()">Back</button>
-        <button class="continue-btn" (click)="onCompleteBooking()">Complete Booking</button>
-    </div>
+  <div class="action-buttons">
+    <button class="back-btn" (click)="onGoBack()">Back</button>
+    <button class="continue-btn" (click)="onCompleteBooking()">Complete Booking</button>
+  </div>
 </div>

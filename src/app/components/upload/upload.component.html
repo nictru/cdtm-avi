@@ -1,0 +1,42 @@
+<div class="file-upload-section">
+    <div class="drag-drop-area" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)" [class.drag-over]="isDragging">
+        <div class="drag-drop-content">
+            <span class="drag-icon">📁</span>
+            <p>Drag files here or <label for="file-upload" class="file-upload-label">choose files
+                    <input type="file" id="file-upload" accept=".pdf,.jpg,.jpeg,.png" multiple
+                        (change)="onFileSelected($event)">
+                </label></p>
+        </div>
+    </div>
+
+    <div class="camera-button-container">
+        <button class="camera-btn" (click)="openCamera()">
+            <span class="camera-icon">📷</span>
+            Take Picture
+        </button>
+    </div>
+
+    <div class="files-actions" *ngIf="uploadedFiles.length > 0">
+        <button class="upload-btn" (click)="uploadFilesToSupabase()"
+            [disabled]="isUploading || uploadedFiles.length === 0">
+            {{isUploading ? 'Uploading...' : 'Upload Files'}}
+        </button>
+    </div>
+
+    <div class="files-list" *ngIf="uploadedFiles.length > 0">
+        <h4>Files ({{uploadedFiles.length}})</h4>
+        <div class="file-item" *ngFor="let file of uploadedFiles; let i = index" [class.uploaded]="isFileUploaded(i)">
+            <div class="file-info">
+                <span class="file-icon">{{isPdf(file) ? '📄' : '🖼️'}}</span>
+                <span class="file-name">{{ file.name }}</span>
+                <span class="file-size">{{ formatFileSize(file.size) }}</span>
+                <span class="upload-status" *ngIf="uploadProgress[file.name] > 0">
+                    <span *ngIf="uploadProgress[file.name] === 100">✓</span>
+                    <span *ngIf="uploadProgress[file.name] > 0 && uploadProgress[file.name] < 100">...</span>
+                </span>
+                <button class="remove-file" (click)="removeFile(i)">✕</button>
+            </div>
+        </div>
+    </div>
+</div>
