@@ -1,8 +1,8 @@
 export const fields = [
   {
     id: 'unwell',
-    name: 'Beschwerden',
-    description: 'Für jegliche Beschwerden, die Sie abklären lassen möchten',
+    name: 'Complaints',
+    description: 'For any complaints you would like to have clarified',
     icon: 'fa-notes-medical',
     fields: [
       'What is the complaint?',
@@ -13,9 +13,9 @@ export const fields = [
   },
   {
     id: 'infection',
-    name: 'Infektsprechstunde',
+    name: 'Infection Consultation',
     description:
-      'Sehr kurzer Termin bei akuten Infektionen (seit max. 1-2 Tage)',
+      'Very short appointment for acute infections (for a maximum of 1-2 days)',
     icon: 'fa-bolt',
     fields: [
       'What symptoms do you have?',
@@ -26,8 +26,8 @@ export const fields = [
   },
   {
     id: 'sick-note',
-    name: 'Krankschreibung',
-    description: 'Krankschreibungen für psychische oder physische Krankheiten',
+    name: 'Sick Note',
+    description: 'Sick notes for psychological or physical illnesses',
     icon: 'fa-file-medical',
     fields: [
       'What illness or condition requires a sick note?',
@@ -37,9 +37,9 @@ export const fields = [
   },
   {
     id: 'prescription',
-    name: 'Rezepte',
+    name: 'Prescriptions',
     description:
-      'Rezepte für Ihre Behandlungen oder Medikamente (ebenfalls Gesundheitsapps auf Rezept möglich)',
+      'Prescriptions for your treatments or medications (also health apps on prescription possible)',
     icon: 'fa-prescription-bottle-alt',
     fields: [
       'Which medication or treatment do you need a prescription for?',
@@ -49,9 +49,8 @@ export const fields = [
   },
   {
     id: 'referral',
-    name: 'Überweisung',
-    description:
-      'Überweisung zu einem Facharzt oder einer speziellen Untersuchung',
+    name: 'Referral',
+    description: 'Referral to a specialist or a special examination',
     icon: 'fa-share-square',
     fields: [
       'Which specialist or examination do you need a referral for?',
@@ -61,8 +60,8 @@ export const fields = [
   },
   {
     id: 'prevention',
-    name: 'Vorsorge',
-    description: 'Vorsorgeuntersuchungen ohne konkrete Beschwerden',
+    name: 'Prevention',
+    description: 'Preventive check-ups without specific complaints',
     icon: 'fa-shield-alt',
     fields: [
       'Which preventive check-up do you need?',
@@ -72,8 +71,8 @@ export const fields = [
   },
   {
     id: 'control-lab',
-    name: 'Kontrolle und Labor',
-    description: 'Für die Kontrolle Ihrer Erkrankung oder Laborwerte',
+    name: 'Control and Laboratory',
+    description: 'For the control of your illness or laboratory values',
     icon: 'fa-chart-line',
     fields: [
       'Which condition or lab values need to be checked?',
@@ -83,8 +82,8 @@ export const fields = [
   },
   {
     id: 'vaccination-advice',
-    name: 'Impfung und Beratung',
-    description: 'Für Reise- oder Standardimpfungen (Kein Corona)',
+    name: 'Vaccination and Advice',
+    description: 'For travel or standard vaccinations (No Corona)',
     icon: 'fa-syringe',
     fields: [
       'Which vaccination or advice do you need?',
@@ -94,9 +93,8 @@ export const fields = [
   },
   {
     id: 'sexual-health',
-    name: 'Sexuelle Gesundheit',
-    description:
-      'Für die Beratung zu und Untersuchung von Ihrer sexuellen Gesundheit',
+    name: 'Sexual Health',
+    description: 'For advice and examination of your sexual health',
     icon: 'fa-venus-mars',
     fields: [
       'What is your concern regarding sexual health?',
@@ -108,7 +106,7 @@ export const fields = [
     id: 'dmp',
     name: 'DMP',
     description:
-      'Hausärztlicher Kontrolltermin in einem Disease-Management-Programm',
+      'General practitioner control appointment in a disease management program',
     icon: 'fa-notes-medical',
     fields: [
       'Which chronic condition is being managed?',
@@ -118,8 +116,8 @@ export const fields = [
   },
   {
     id: 'mental-health',
-    name: 'Mentale Gesundheit',
-    description: 'Für Beratung Ihrer mentale Gesundheit',
+    name: 'Mental Health',
+    description: 'For advice on your mental health',
     icon: 'fa-brain',
     fields: [
       'What mental health concern do you have?',
@@ -129,9 +127,9 @@ export const fields = [
   },
   {
     id: 'other',
-    name: 'Weitere Besuchsgründe',
+    name: 'Other Reasons for Visit',
     description:
-      'Für weitere Besuchsgründe und Spezialsprechstunden (u.a. Cannabis-Sprechstunde)',
+      'For other reasons for visit and special consultations (including cannabis consultation)',
     icon: 'fa-ellipsis-h',
     fields: [
       'What is the reason for your visit?',
