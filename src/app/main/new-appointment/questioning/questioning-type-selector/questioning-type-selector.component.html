@@ -1,0 +1,35 @@
+<div class="questioning-container">
+  <h1>We have some questions for you. How would you like to discuss them?</h1>
+
+  <div class="cards-container">
+    <div class="card" (click)="questioning_type.emit('chat')">
+      <div class="icon-container">
+        <i class="fas fa-comments"></i>
+      </div>
+      <h2>Chat</h2>
+      <div class="card-content">
+        <p>Text-based communication</p>
+      </div>
+    </div>
+
+    <div class="card" (click)="questioning_type.emit('voice')">
+      <div class="icon-container">
+        <i class="fas fa-phone-alt"></i>
+      </div>
+      <h2>Voice call</h2>
+      <div class="card-content">
+        <p>Audio-based communication</p>
+      </div>
+    </div>
+
+    <div class="card" (click)="questioning_type.emit('video')">
+      <div class="icon-container">
+        <i class="fas fa-video"></i>
+      </div>
+      <h2>Video call</h2>
+      <div class="card-content">
+        <p>Face-to-face communication</p>
+      </div>
+    </div>
+  </div>
+</div>

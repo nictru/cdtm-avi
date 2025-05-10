@@ -1,0 +1,144 @@
+.questioning-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 30px;
+  max-width: 800px;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.card {
+  width: 100%;
+  max-width: 320px;
+  min-height: 280px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 30px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.icon-container {
+  margin-bottom: 20px;
+  background-color: #f0f7ff;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-container i {
+  font-size: 40px;
+  color: #3498db;
+}
+
+h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 26px;
+  text-align: center;
+}
+
+.card-content {
+  padding: 15px 0;
+  width: 100%;
+}
+
+.card-content p {
+  color: #7f8c8d;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 26px;
+    margin-bottom: 30px;
+  }
+
+  .cards-container {
+    gap: 30px;
+  }
+
+  .card {
+    min-height: 250px;
+    padding: 25px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  .icon-container {
+    width: 70px;
+    height: 70px;
+  }
+
+  .icon-container i {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
+
+  .cards-container {
+    gap: 20px;
+  }
+
+  .card {
+    min-height: 220px;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .card-content p {
+    font-size: 14px;
+  }
+
+  .icon-container {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+  }
+
+  .icon-container i {
+    font-size: 28px;
+  }
+}

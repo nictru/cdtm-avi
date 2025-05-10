@@ -1,0 +1,14 @@
+@switch (questioning_type()) {
+@case ('chat') {
+<app-chat></app-chat>
+}
+@case ('voice') {
+<app-audio></app-audio>
+}
+@case ('video') {
+<app-video></app-video>
+}
+@default {
+<app-questioning-type-selector (questioning_type)="questioning_type.set($event)"></app-questioning-type-selector>
+}
+}

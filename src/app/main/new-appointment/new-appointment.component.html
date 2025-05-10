@@ -1,11 +1,11 @@
 @switch (appointmentType()) {
 @case (undefined) {
-  <app-appointment-type (appointmentType)="appointmentType.set($event)"></app-appointment-type>
+<app-appointment-type (appointmentType)="appointmentType.set($event)"></app-appointment-type>
 }
 @case ('emergency') {
-  <app-emergency></app-emergency>
+<app-emergency></app-emergency>
 }
 @default {
-  <app-chat></app-chat>
+<app-questioning></app-questioning>
 }
 }
