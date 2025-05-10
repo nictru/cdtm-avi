@@ -2,6 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { AbstractApiService } from '../supabase.service';
 import { AuthSession, AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,11 @@ export class AuthService extends AbstractApiService {
   isAnonymous = computed(() => this._session()?.user.is_anonymous);
   userId = computed(() => this._session()?.user.id);
   userEmail = computed(() => this._session()?.user.email);
+
+  // Google Fit OAuth configuration
+  private readonly GOOGLE_FIT_CLIENT_ID = environment.googleFit.clientId;
+  private readonly GOOGLE_FIT_REDIRECT_URI = environment.googleFit.redirectUri;
+  private readonly GOOGLE_FIT_SCOPES = environment.googleFit.scopes;
 
   // Promise that resolves when the initial session check is complete
   private sessionInitialized: Promise<void>;
@@ -193,5 +199,78 @@ export class AuthService extends AbstractApiService {
     // Navigate to the return URL if provided, or to /app if not
     const redirectTo = returnUrl || '/app';
     this.router.navigate([redirectTo]);
+  }
+
+  /**
+   * Initiates Google Fit authentication flow
+   * @returns URL to redirect to for Google Fit authentication
+   */
+  getGoogleFitAuthUrl(): string {
+    const scopeStr = this.GOOGLE_FIT_SCOPES.join(' ');
+    const params = new URLSearchParams({
+      client_id: this.GOOGLE_FIT_CLIENT_ID,
+      redirect_uri: this.GOOGLE_FIT_REDIRECT_URI,
+      response_type: 'code',
+      scope: scopeStr,
+      access_type: 'offline',
+      prompt: 'consent',
+    });
+    
+    return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  }
+
+  /**
+   * Handles the OAuth callback from Google Fit
+   * @param code The authorization code from Google
+   * @returns Promise resolving to the OAuth tokens
+   */
+  async handleGoogleFitCallback(code: string): Promise<any> {
+    try {
+      // Exchange the code for tokens
+      const response = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          code: code,
+          client_id: this.GOOGLE_FIT_CLIENT_ID,
+          client_secret: '', // This should be handled securely on the server side
+          redirect_uri: this.GOOGLE_FIT_REDIRECT_URI,
+          grant_type: 'authorization_code'
+        }).toString()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Token exchange failed: ${await response.text()}`);
+      }
+
+      const tokenData = await response.json();
+      
+      // Store the tokens in localStorage or preferably in a more secure way
+      // This is just for demonstration - in production, handle tokens securely
+      localStorage.setItem('googlefit_tokens', JSON.stringify(tokenData));
+      
+      return tokenData;
+    } catch (error) {
+      console.error('Error handling Google Fit callback:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Check if user has connected Google Fit
+   * @returns boolean indicating if Google Fit is connected
+   */
+  isGoogleFitConnected(): boolean {
+    const tokens = localStorage.getItem('googlefit_tokens');
+    return !!tokens;
+  }
+
+  /**
+   * Disconnect Google Fit integration
+   */
+  disconnectGoogleFit(): void {
+    localStorage.removeItem('googlefit_tokens');
   }
 }

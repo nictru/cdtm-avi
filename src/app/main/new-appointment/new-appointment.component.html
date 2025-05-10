@@ -58,5 +58,11 @@
     <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalData()">
     </app-personal-information>
     }
+    @if (currentStep$() === 4) {
+    <div class="google-fit-redirect">
+      <h2>Connecting to Google Fit</h2>
+      <p>You're being redirected to connect your Google Fit account...</p>
+    </div>
+    }
   </div>
 </div>
