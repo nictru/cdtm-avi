@@ -1,0 +1,14 @@
+<div class="personal-info-container">
+    <h2>Relevant Documents</h2>
+
+    <!-- Placeholder for document upload -->
+    <div class="form-placeholder">
+        <app-upload [bucket]="'patient-docs'" (filesUploaded)="onFilesUploaded($event)">
+        </app-upload>
+    </div>
+
+    <div class="action-buttons">
+        <button class="back-btn" (click)="onGoBack()">Back</button>
+        <button class="continue-btn" (click)="onCompleteBooking()">Complete Booking</button>
+    </div>
+</div>
