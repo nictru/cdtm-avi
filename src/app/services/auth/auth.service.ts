@@ -191,7 +191,7 @@ export class AuthService extends AbstractApiService {
    */
   redirectAfterAuth(returnUrl?: string) {
     // Navigate to the return URL if provided, or to /app if not
-    const redirectTo = returnUrl || '/chat';
-    this.router.navigateByUrl(redirectTo);
+    const redirectTo = returnUrl || '/app';
+    this.router.navigate([redirectTo]);
   }
 }
