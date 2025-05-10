@@ -1,4 +1,4 @@
-import { Component, computed, output, signal } from '@angular/core';
+import { Component, computed, effect, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -19,6 +19,7 @@ export class TimePlacePickerComponent {
   practice = signal<string | null>(null);
   doctor = signal<string | null>(null);
   date = signal<Date>(new Date());
+  dateString = computed(() => this.formatDateForInput(this.date()));
   time = signal<Date | null>(null);
 
   // Available options as signals
@@ -49,6 +50,19 @@ export class TimePlacePickerComponent {
   constructor() {
     // Initialize time slots
     this.availableTimes.set(this.generateTimeSlots());
+  }
+
+  // Format a Date as YYYY-MM-DD for the input element
+  formatDateForInput(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  // Update the date when dateString changes
+  onDateInputChange(dateStr: string) {
+    if (dateStr) {
+      const newDate = new Date(dateStr);
+      this.date.set(newDate);
+    }
   }
 
   // Generate time slots as Date objects

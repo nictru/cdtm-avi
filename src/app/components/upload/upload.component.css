@@ -65,6 +65,7 @@
   display: flex;
   justify-content: center;
   margin: var(--spacing-4) 0;
+  gap: var(--spacing-3);
 }
 
 .camera-btn {
@@ -96,6 +97,7 @@
   display: flex;
   justify-content: flex-end;
   margin: var(--spacing-4) 0;
+  gap: var(--spacing-3);
 }
 
 .upload-btn {
@@ -208,6 +210,132 @@
 .remove-file:hover {
   color: var(--error);
   background: var(--error-light);
+}
+
+/* Postal Mail Modal Styles */
+.postal-mail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: var(--spacing-4);
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modal-appear 0.3s ease-out forwards;
+}
+
+@keyframes modal-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  color: var(--gray-800);
+  font-weight: 600;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  color: var(--gray-400);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  padding: var(--spacing-1);
+  line-height: 1;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.close-modal:hover {
+  color: var(--error);
+  background: var(--error-light);
+}
+
+.modal-body {
+  padding: var(--spacing-5);
+}
+
+.modal-body p {
+  margin-bottom: var(--spacing-3);
+  color: var(--gray-700);
+  line-height: 1.6;
+}
+
+.modal-body ol {
+  margin: var(--spacing-3) 0;
+  padding-left: var(--spacing-6);
+}
+
+.modal-body li {
+  margin-bottom: var(--spacing-2);
+  color: var(--gray-700);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  border-top: 1px solid var(--gray-200);
+}
+
+.modal-btn {
+  padding: var(--spacing-2) var(--spacing-6);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+}
+
+.cancel-btn {
+  background: var(--gray-200);
+  color: var(--gray-700);
+}
+
+.cancel-btn:hover {
+  background: var(--gray-300);
+}
+
+.action-btn {
+  background: var(--primary-600);
+  color: white;
+}
+
+.action-btn:hover {
+  background: var(--primary-700);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
 /* Camera Modal Styles */

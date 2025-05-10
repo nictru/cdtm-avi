@@ -1,1 +1,24 @@
+<div class="titlebar">
+  <a routerLink="/app">
+    <img src="/avi.svg" alt="Logo" class="logo" />
+  </a>
+
+  @if (isRoot()) {
+  <nav class="nav-links">
+    <div class="dropdown">
+      <a>Practices <span class="dropdown-icon">▼</span></a>
+    </div>
+    <a>Primary care</a>
+    <div class="dropdown">
+      <a>Care plans <span class="dropdown-icon">▼</span></a>
+    </div>
+    <a>For insurances</a>
+    <a>Blog</a>
+    <div class="language-selector">
+      <a>EN <span class="dropdown-icon">▼</span></a>
+    </div>
+    <a routerLink="/app/new-appointment" class="book-appointment">Book appointment</a>
+  </nav>
+  }
+</div>
 <router-outlet></router-outlet>

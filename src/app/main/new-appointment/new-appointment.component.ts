@@ -4,7 +4,7 @@ import { fields } from './appointment-type/fields';
 import { NgClass } from '@angular/common';
 import { TimePlacePickerComponent } from './time-place-picker/time-place-picker.component';
 import { ConfirmAppointmentComponent } from './confirm-appointment/confirm-appointment.component';
-import { PersonalInformationComponent } from './personal-information/personal-information.component';
+import { RelevantDocumentsComponent } from './relevant-documents/relevant-documents.component';
 
 @Component({
   selector: 'app-new-appointment',
@@ -13,7 +13,7 @@ import { PersonalInformationComponent } from './personal-information/personal-in
     NgClass,
     TimePlacePickerComponent,
     ConfirmAppointmentComponent,
-    PersonalInformationComponent
+    RelevantDocumentsComponent,
   ],
   templateUrl: './new-appointment.component.html',
   styleUrl: './new-appointment.component.css',
@@ -78,8 +78,8 @@ export class NewAppointmentComponent {
       description: () => 'Review and confirm your appointment details.',
     },
     {
-      label: 'Personal information',
-      description: () => 'Enter your personal details.',
+      label: 'Relevant documents',
+      description: () => 'Upload any relevant documents for your appointment.',
     },
     {
       label: 'Authentication',
@@ -119,7 +119,7 @@ export class NewAppointmentComponent {
   }
 
   completePersonalInfo() {
-    console.log('Personal information completed!');
+    console.log('Document upload completed!');
     // Here you would typically handle the final step
     // For example, saving the appointment to a database
     // and navigating to a confirmation page

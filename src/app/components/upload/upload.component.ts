@@ -40,6 +40,7 @@ export class UploadComponent {
   qrCodeUrl = '';
   currentStream: MediaStream | null = null;
   @ViewChild('cameraVideo') cameraVideoRef!: ElementRef<HTMLVideoElement>;
+  showPostalMailModal: boolean = false; // Controls the visibility of the postal mail modal
 
   constructor(private supabaseService: SupabaseService) {}
 
@@ -232,6 +233,37 @@ export class UploadComponent {
       this.isUploading = false;
       this.cdr.detectChanges();
     }
+  }
+
+  // Open the postal mail modal
+  openPostalMailModal(): void {
+    this.showPostalMailModal = true;
+  }
+
+  // Close the postal mail modal
+  closePostalMailModal(): void {
+    this.showPostalMailModal = false;
+  }
+
+  // Handle the get postage label action
+  getPostageLabel(): void {
+    // Close the modal
+    this.closePostalMailModal();
+
+    // Create a link to download the shipping label
+    const link = document.createElement('a');
+    link.href = '/shipping.png';
+    link.download = 'shipping_label.png';
+
+    // Append to the document, trigger click, and remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Show confirmation to the user
+    alert(
+      'Your postage label has been downloaded. Please print it and attach it to your package.'
+    );
   }
 
   // Delete a file from Supabase storage

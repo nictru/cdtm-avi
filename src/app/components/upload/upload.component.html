@@ -1,21 +1,26 @@
 <div class="file-upload-section">
-    <div class="drag-drop-area" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
-        (drop)="onDrop($event)" [class.drag-over]="isDragging">
-        <div class="drag-drop-content">
-            <span class="drag-icon">📁</span>
-            <p>Drag files here or <label for="file-upload" class="file-upload-label">choose files
-                    <input type="file" id="file-upload" accept=".pdf,.jpg,.jpeg,.png" multiple
-                        (change)="onFileSelected($event)">
-                </label></p>
-        </div>
+  <div class="drag-drop-area" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
+    [class.drag-over]="isDragging">
+    <div class="drag-drop-content">
+      <span class="drag-icon">📁</span>
+      <p>Drag files here or <label for="file-upload" class="file-upload-label">choose files
+          <input type="file" id="file-upload" accept=".pdf,.jpg,.jpeg,.png" multiple (change)="onFileSelected($event)">
+        </label></p>
     </div>
+  </div>
 
+  <div class="camera-button-container">
     <div class="camera-section">
-        <button class="camera-btn" (click)="showCameraOptionsDialog()">
-            <span class="camera-icon">📷</span>
-            Use Camera
-        </button>
-    </div>
+      <button class="camera-btn" (click)="showCameraOptionsDialog()">
+          <span class="camera-icon">📷</span>
+          Use Camera
+      </button>
+  </div>
+    <button class="camera-btn" (click)="openPostalMailModal()">
+      <span class="camera-icon">📫</span>
+      Send via Postal Mail
+    </button>
+  </div>
 
     <!-- Camera options modal (centered popup) -->
     <div class="modal camera-modal" *ngIf="showCameraOptions">
@@ -58,26 +63,50 @@
         </div>
     </div>
 
-    <div class="files-actions" *ngIf="uploadedFiles.length > 0">
-        <button class="upload-btn" (click)="uploadFilesToSupabase()"
-            [disabled]="isUploading || uploadedFiles.length === 0">
-            {{isUploading ? 'Uploading...' : 'Upload Files'}}
-        </button>
-    </div>
+  <div class="files-actions" *ngIf="uploadedFiles.length > 0">
+    <button class="upload-btn" (click)="uploadFilesToSupabase()" [disabled]="isUploading || uploadedFiles.length === 0">
+      {{isUploading ? 'Uploading...' : 'Upload Files'}}
+    </button>
+  </div>
 
-    <div class="files-list" *ngIf="uploadedFiles.length > 0">
-        <h4>Files ({{uploadedFiles.length}})</h4>
-        <div class="file-item" *ngFor="let file of uploadedFiles; let i = index" [class.uploaded]="isFileUploaded(i)">
-            <div class="file-info">
-                <span class="file-icon">{{isPdf(file) ? '📄' : '🖼️'}}</span>
-                <span class="file-name">{{ file.name }}</span>
-                <span class="file-size">{{ formatFileSize(file.size) }}</span>
-                <span class="upload-status" *ngIf="uploadProgress[file.name] > 0">
-                    <span *ngIf="uploadProgress[file.name] === 100">✓</span>
-                    <span *ngIf="uploadProgress[file.name] > 0 && uploadProgress[file.name] < 100">...</span>
-                </span>
-                <button class="remove-file" (click)="removeFile(i)">✕</button>
-            </div>
-        </div>
+  <div class="files-list" *ngIf="uploadedFiles.length > 0">
+    <h4>Files ({{uploadedFiles.length}})</h4>
+    <div class="file-item" *ngFor="let file of uploadedFiles; let i = index" [class.uploaded]="isFileUploaded(i)">
+      <div class="file-info">
+        <span class="file-icon">{{isPdf(file) ? '📄' : '🖼️'}}</span>
+        <span class="file-name">{{ file.name }}</span>
+        <span class="file-size">{{ formatFileSize(file.size) }}</span>
+        <span class="upload-status" *ngIf="uploadProgress[file.name] > 0">
+          <span *ngIf="uploadProgress[file.name] === 100">✓</span>
+          <span *ngIf="uploadProgress[file.name] > 0 && uploadProgress[file.name] < 100">...</span>
+        </span>
+        <button class="remove-file" (click)="removeFile(i)">✕</button>
+      </div>
     </div>
+  </div>
+
+  <!-- Postal Mail Modal -->
+  <div class="postal-mail-modal" *ngIf="showPostalMailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Send Documents via Postal Mail</h3>
+        <button class="close-modal" (click)="closePostalMailModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>We can generate a postage label for you to send your physical documents to us.</p>
+        <p>Once we receive your documents, we will:</p>
+        <ol>
+          <li>Scan them at high resolution</li>
+          <li>Securely upload them to your account</li>
+          <li>Return your original documents to you</li>
+        </ol>
+        <p>This service ensures your important documents are digitized professionally while maintaining their physical
+          integrity.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn cancel-btn" (click)="closePostalMailModal()">Cancel</button>
+        <button class="modal-btn action-btn" (click)="getPostageLabel()">Get Label</button>
+      </div>
+    </div>
+  </div>
 </div>
