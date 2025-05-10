@@ -55,16 +55,10 @@
     </app-relevant-documents>
     }
     @if (currentStep$() === 3) {
-    <div class="google-fit-redirect">
-      <h2>Connecting to Google Fit</h2>
-      <p>You're being redirected to connect your Google Fit account...</p>
-    </div>
-    }
-    @if (currentStep$() === 4) {
     <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalData($event)">
     </app-personal-information>
     }
-    @if (currentStep$() === 5) {
+    @if (currentStep$() === 4) {
     <app-summary [appointmentType]="appointmentType$()" [prettyAppointmentType]="prettyAppointmentType$()"
       [appointmentInfo]="appointmentInfo$()" [personalInfo]="personalInfo$()" (bookAppointment)="bookAppointment()"
       (cancelBooking)="cancelBooking()">
