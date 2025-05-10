@@ -2,8 +2,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px;
-  min-height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.title-bar {
+  width: 100%;
+  background: white;
+  z-index: 2;
+  position: sticky;
+  top: 0;
+  padding: 40px 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scrollable-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 40px;
 }
 
 h1 {
