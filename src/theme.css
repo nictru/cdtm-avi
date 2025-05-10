@@ -82,7 +82,7 @@
 
   /* Layout Constants */
   --header-height: 64px;
-  --stepper-width: 320px;
+  --stepper-width: 360px;
 
   /* Transitions */
   --transition-fast: 150ms;

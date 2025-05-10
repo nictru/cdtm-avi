@@ -19,12 +19,20 @@
   letter-spacing: -0.5px;
 }
 
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-6);
+  gap: var(--spacing-6);
+}
+
 .mode-toggle {
   display: flex;
   gap: 0;
   background: var(--gray-200);
   border-radius: var(--radius-full);
-  width: fit-content;
+  width: 240px;
   margin-bottom: var(--spacing-2);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -32,13 +40,15 @@
 .mode-toggle button {
   border: none;
   background: none;
-  padding: var(--spacing-4) var(--spacing-12);
+  padding: var(--spacing-4) 0;
   font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--gray-700);
   cursor: pointer;
   transition: background var(--transition-fast), color var(--transition-fast);
   border-radius: var(--radius-full);
+  flex: 1;
+  text-align: center;
 }
 .mode-toggle button.selected {
   background: var(--primary-600);
@@ -48,8 +58,9 @@
 
 .dropdowns {
   display: flex;
-  gap: var(--spacing-8);
+  gap: var(--spacing-4);
   margin-bottom: var(--spacing-2);
+  flex: 1;
 }
 .dropdowns label {
   display: flex;
@@ -60,8 +71,9 @@
   gap: var(--spacing-2);
   background: var(--surface-card);
   border-radius: var(--radius-xl);
-  padding: var(--spacing-4) var(--spacing-6) var(--spacing-3) var(--spacing-6);
-  min-width: 280px;
+  padding: var(--spacing-4) var(--spacing-4) var(--spacing-3) var(--spacing-4);
+  min-width: 180px;
+  flex: 1;
   box-shadow: var(--shadow-md);
 }
 .dropdowns select {
@@ -76,10 +88,19 @@
 
 .calendar-time-section {
   display: flex;
+  flex-direction: row;
   gap: var(--spacing-12);
   align-items: flex-start;
   position: relative;
 }
+
+.date-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  min-width: 220px;
+}
+
 .calendar-time-section label {
   font-size: var(--font-size-base);
   font-weight: 600;
@@ -93,6 +114,7 @@
   min-width: 220px;
   box-shadow: var(--shadow-md);
 }
+
 .calendar-time-section input[type="date"] {
   margin-top: var(--spacing-1);
   padding: var(--spacing-2) var(--spacing-4);
@@ -111,7 +133,7 @@
   position: absolute;
   left: 260px;
   top: 0;
-  bottom: 0;
+  height: 100%;
   width: 1.5px;
   background: var(--gray-200);
   z-index: 1;
@@ -122,6 +144,7 @@
   flex-direction: column;
   gap: var(--spacing-6);
   margin-left: var(--spacing-6);
+  padding-left: var(--spacing-8);
 }
 .time-group {
   display: flex;
@@ -169,6 +192,15 @@
     max-width: 99vw;
     border-radius: 0;
   }
+  .top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+    width: 100%;
+  }
+  .mode-toggle {
+    width: 100%;
+  }
   .calendar-time-section {
     flex-direction: column;
     gap: var(--spacing-4);
@@ -185,8 +217,15 @@
     width: 100%;
     padding: var(--spacing-3) var(--spacing-2) var(--spacing-2) var(--spacing-3);
   }
+  .date-column {
+    width: 100%;
+  }
   .time-slots {
     margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    width: 100%;
+    margin-top: var(--spacing-4);
   }
   .time-group > div {
     min-width: 100px;
@@ -199,17 +238,18 @@
 }
 
 .continue-btn {
-  margin-top: var(--spacing-8);
+  margin: var(--spacing-3) 0 0 0;
   background: var(--primary-600);
   color: white;
   border: none;
   border-radius: var(--radius-lg);
-  padding: var(--spacing-5) var(--spacing-12);
-  font-size: var(--font-size-xl);
+  padding: var(--spacing-4) var(--spacing-12);
+  font-size: var(--font-size-lg);
   font-weight: 700;
   cursor: pointer;
   transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-normal);
   box-shadow: var(--shadow);
+  width: 220px;
 }
 
 .continue-btn:disabled {
@@ -230,5 +270,6 @@
     padding: var(--spacing-4) 0;
     font-size: var(--font-size-lg);
     border-radius: var(--radius-lg);
+    margin: var(--spacing-4) 0 var(--spacing-6) 0;
   }
 }
