@@ -1,6 +1,7 @@
 .titlebar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: var(--surface-elevated);
   box-shadow: var(--shadow);
   padding: 0 var(--spacing-6);
@@ -23,11 +24,67 @@
   margin-right: var(--spacing-4);
 }
 
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-links a {
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-icon {
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+.language-selector {
+  margin: 0 8px;
+}
+
+.book-appointment {
+  background-color: #7950F2;
+  color: white !important;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.dots {
+  font-size: 24px;
+  color: #333;
+  transform: rotate(90deg);
+  display: inline-block;
+}
+
 .app-title {
   font-size: var(--font-size-xl);
   font-weight: 600;
   color: var(--gray-800);
   letter-spacing: 1px;
+}
+
+@media (max-width: 1024px) {
+  .nav-links {
+    display: none;
+  }
+
+  .menu-icon {
+    display: block;
+  }
 }
 
 @media (max-width: 600px) {
