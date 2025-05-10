@@ -6,7 +6,6 @@ import { NewAppointmentComponent } from './main/new-appointment/new-appointment.
 import { AppointmentsComponent } from './main/appointments/appointments.component';
 import { MedicalDataComponent } from './main/medical-data/medical-data.component';
 import { AppointmentTypeComponent } from './main/new-appointment/appointment-type/appointment-type.component';
-import { EmergencyComponent } from './main/new-appointment/emergency/emergency.component';
 import { QuestioningComponent } from './main/new-appointment/questioning/questioning.component';
 import { QuestioningTypeSelectorComponent } from './main/new-appointment/questioning/questioning-type-selector/questioning-type-selector.component';
 import { ChatComponent } from './main/new-appointment/questioning/chat/chat.component';
@@ -47,10 +46,6 @@ export const routes: Routes = [
           {
             path: '',
             component: AppointmentTypeComponent,
-          },
-          {
-            path: 'emergency',
-            component: EmergencyComponent,
           },
           {
             path: 'questioning',
