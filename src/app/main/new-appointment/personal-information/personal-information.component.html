@@ -15,24 +15,22 @@
                     <p>Drag and drop your files here</p>
                     <p>or</p>
                     <label for="file-upload" class="file-upload-label">
-                        <span>Choose File</span>
-                        <input type="file" id="file-upload" accept=".pdf,.jpg,.jpeg,.png"
+                        <span>Choose Files</span>
+                        <input type="file" id="file-upload" accept=".pdf,.jpg,.jpeg,.png" multiple
                             (change)="onFileSelected($event)">
                     </label>
                 </div>
             </div>
 
-            <div class="file-info" *ngIf="selectedFile">
-                <span class="file-name">{{ selectedFile.name }}</span>
-                <button class="remove-file" (click)="removeFile()">✕</button>
-            </div>
-
-            <div class="file-preview" *ngIf="selectedFile">
-                <div *ngIf="isImage(selectedFile)" class="image-preview">
-                    <img [src]="previewUrl" alt="Preview">
-                </div>
-                <div *ngIf="isPdf(selectedFile)" class="pdf-preview">
-                    <span>PDF Document: {{ selectedFile.name }}</span>
+            <div class="files-list" *ngIf="uploadedFiles.length > 0">
+                <h4>Uploaded Files ({{uploadedFiles.length}})</h4>
+                <div class="file-item" *ngFor="let file of uploadedFiles; let i = index">
+                    <div class="file-info">
+                        <span class="file-icon">{{isPdf(file) ? '📄' : '🖼️'}}</span>
+                        <span class="file-name">{{ file.name }}</span>
+                        <span class="file-size">{{ formatFileSize(file.size) }}</span>
+                        <button class="remove-file" (click)="removeFile(i)">✕</button>
+                    </div>
                 </div>
             </div>
         </div>

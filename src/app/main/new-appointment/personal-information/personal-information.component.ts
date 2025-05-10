@@ -17,8 +17,7 @@ export class PersonalInformationComponent {
   completeBooking = output<void>();
 
   // File upload properties
-  selectedFile: File | null = null;
-  previewUrl: string | null = null;
+  uploadedFiles: File[] = [];
   isDragging = false;
 
   // Method to emit go back event
@@ -36,7 +35,7 @@ export class PersonalInformationComponent {
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.processFile(input.files[0]);
+      this.processFiles(Array.from(input.files));
     }
   }
 
@@ -61,34 +60,46 @@ export class PersonalInformationComponent {
     this.isDragging = false;
 
     if (event.dataTransfer && event.dataTransfer.files.length > 0) {
-      const file = event.dataTransfer.files[0];
-      // Check if the file type is allowed (PDF or image)
-      if (this.isImage(file) || this.isPdf(file)) {
-        this.processFile(file);
-      } else {
-        // Alert the user that the file type is not supported
-        alert('Please upload only PDF or image files (JPG, JPEG, PNG).');
+      const files = Array.from(event.dataTransfer.files);
+
+      // Filter files to only include PDFs and images
+      const validFiles = files.filter(
+        (file) => this.isImage(file) || this.isPdf(file)
+      );
+
+      if (validFiles.length !== files.length) {
+        // Alert the user if some files were invalid
+        alert(
+          'Some files were skipped. Please upload only PDF or image files (JPG, JPEG, PNG).'
+        );
+      }
+
+      if (validFiles.length > 0) {
+        this.processFiles(validFiles);
       }
     }
   }
 
-  // Process the selected file
-  private processFile(file: File) {
-    this.selectedFile = file;
-
-    // Create a preview for images
-    if (this.isImage(this.selectedFile)) {
-      this.createImagePreview();
-    } else {
-      // For PDFs, we don't create a preview URL
-      this.previewUrl = null;
-    }
+  // Process multiple files
+  private processFiles(files: File[]) {
+    // Add new files to the existing array
+    this.uploadedFiles = [...this.uploadedFiles, ...files];
   }
 
-  // Remove the selected file
-  removeFile() {
-    this.selectedFile = null;
-    this.previewUrl = null;
+  // Format file size to human-readable format
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  // Remove a file at specified index
+  removeFile(index: number) {
+    this.uploadedFiles.splice(index, 1);
   }
 
   // Check if file is an image
@@ -99,16 +110,5 @@ export class PersonalInformationComponent {
   // Check if file is a PDF
   isPdf(file: File): boolean {
     return file.type === 'application/pdf';
-  }
-
-  // Create image preview URL
-  private createImagePreview() {
-    if (this.selectedFile) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result as string;
-      };
-      reader.readAsDataURL(this.selectedFile);
-    }
   }
 }
