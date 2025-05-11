@@ -12,6 +12,21 @@
       </div>
     </div>
 
+    <!-- Search mode description and deep search submit button -->
+    @if (searchMode() === 'deep') {
+    <div class="search-mode-description">
+      <div class="description-text">
+        <i class="fas fa-info-circle"></i>
+        <span>Deep search uses AI to find semantically relevant documents.</span>
+      </div>
+      <button class="submit-search-btn" (click)="submitDeepSearch()" [disabled]="isSearching() || !searchQuery()">
+        <i class="fas" [class.fa-search]="!isSearching()" [class.fa-spinner]="isSearching()"
+          [class.fa-spin]="isSearching()"></i>
+        {{ isSearching() ? 'Searching...' : 'Search' }}
+      </button>
+    </div>
+    }
+
     @if (searchMode() === 'deep' && isSearching()) {
     <div class="search-loading">
       <i class="fas fa-spinner fa-spin"></i>

@@ -168,14 +168,27 @@ export class DocumentsComponent {
 
   constructor() {
     effect(() => {
-      // Trigger embedded search when search query changes and mode is 'deep'
+      // Only trigger search on query change when in FAST mode
       const query = this.searchQuery();
-      const mode = this.searchMode();
-
-      if (query && mode === 'deep') {
-        this.performEmbeddedSearch(query);
+      if (query && this.searchMode() === 'fast') {
+        // Fast search happens automatically as you type
+        // (for Deep search, we'll use a submit button)
       }
     });
+  }
+
+  /**
+   * Performs a deep search using semantic embeddings
+   * This is triggered by a button click, not automatically
+   */
+  async submitDeepSearch(): Promise<void> {
+    const query = this.searchQuery();
+    if (!query.trim()) {
+      this.embeddedSearchResults.set([]);
+      return;
+    }
+
+    await this.performEmbeddedSearch(query);
   }
 
   /**
@@ -235,12 +248,9 @@ export class DocumentsComponent {
   setSearchMode(mode: 'fast' | 'deep'): void {
     this.searchMode.set(mode);
 
-    // If switching to deep search and there's a query, perform embedded search
+    // Reset search results when switching modes
     if (mode === 'deep') {
-      const query = this.searchQuery();
-      if (query) {
-        this.performEmbeddedSearch(query);
-      }
+      this.embeddedSearchResults.set([]);
     }
   }
 
