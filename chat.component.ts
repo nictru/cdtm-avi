@@ -118,17 +118,17 @@ export class ChatComponent {
 
     try {
       // Get AI response with streaming updates
-      const response = await this.chatService.getAiResponse(
+      const response = (await this.chatService.getAiResponse(
         this.messages$(),
         (partialResponse: string) => {
           this.pendingAssistantMessage$.set(partialResponse);
         }
-      );
+      )) as string;
 
       // Add the final assistant response
       this.messages$.update((messages) => [
         ...messages,
-        { role: 'assistant', content: response as string },
+        { role: 'assistant', content: response },
       ]);
       this.pendingAssistantMessage$.set(null);
     } catch (error) {
