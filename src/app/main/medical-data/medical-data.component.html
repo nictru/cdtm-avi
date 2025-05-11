@@ -59,13 +59,18 @@
   </div>
 
   <!-- Add Allergy Dialog -->
-  <div class="dialog-overlay" *ngIf="showDialog">
+  <div class="dialog-overlay" *ngIf="showDialog()">
     <div class="dialog-container">
       <div class="dialog-header">
         <h2>Add New Allergy</h2>
         <button class="close-btn" (click)="closeDialog()">&times;</button>
       </div>
       <div class="dialog-content">
+        @if (errorMessage(); as errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+        }
         <div class="form-group">
           <label for="substance">Allergen/Substance</label>
           <input type="text" id="substance" class="form-control" [(ngModel)]="newAllergy.substance" required>

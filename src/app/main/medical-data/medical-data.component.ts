@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -10,6 +10,7 @@ import { DocumentsComponent } from './documents/documents.component';
 import {
   AllergiesService,
   Allergy,
+  CreateAllergyDto,
 } from '../../services/allergies/allergies.service';
 
 @Component({
@@ -31,9 +32,9 @@ export class MedicalDataComponent {
   userAllergies = this.allergiesService.userAllergiesResource;
 
   // Dialog state
-  showDialog = false;
-  newAllergy: Omit<Allergy, 'id'> = {
-    patient_id: 0,
+  showDialog = signal(false);
+  errorMessage = signal('');
+  newAllergy: CreateAllergyDto = {
     substance: '',
     reaction: '',
     severity: 'Mild',
@@ -44,9 +45,9 @@ export class MedicalDataComponent {
   }
 
   showAddAllergyDialog() {
-    this.showDialog = true;
+    this.showDialog.set(true);
+    this.errorMessage.set('');
     this.newAllergy = {
-      patient_id: 0,
       substance: '',
       reaction: '',
       severity: 'Mild',
@@ -54,15 +55,21 @@ export class MedicalDataComponent {
   }
 
   closeDialog() {
-    this.showDialog = false;
+    this.showDialog.set(false);
+    this.errorMessage.set('');
   }
 
   saveAllergy() {
     if (this.newAllergy.substance.trim()) {
-      this.allergiesService.saveAllergy(this.newAllergy).then(() => {
-        this.userAllergies.reload();
-        this.closeDialog();
-      });
+      this.allergiesService
+        .createAllergy(this.newAllergy)
+        .then(() => {
+          this.closeDialog();
+        })
+        .catch((error) => {
+          console.error('Error creating allergy:', error);
+          this.errorMessage.set('Failed to save allergy. Please try again later.');
+        });
     }
   }
 
