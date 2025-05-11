@@ -1,0 +1,50 @@
+<div class="documents-container" [class.split-view]="activeDocUrl.value()" style="height: 100%;">
+  <div class="documents-list" style="height: 100%;">
+    <div class="documents-scroll">
+      @for (doc of userDocs.value(); track doc.id) {
+      <div class="document-item" [class.active]="activeDocId() === doc.id" (click)="setActiveDoc(doc.id)">
+        <div class="document-icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="document-details">
+          <div class="document-header">
+            <h3>{{ extractDocumentName(doc.doc_name) }}</h3>
+            <span class="document-type">{{ doc.doc_type }}</span>
+          </div>
+
+          @if (doc.medical_record) {
+          <div class="medical-record-details">
+            <h4>{{ doc.medical_record.title }}</h4>
+            <p class="hospital">{{ doc.medical_record.hospital_or_agency }}</p>
+            <div class="meta-info">
+              <span class="date">Date: {{ doc.medical_record.date_of_issue | date:'mediumDate' }}</span>
+              <span class="doctor">Doctor: {{ doc.medical_record.doctor_name }}</span>
+            </div>
+            <p class="summary">{{ doc.medical_record.summary }}</p>
+          </div>
+          }
+
+          <p class="document-date">Uploaded: {{ doc.created_at | date:'medium' }}</p>
+        </div>
+      </div>
+      } @empty {
+      <p class="no-documents">No documents available.</p>
+      }
+    </div>
+  </div>
+
+  @if (activeDocUrl.value()) {
+  <div class="document-viewer">
+    <div class="document-viewer-header">
+      <button class="close-btn" (click)="closeDocument()">
+        <i class="fas fa-times"></i> Close
+      </button>
+    </div>
+    <div class="document-viewer-content">
+      <pdf-viewer [src]="activeDocUrl.value()" [render-text]="true" [original-size]="false" [fit-to-page]="true"
+        [show-all]="true" style="width: 100%; height: 100%;">
+      </pdf-viewer>
+    </div>
+  </div>
+  }
+</div>

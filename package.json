@@ -21,6 +21,7 @@
     "@supabase/supabase-js": "^2.49.4",
     "@tailwindcss/postcss": "^4.1.6",
     "angularx-qrcode": "^19.0.0",
+    "ng2-pdf-viewer": "^10.4.0",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.6",

@@ -4,18 +4,20 @@ import {
   MedicalRecordsService,
   DocumentWithMedicalRecord,
 } from '../../services/medical-records/medical-records.service';
+import { ChatComponent } from './chat/chat.component';
+import { DocumentsComponent } from './documents/documents.component';
 
 @Component({
   selector: 'app-medical-data',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ChatComponent, DocumentsComponent],
   templateUrl: './medical-data.component.html',
   styleUrl: './medical-data.component.css',
 })
 export class MedicalDataComponent {
   private medicalRecordsService = inject(MedicalRecordsService);
 
-  activeTab = 'general'; // Either 'general' or 'documents'
+  activeTab = 'general'; // Either 'general', 'documents', or 'chat'
 
   // Access the documents with medical records resource
   userDocs = this.medicalRecordsService.userDocsWithMedicalRecordsResource;

@@ -1,0 +1,42 @@
+<div class="chat-container">
+  <!-- Chat messages - scrollable section -->
+  <div class="chat-messages">
+    @for (message of messagesToShow$(); track $index) {
+    <div class="message" [ngClass]="{
+                'user': message.role === 'user',
+                'assistant': message.role === 'assistant'
+            }">
+      <div class="message-avatar">
+        <i class="fas" [ngClass]="{
+                        'fa-robot': message.role === 'assistant',
+                        'fa-user': message.role === 'user'
+                    }"></i>
+      </div>
+      <div class="message-content">
+        <p>{{ message.content }}</p>
+      </div>
+    </div>
+    }
+
+    <!-- Pending message (streaming response) -->
+    @if (pendingAssistantMessage$(); as pendingResponse) {
+    <div class="message assistant">
+      <div class="message-avatar">
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="message-content">
+        <p>{{ pendingResponse }}</p>
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Chat input - always visible at the bottom -->
+  <div class="chat-input">
+    <input type="text" placeholder="Type your message..." class="message-input" [ngModel]="currentMessage()"
+      (ngModelChange)="currentMessage.set($event)" (keyup.enter)="sendMessage(currentMessage())" />
+    <button class="send-button" (click)="sendMessage(currentMessage())" [disabled]="!currentMessage()">
+      Send
+    </button>
+  </div>
+</div>
