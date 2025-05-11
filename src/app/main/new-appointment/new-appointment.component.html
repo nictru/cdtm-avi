@@ -1,68 +1,149 @@
-<div class="stepper-layout-container">
-  <nav aria-label="Progress">
-    @let step = currentStep$();
-    <ol role="list" class="overflow-hidden">
-      @for (stepDef of steps; track $index) {
-      <li class="relative pb-10" [ngClass]="{ 'pb-10': $index < steps.length - 1 }">
-        @if ($index < steps.length - 1) { <div class="absolute top-4 left-4 mt-0.5 -ml-px h-full w-0.5"
-          [ngClass]="step > $index ? 'step-line-active' : 'step-line-inactive'" aria-hidden="true">
-</div>
-}
-<button class="group relative flex items-start" [attr.aria-current]="step === $index ? 'step' : null"
-  [disabled]="$index > step" (click)="$index < step && goToStep($index)" [class.cursor-pointer]="$index < step"
-  [class.cursor-not-allowed]="$index > step" [class.cursor-default]="$index === step">
-  <span class="flex h-9 items-center">
-    <span class="relative z-10 flex size-8 items-center justify-center rounded-full"
-      [ngClass]="step > $index ? 'step-indicator-active' : step === $index ? 'step-indicator-current' : 'step-indicator-inactive'">
-      @if (step > $index) {
-      <!-- Tick for completed step -->
-      <svg class="size-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-        <path fill-rule="evenodd"
-          d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-          clip-rule="evenodd" />
-      </svg>
-      }
-      @if (step === $index) {
-      <span class="size-2.5 rounded-full step-dot-current"></span>
-      }
-      @if (step < $index) { <span class="size-2.5 rounded-full bg-transparent"></span>
-    }
-  </span>
-  </span>
-  <span class="ml-4 flex min-w-0 flex-col">
-    <span class="text-sm font-medium"
-      [ngClass]="step === $index ? 'step-text-current' : step > $index ? '' : 'step-text-inactive'">{{ stepDef.label
-      }}</span>
-    <span class="text-sm text-gray-500">{{ stepDef.description() }}</span>
-  </span>
-</button>
-</li>
-}
-</ol>
-</nav>
-</div>
-<div class="main-content">
-  <div class="content-column">
-    @if (currentStep$() === 0) {
-    <app-appointment-type (appointmentType)="appointmentType$.set($event)"></app-appointment-type>
-    }
-    @if (currentStep$() === 1) {
-    <app-time-place-picker [appointmentType]="appointmentType$()" (appointmentInfo)="handleAppointmentInfoSet($event)">
-    </app-time-place-picker>
-    }
-    @if (currentStep$() === 2) {
-    <app-relevant-documents (goBack)="goToStep(1)" (continueToNext)="completeRelevantDocuments()">
-    </app-relevant-documents>
-    }
-    @if (currentStep$() === 3) {
-    <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalData($event)">
-    </app-personal-information>
-    }
-    @if (currentStep$() === 4) {
-    <app-summary [appointmentType]="appointmentType$()" [prettyAppointmentType]="prettyAppointmentType$()"
-      [appointmentInfo]="appointmentInfo$()" [personalInfo]="personalInfo$()" (bookAppointment)="bookAppointment()"
-      (cancelBooking)="cancelBooking()">
-    </app-summary>
-    }
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-8 text-center">Book an Appointment</h1>
+  
+  <!-- Progress Steps -->
+  <div class="mb-12">
+    <div class="flex justify-between items-center">
+      <div *ngFor="let step of steps; let i = index" class="flex-1 relative">
+        <div class="flex flex-col items-center">
+          <div 
+            [ngClass]="{ 
+              'bg-blue-600 text-white': currentStep$() >= i, 
+              'bg-gray-200 text-gray-500': currentStep$() < i 
+            }"
+            class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors duration-300"
+          >
+            {{ i + 1 }}
+          </div>
+          <div class="text-sm mt-2 text-center font-medium" [ngClass]="{'text-blue-600': currentStep$() >= i, 'text-gray-500': currentStep$() < i}">
+            {{ step.label }}
+          </div>
+          <div class="text-xs text-center text-gray-500 mt-1 max-w-[120px]">
+            {{ step.description() }}
+          </div>
+        </div>
+        
+        <!-- Connector line between steps -->
+        <div 
+          *ngIf="i < steps.length - 1" 
+          class="absolute top-5 left-1/2 w-full h-0.5 transition-colors duration-300"
+          [ngClass]="{'bg-blue-600': currentStep$() > i, 'bg-gray-200': currentStep$() <= i}"
+        ></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Step Content -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <!-- Step 0: Appointment Type -->
+    <div *ngIf="currentStep$() === 0">
+      <h2 class="text-2xl font-semibold mb-6">What's the reason for your visit?</h2>
+      <app-appointment-type 
+        (appointmentType)="appointmentType$.set($event)"
+      ></app-appointment-type>
+    </div>
+    
+    <!-- Step 1: Date and Time -->
+    <div *ngIf="currentStep$() === 1">
+      <h2 class="text-2xl font-semibold mb-6">Select a date and time</h2>
+      <app-time-place-picker
+        [appointmentType]="appointmentType$()"
+        (appointmentConfirmed)="handleAppointmentInfoSet($event)"
+      ></app-time-place-picker>
+    </div>
+    
+    <!-- Step 2: Relevant Documents -->
+    <div *ngIf="currentStep$() === 2">
+      <h2 class="text-2xl font-semibold mb-6">Upload relevant documents</h2>
+      <app-relevant-documents
+        (documentsUploaded)="completeRelevantDocuments()"
+      ></app-relevant-documents>
+    </div>
+    
+    <!-- Step 3: Personal Information -->
+    <div *ngIf="currentStep$() === 3">
+      <h2 class="text-2xl font-semibold mb-6">Your personal information</h2>
+      <app-personal-information
+        (personalInfoSubmitted)="completePersonalData($event)"
+      ></app-personal-information>
+    </div>
+    
+    <!-- Step 4: Health Data (Google Fit) -->
+    <div *ngIf="currentStep$() === 4">
+      <h2 class="text-2xl font-semibold mb-4">Health Data</h2>
+      <p class="text-gray-600 mb-6">Connect your health devices to share data with your doctor (optional).</p>
+      
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <div class="flex items-center mb-4">
+          <img src="assets/icons/google-fit.svg" alt="Google Fit" class="w-12 h-12 mr-4">
+          <div>
+            <h3 class="text-lg font-medium">Google Fit</h3>
+            <p class="text-gray-600">Share your activity, heart rate, and sleep data</p>
+          </div>
+        </div>
+        
+        <div *ngIf="isGoogleFitConnected" class="flex items-center mb-4 bg-green-50 p-4 rounded-lg">
+          <span class="inline-flex items-center justify-center w-8 h-8 mr-3 bg-green-500 rounded-full">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="text-green-700">Connected to Google Fit</p>
+            <p class="text-sm text-green-600">Your health data will be shared with your doctor</p>
+          </div>
+        </div>
+        
+        <div *ngIf="!isGoogleFitConnected" class="flex flex-col">
+          <button 
+            (click)="connectGoogleFit()" 
+            class="w-full mb-4 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+            <img src="assets/icons/google-fit.svg" alt="Google Fit" class="w-6 h-6 mr-2">
+            Connect Google Fit
+          </button>
+        </div>
+        
+        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-blue-700">
+                Connecting your health data is optional. You can skip this step if you prefer not to share this information.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex justify-between mt-8">
+        <button 
+          (click)="previousStep()" 
+          class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+          Back
+        </button>
+        <button 
+          (click)="skipHealthDataStep()" 
+          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          {{ isGoogleFitConnected ? 'Continue' : 'Skip' }}
+        </button>
+      </div>
+    </div>
+    
+    <!-- Step 5: Summary -->
+    <div *ngIf="currentStep$() === 5">
+      <h2 class="text-2xl font-semibold mb-6">Appointment Summary</h2>
+      <app-summary
+        [appointmentType]="prettyAppointmentType$()"
+        [appointmentInfo]="appointmentInfo$()"
+        [personalInfo]="personalInfo$()"
+        [isGoogleFitConnected]="isGoogleFitConnected"
+        (appointmentConfirmed)="bookAppointment()"
+        (appointmentCancelled)="cancelBooking()"
+      ></app-summary>
+    </div>
   </div>
 </div>

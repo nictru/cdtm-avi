@@ -1,7 +1,7 @@
 import { Component, computed, signal, OnInit, inject } from '@angular/core';
 import { AppointmentTypeComponent } from './appointment-type/appointment-type.component';
 import { fields } from './appointment-type/fields';
-import { NgClass } from '@angular/common';
+import { NgClass, CommonModule } from '@angular/common';
 import { TimePlacePickerComponent } from './time-place-picker/time-place-picker.component';
 import { RelevantDocumentsComponent } from './relevant-documents/relevant-documents.component';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
@@ -14,6 +14,7 @@ import { GoogleFitService } from '../../services/google-fit.service';
   imports: [
     AppointmentTypeComponent,
     NgClass,
+    CommonModule,
     TimePlacePickerComponent,
     RelevantDocumentsComponent,
     PersonalInformationComponent,
@@ -50,6 +51,9 @@ export class NewAppointmentComponent implements OnInit {
   // Signal for personal data step
   personalData$ = signal<boolean>(false);
 
+  // Signal for health data step
+  healthData$ = signal<boolean>(false);
+
   // Signal to store personal information
   personalInfo$ = signal<any>(undefined);
 
@@ -73,12 +77,13 @@ export class NewAppointmentComponent implements OnInit {
     }
   }
 
-  currentStep$ = computed<0 | 1 | 2 | 3 | 4>(() => {
+  currentStep$ = computed<0 | 1 | 2 | 3 | 4 | 5>(() => {
     // Step 0: Reason for visit (appointmentType not selected)
     // Step 1: Date and time selection (includes confirmation)
     // Step 2: Relevant documents
     // Step 3: Personal information
-    // Step 4: Summary and booking
+    // Step 4: Health data (Google Fit)
+    // Step 5: Summary and booking
     if (!this.appointmentType$()) {
       return 0;
     }
@@ -92,11 +97,14 @@ export class NewAppointmentComponent implements OnInit {
     if (!this.personalData$()) {
       return 3;
     }
-    if (!this.completed$()) {
+    if (!this.healthData$()) {
       return 4;
     }
+    if (!this.completed$()) {
+      return 5;
+    }
     // Final step is summary
-    return 4;
+    return 5;
   });
 
   steps = [
@@ -128,6 +136,10 @@ export class NewAppointmentComponent implements OnInit {
       description: () => 'Provide your personal information.',
     },
     {
+      label: 'Health data',
+      description: () => 'Connect your health devices (optional).',
+    },
+    {
       label: 'Summary',
       description: () => 'Review and confirm your appointment.',
     },
@@ -140,6 +152,7 @@ export class NewAppointmentComponent implements OnInit {
       this.appointmentInfo$.set(undefined);
       this.relevantDocuments$.set(false);
       this.personalData$.set(false);
+      this.healthData$.set(false);
       this.personalInfo$.set(undefined);
       this.completed$.set(false);
     }
@@ -147,21 +160,28 @@ export class NewAppointmentComponent implements OnInit {
       this.appointmentInfo$.set(undefined);
       this.relevantDocuments$.set(false);
       this.personalData$.set(false);
+      this.healthData$.set(false);
       this.personalInfo$.set(undefined);
       this.completed$.set(false);
     }
     if (step === 2) {
       this.relevantDocuments$.set(false);
       this.personalData$.set(false);
+      this.healthData$.set(false);
       this.personalInfo$.set(undefined);
       this.completed$.set(false);
     }
     if (step === 3) {
       this.personalData$.set(false);
+      this.healthData$.set(false);
       this.personalInfo$.set(undefined);
       this.completed$.set(false);
     }
     if (step === 4) {
+      this.healthData$.set(false);
+      this.completed$.set(false);
+    }
+    if (step === 5) {
       this.completed$.set(false);
     }
   }
@@ -188,11 +208,18 @@ export class NewAppointmentComponent implements OnInit {
   // Method to complete the personal data step
   completePersonalData(personalInfo: any) {
     console.log(
-      'Personal information completed! Moving to summary step.',
+      'Personal information completed! Moving to health data step.',
       personalInfo
     );
     this.personalInfo$.set(personalInfo);
     this.personalData$.set(true);
+    this.healthData$.set(false);
+  }
+
+  // Method to complete the health data step
+  completeHealthDataStep() {
+    console.log('Health data step completed! Moving to summary step.');
+    this.healthData$.set(true);
     this.completed$.set(true);
   }
 
@@ -203,6 +230,7 @@ export class NewAppointmentComponent implements OnInit {
       prettyType: this.prettyAppointmentType$(),
       info: this.appointmentInfo$(),
       personalInfo: this.personalInfo$(),
+      googleFitConnected: this.isGoogleFitConnected
     });
 
     // Navigate to appointments page after successful booking
@@ -211,18 +239,14 @@ export class NewAppointmentComponent implements OnInit {
 
   // Method to handle booking cancellation
   cancelBooking() {
-    console.log('Going back to personal information step');
+    console.log('Going back to health data step');
 
-    // Based on currentStep$ logic, to go back to the personal information step:
-    // 1. Keep appointmentType$, appointmentInfo$, and relevantDocuments$ as they are
-    // 2. Set completed$ to false to exit step 4
-    // 3. Set personalData$ to false to enter step 3
+    // Set completed$ to false to exit summary step
     this.completed$.set(false);
-    this.personalData$.set(false);
   }
 
   nextStep() {
-    if (this.currentStep < 4) {
+    if (this.currentStep < 5) {
       this.currentStep++;
     }
   }
@@ -246,6 +270,10 @@ export class NewAppointmentComponent implements OnInit {
   // This will be called from the GoogleFit component after connection
   completeGoogleFitStep() {
     this.isGoogleFitConnected = true;
+  }
+  
+  skipHealthDataStep() {
+    this.completeHealthDataStep();
   }
   
   confirmAppointment() {

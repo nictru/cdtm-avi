@@ -39,6 +39,7 @@ export class SummaryComponent {
     | undefined;
 
   @Input() personalInfo: PersonalInfo | undefined;
+  @Input() isGoogleFitConnected: boolean = false;
 
   @Output() bookAppointment = new EventEmitter<void>();
   @Output() cancelBooking = new EventEmitter<void>();
