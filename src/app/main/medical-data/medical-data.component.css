@@ -56,6 +56,205 @@
   color: #333;
 }
 
+/* Allergies section styling */
+.allergies-section {
+  margin-bottom: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.allergies-section h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #333;
+}
+
+.allergies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.allergy-item {
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #f5f5f5;
+  border-left: 3px solid #2f80ed;
+}
+
+.allergy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.substance {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.severity {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.severity-mild {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.severity-moderate {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.severity-severe {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.reaction {
+  font-size: 14px;
+  color: #666;
+}
+
+.no-allergies {
+  color: #888;
+  font-style: italic;
+  padding: 10px;
+  text-align: center;
+}
+
+.add-allergy-btn {
+  padding: 8px 16px;
+  background-color: #2f80ed;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.add-allergy-btn:hover {
+  background-color: #1c6ddc;
+}
+
+/* Dialog styling */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-control:focus {
+  border-color: #2f80ed;
+  outline: none;
+}
+
+.form-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+}
+
+.dialog-footer {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.btn-primary {
+  background-color: #2f80ed;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-primary:hover {
+  background-color: #1c6ddc;
+}
+
 /* Documents list styling */
 .documents-list {
   display: flex;
@@ -250,20 +449,22 @@
 }
 
 .chat-input {
-  display: flex;
-  padding: 12px;
-  background-color: white;
+  padding: 16px;
   border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
 }
 
 .message-input {
   flex: 1;
-  padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 20px;
+  padding: 10px 16px;
   font-size: 14px;
   outline: none;
-  transition: border 0.2s ease;
+  resize: none;
+  min-height: 24px;
+  max-height: 120px;
 }
 
 .message-input:focus {
@@ -274,31 +475,30 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #7950f2;
+  background-color: #2f80ed;
   color: white;
-  border: none;
-  margin-left: 8px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  margin-left: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .send-button:hover {
-  background-color: #6040cc;
+  background-color: #1c6ddc;
   transform: scale(1.05);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .medical-data-container {
     padding: 10px;
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - var(--header-height) - 20px);
   }
 
   .tab {
-    padding: 10px 15px;
+    padding: 8px 12px;
     font-size: 14px;
   }
 
@@ -312,12 +512,12 @@
   }
 }
 
-/* Special styling for chat tab */
 .tab-pane:has(app-chat) {
-  flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding-bottom: 0;
+  height: 100%;
 }
 
 .tab-pane:has(app-chat) h2 {
@@ -326,5 +526,5 @@
 
 .tab-pane:has(app-chat) app-chat {
   flex: 1;
-  display: flex;
+  display: block;
 }

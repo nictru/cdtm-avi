@@ -1,29 +1,69 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   MedicalRecordsService,
   DocumentWithMedicalRecord,
 } from '../../services/medical-records/medical-records.service';
 import { ChatComponent } from './chat/chat.component';
 import { DocumentsComponent } from './documents/documents.component';
+import {
+  AllergiesService,
+  Allergy,
+} from '../../services/allergies/allergies.service';
 
 @Component({
   selector: 'app-medical-data',
   standalone: true,
-  imports: [CommonModule, ChatComponent, DocumentsComponent],
+  imports: [CommonModule, FormsModule, ChatComponent, DocumentsComponent],
   templateUrl: './medical-data.component.html',
   styleUrl: './medical-data.component.css',
 })
 export class MedicalDataComponent {
   private medicalRecordsService = inject(MedicalRecordsService);
+  private allergiesService = inject(AllergiesService);
 
   activeTab = 'general'; // Either 'general', 'documents', or 'chat'
 
   // Access the documents with medical records resource
   userDocs = this.medicalRecordsService.userDocsWithMedicalRecordsResource;
+  // Access the allergies resource
+  userAllergies = this.allergiesService.userAllergiesResource;
+
+  // Dialog state
+  showDialog = false;
+  newAllergy: Omit<Allergy, 'id'> = {
+    patient_id: 0,
+    substance: '',
+    reaction: '',
+    severity: 'Mild',
+  };
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
+  }
+
+  showAddAllergyDialog() {
+    this.showDialog = true;
+    this.newAllergy = {
+      patient_id: 0,
+      substance: '',
+      reaction: '',
+      severity: 'Mild',
+    };
+  }
+
+  closeDialog() {
+    this.showDialog = false;
+  }
+
+  saveAllergy() {
+    if (this.newAllergy.substance.trim()) {
+      this.allergiesService.saveAllergy(this.newAllergy).then(() => {
+        this.userAllergies.reload();
+        this.closeDialog();
+      });
+    }
   }
 
   /**

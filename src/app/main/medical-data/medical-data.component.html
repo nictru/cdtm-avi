@@ -1,35 +1,92 @@
 <div class="medical-data-container">
-    <div class="tabs-container">
-        <div class="tab" [class.active]="activeTab === 'general'" (click)="setActiveTab('general')">
-            General Information
-        </div>
-        <div class="tab" [class.active]="activeTab === 'documents'" (click)="setActiveTab('documents')">
-            Documents
-        </div>
-        <div class="tab" [class.active]="activeTab === 'chat'" (click)="setActiveTab('chat')">
-            Chat
-        </div>
+  <div class="tabs-container">
+    <div class="tab" [class.active]="activeTab === 'general'" (click)="setActiveTab('general')">
+      General Information
     </div>
+    <div class="tab" [class.active]="activeTab === 'documents'" (click)="setActiveTab('documents')">
+      Documents
+    </div>
+    <div class="tab" [class.active]="activeTab === 'chat'" (click)="setActiveTab('chat')">
+      Chat
+    </div>
+  </div>
 
-    <div class="tab-content">
-        <!-- General Information Tab -->
-        <div class="tab-pane" *ngIf="activeTab === 'general'">
-            <h2>General Information</h2>
-            <div class="info-content">
-                <p>This section will contain general patient information.</p>
-                <!-- Additional content for general information would go here -->
+  <div class="tab-content">
+    <!-- General Information Tab -->
+    <div class="tab-pane" *ngIf="activeTab === 'general'">
+      <h2>General Information</h2>
+      <div class="info-content">
+        <div class="allergies-section">
+          <h3>Allergies</h3>
+          <div class="allergies-list">
+            @for (allergy of userAllergies.value(); track allergy.id) {
+            <div class="allergy-item">
+              <div class="allergy-header">
+                <span class="substance">{{ allergy.substance }}</span>
+                <span class="severity" [class]="'severity-' + allergy.severity.toLowerCase()">
+                  {{ allergy.severity }}
+                </span>
+              </div>
+              <div class="reaction" *ngIf="allergy.reaction">
+                Reaction: {{ allergy.reaction }}
+              </div>
             </div>
+            }
+            @empty {
+            <div class="no-allergies">
+              No allergies recorded.
+            </div>
+            }
+          </div>
+          <button class="add-allergy-btn" (click)="showAddAllergyDialog()">Add Allergy</button>
         </div>
 
-        <!-- Documents Tab -->
-        <div class="tab-pane" *ngIf="activeTab === 'documents'" style="height: 100%;">
-            <app-documents style="display: block; height: 100%;"></app-documents>
-        </div>
-
-        <!-- Chat Tab -->
-        <div class="tab-pane" *ngIf="activeTab === 'chat'">
-            <h2>Chat with your Health Assistant</h2>
-            <app-chat></app-chat>
-        </div>
+        <p>This section will contain general patient information.</p>
+        <!-- Additional content for general information would go here -->
+      </div>
     </div>
+
+    <!-- Documents Tab -->
+    <div class="tab-pane" *ngIf="activeTab === 'documents'" style="height: 100%;">
+      <app-documents style="display: block; height: 100%;"></app-documents>
+    </div>
+
+    <!-- Chat Tab -->
+    <div class="tab-pane" *ngIf="activeTab === 'chat'">
+      <h2>Chat with your Health Assistant</h2>
+      <app-chat></app-chat>
+    </div>
+  </div>
+
+  <!-- Add Allergy Dialog -->
+  <div class="dialog-overlay" *ngIf="showDialog">
+    <div class="dialog-container">
+      <div class="dialog-header">
+        <h2>Add New Allergy</h2>
+        <button class="close-btn" (click)="closeDialog()">&times;</button>
+      </div>
+      <div class="dialog-content">
+        <div class="form-group">
+          <label for="substance">Allergen/Substance</label>
+          <input type="text" id="substance" class="form-control" [(ngModel)]="newAllergy.substance" required>
+        </div>
+        <div class="form-group">
+          <label for="reaction">Reaction (Optional)</label>
+          <input type="text" id="reaction" class="form-control" [(ngModel)]="newAllergy.reaction">
+        </div>
+        <div class="form-group">
+          <label for="severity">Severity</label>
+          <select id="severity" class="form-select" [(ngModel)]="newAllergy.severity">
+            <option value="Mild">Mild</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Severe">Severe</option>
+          </select>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-secondary" (click)="closeDialog()">Cancel</button>
+        <button class="btn btn-primary" (click)="saveAllergy()">Save</button>
+      </div>
+    </div>
+  </div>
 </div>
