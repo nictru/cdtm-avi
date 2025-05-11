@@ -11,6 +11,21 @@
         <button [class.active]="searchMode() === 'deep'" (click)="setSearchMode('deep')">Deep</button>
       </div>
     </div>
+
+    @if (searchMode() === 'deep' && isSearching()) {
+    <div class="search-loading">
+      <i class="fas fa-spinner fa-spin"></i>
+      <span>Performing deep search...</span>
+    </div>
+    }
+
+    @if (searchError()) {
+    <div class="search-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ searchError() }}</span>
+    </div>
+    }
+
     <div class="documents-scroll">
       @for (doc of filteredDocs(); track doc.id) {
       <div class="document-item" [class.active]="activeDocId() === doc.id" (click)="setActiveDoc(doc.id)">
@@ -39,7 +54,13 @@
         </div>
       </div>
       } @empty {
+      @if (searchQuery() && searchMode() === 'deep' && !isSearching() && filteredDocs().length === 0) {
+      <p class="no-documents">No documents found matching your search.</p>
+      } @else if (searchQuery() && searchMode() === 'fast' && filteredDocs().length === 0) {
+      <p class="no-documents">No documents found matching your search.</p>
+      } @else {
       <p class="no-documents">No documents available.</p>
+      }
       }
     </div>
   </div>

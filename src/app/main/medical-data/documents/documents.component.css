@@ -81,6 +81,33 @@
   background: #e5e5e5;
 }
 
+/* Search loading indicator and error message */
+.search-loading,
+.search-error {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  gap: 10px;
+}
+
+.search-loading {
+  background-color: #e3f2fd;
+  color: #2f80ed;
+}
+
+.search-error {
+  background-color: #ffebee;
+  color: #f44336;
+}
+
+.search-loading i,
+.search-error i {
+  font-size: 16px;
+}
+
 /* Documents list styling */
 .documents-list {
   display: flex;
