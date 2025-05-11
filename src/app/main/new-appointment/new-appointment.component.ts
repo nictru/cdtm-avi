@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, OnInit, inject } from '@angular/core';
 import { AppointmentTypeComponent } from './appointment-type/appointment-type.component';
 import { fields } from './appointment-type/fields';
 import { NgClass } from '@angular/common';
@@ -7,6 +7,7 @@ import { RelevantDocumentsComponent } from './relevant-documents/relevant-docume
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { SummaryComponent } from './summary/summary.component';
 import { Router } from '@angular/router';
+import { GoogleFitService } from '../../services/google-fit.service';
 
 @Component({
   selector: 'app-new-appointment',
@@ -22,7 +23,10 @@ import { Router } from '@angular/router';
   styleUrl: './new-appointment.component.css',
   standalone: true,
 })
-export class NewAppointmentComponent {
+export class NewAppointmentComponent implements OnInit {
+  private router = inject(Router);
+  private googleFitService = inject(GoogleFitService);
+  
   appointmentType$ = signal<string | undefined>(undefined);
   prettyAppointmentType$ = computed(() => {
     const appointmentType = this.appointmentType$();
@@ -52,7 +56,22 @@ export class NewAppointmentComponent {
   // Signal for completed all steps
   completed$ = signal<boolean>(false);
 
-  constructor(private router: Router) {}
+  currentStep = 1;
+  isGoogleFitConnected = false;
+
+  constructor() {}
+
+  ngOnInit() {
+    this.checkGoogleFitConnection();
+  }
+
+  async checkGoogleFitConnection() {
+    try {
+      this.isGoogleFitConnected = await this.googleFitService.hasLinkedGoogleFit();
+    } catch (error) {
+      console.error('Error checking Google Fit connection:', error);
+    }
+  }
 
   currentStep$ = computed<0 | 1 | 2 | 3 | 4>(() => {
     // Step 0: Reason for visit (appointmentType not selected)
@@ -200,5 +219,38 @@ export class NewAppointmentComponent {
     // 3. Set personalData$ to false to enter step 3
     this.completed$.set(false);
     this.personalData$.set(false);
+  }
+
+  nextStep() {
+    if (this.currentStep < 4) {
+      this.currentStep++;
+    }
+  }
+  
+  previousStep() {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+  
+  connectGoogleFit() {
+    // Store current state to return here after connection
+    this.router.navigateByUrl('/app/googlefit', { 
+      state: { 
+        appointmentComponent: this,
+        returnUrl: '/app/new-appointment'
+      }
+    });
+  }
+  
+  // This will be called from the GoogleFit component after connection
+  completeGoogleFitStep() {
+    this.isGoogleFitConnected = true;
+  }
+  
+  confirmAppointment() {
+    // Process appointment confirmation
+    // Then navigate to confirmation page
+    this.router.navigateByUrl('/app/appointments');
   }
 }
