@@ -6,6 +6,9 @@
         <div class="tab" [class.active]="activeTab === 'documents'" (click)="setActiveTab('documents')">
             Documents
         </div>
+        <div class="tab" [class.active]="activeTab === 'chat'" (click)="setActiveTab('chat')">
+            Chat
+        </div>
     </div>
 
     <div class="tab-content">
@@ -54,6 +57,30 @@
                 </div>
                 }
                 }
+            </div>
+        </div>
+
+        <!-- Chat Tab -->
+        <div class="tab-pane" *ngIf="activeTab === 'chat'">
+            <h2>Chat with your Health Assistant</h2>
+            <div class="chat-container">
+                <div class="chat-messages">
+                    <div class="message assistant">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm your health assistant. How can I help you today?</p>
+                            <span class="message-time">Just now</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Type your message..." class="message-input">
+                    <button class="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

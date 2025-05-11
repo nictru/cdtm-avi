@@ -15,7 +15,7 @@ import {
 export class MedicalDataComponent {
   private medicalRecordsService = inject(MedicalRecordsService);
 
-  activeTab = 'general'; // Either 'general' or 'documents'
+  activeTab = 'general'; // Either 'general', 'documents', or 'chat'
 
   // Access the documents with medical records resource
   userDocs = this.medicalRecordsService.userDocsWithMedicalRecordsResource;
