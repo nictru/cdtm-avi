@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import {
   MedicalRecordsService,
   DocumentWithMedicalRecord,
+  Bloodtest,
 } from '../../../services/medical-records/medical-records.service';
 import { StorageService } from '../../../services/storage/storage.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -35,6 +36,11 @@ export class DocumentsComponent {
 
   // Access the documents with medical records resource
   userDocs = this.medicalRecordsService.userDocsWithMedicalRecordsResource;
+
+  // Bloodtest modal handling
+  showBloodtestModal = signal<boolean>(false);
+  activeBloodtests = signal<Bloodtest[] | undefined>(undefined);
+  activeBloodtestDocName = signal<string>('');
 
   // Search functionality
   searchQuery = signal<string>('');
@@ -252,6 +258,33 @@ export class DocumentsComponent {
     if (mode === 'deep') {
       this.embeddedSearchResults.set([]);
     }
+  }
+
+  /**
+   * Opens the bloodtest modal and populates it with data from the selected document
+   */
+  openBloodtestModal(doc: DocumentWithMedicalRecord, event: Event): void {
+    event.stopPropagation(); // Prevent document selection when clicking the button
+
+    if (doc.bloodtests && doc.bloodtests.length > 0) {
+      this.activeBloodtests.set(doc.bloodtests);
+      this.activeBloodtestDocName.set(this.extractDocumentName(doc.doc_name));
+      this.showBloodtestModal.set(true);
+    }
+  }
+
+  /**
+   * Closes the bloodtest modal
+   */
+  closeBloodtestModal(): void {
+    this.showBloodtestModal.set(false);
+  }
+
+  /**
+   * Checks if a document has bloodtest data
+   */
+  hasBloodtests(doc: DocumentWithMedicalRecord): boolean {
+    return !!(doc.bloodtests && doc.bloodtests.length > 0);
   }
 
   /**
