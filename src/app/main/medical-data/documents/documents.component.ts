@@ -12,11 +12,12 @@ import {
   DocumentWithMedicalRecord,
 } from '../../../services/medical-records/medical-records.service';
 import { StorageService } from '../../../services/storage/storage.service';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'app-documents',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, PdfViewerModule],
   templateUrl: './documents.component.html',
   styleUrl: './documents.component.css',
 })
@@ -57,6 +58,10 @@ export class DocumentsComponent {
   setActiveDoc(docId: number): void {
     // Toggle active state (if clicking the same document again, deselect it)
     this.activeDocId.set(this.activeDocId() === docId ? undefined : docId);
+  }
+
+  closeDocument(): void {
+    this.activeDocId.set(undefined);
   }
 
   /**
