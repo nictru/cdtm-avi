@@ -1,1 +1,97 @@
-<p>appointments works!</p>
+<div class="appointments-container">
+  <div class="header">
+    <h1>Your Appointments</h1>
+    <button class="new-appointment" routerLink="/app/new-appointment">+ New Appointment</button>
+  </div>
+
+  <ng-container *ngIf="appointments.isLoading()">
+    <div class="loading">
+      <p>Loading your appointments...</p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="appointments.error()">
+    <div class="error">
+      <p>Error loading appointments</p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!appointments.isLoading() && !appointments.error()">
+    <!-- Upcoming appointments section -->
+    <div class="section upcoming">
+      <h2>Upcoming Appointments</h2>
+
+      <ng-container *ngIf="appointments.value() && appointments.value().length > 0">
+        <div class="appointments-list">
+          <ng-container *ngFor="let appointment of appointments.value()">
+            <div class="appointment-card" *ngIf="isUpcoming(appointment)">
+              <div class="appointment-header">
+                <h3>{{ appointment.reason }}</h3>
+                <span class="date">{{ formatDate(appointment.date) }}</span>
+              </div>
+              <div class="appointment-details">
+                <div class="detail-row">
+                  <span class="label">Practice:</span>
+                  <span class="value">{{ appointment.practice }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Doctor:</span>
+                  <span class="value">{{ appointment.doctor }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Time:</span>
+                  <span class="value">{{ formatTime(appointment.time) }}</span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="no-appointments" *ngIf="!hasUpcomingAppointments()">
+            <p>You have no upcoming appointments.</p>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="no-appointments" *ngIf="!appointments.value() || appointments.value().length === 0">
+        <p>You have no appointments scheduled. Book your first appointment now!</p>
+        <button class="book-button" routerLink="/app/new-appointment">Book Appointment</button>
+      </div>
+    </div>
+
+    <!-- Past appointments section -->
+    <div class="section past">
+      <h2>Past Appointments</h2>
+
+      <ng-container *ngIf="appointments.value() && appointments.value().length > 0">
+        <div class="appointments-list">
+          <ng-container *ngFor="let appointment of appointments.value()">
+            <div class="appointment-card" *ngIf="!isUpcoming(appointment)">
+              <div class="appointment-header">
+                <h3>{{ appointment.reason }}</h3>
+                <span class="date">{{ formatDate(appointment.date) }}</span>
+              </div>
+              <div class="appointment-details">
+                <div class="detail-row">
+                  <span class="label">Practice:</span>
+                  <span class="value">{{ appointment.practice }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Doctor:</span>
+                  <span class="value">{{ appointment.doctor }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Time:</span>
+                  <span class="value">{{ formatTime(appointment.time) }}</span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="no-appointments" *ngIf="!hasPastAppointments()">
+            <p>You have no past appointments.</p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

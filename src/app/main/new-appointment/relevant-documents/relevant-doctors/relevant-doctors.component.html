@@ -1,0 +1,82 @@
+@if (isVisible()) {
+<div class="modal-backdrop">
+    <div class="modal-container">
+        <div class="modal-content">
+            <h2>May we ask your previous doctors for additional data?</h2>
+
+            <div class="modal-layout">
+                <div class="left-column">
+                    <!-- Display existing doctors from medical records -->
+                    <div class="doctors-list">
+                        <h3>Your previous doctors:</h3>
+                        @if (allDoctors().length === 0) {
+                        <p>No previous doctors found in your records.</p>
+                        } @else {
+                        <ul>
+                            @for (doctor of allDoctors(); track doctor.name + doctor.email) {
+                            <li>
+                                <div class="doctor-info">
+                                    @if (doctor.name) {
+                                    <span class="doctor-name">{{ doctor.name }}</span>
+                                    }
+                                    @if (doctor.email) {
+                                    <span class="doctor-email">{{ doctor.email }}</span>
+                                    }
+                                </div>
+                            </li>
+                            }
+                        </ul>
+                        }
+                    </div>
+
+                    <!-- Form to add custom doctors -->
+                    <div class="add-doctor-form">
+                        <h3>Add another doctor:</h3>
+                        <div class="form-group">
+                            <input type="text" placeholder="Doctor Name" [value]="newDoctorName()"
+                                (input)="updateDoctorName($event)" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Doctor Email" [value]="newDoctorEmail()"
+                                (input)="updateDoctorEmail($event)" />
+                        </div>
+                        <button class="btn-add" (click)="addDoctor()" [disabled]="!canAddDoctor()">Add Doctor</button>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    <div>
+                        <h3>How this works:</h3>
+                        <div class="description">
+                            <p>
+                                If you approve, we will send an email to the doctors listed on the left requesting your medical records.
+                                When they respond, we'll automatically import your data into our system, making it available for your
+                                upcoming appointments.
+                            </p>
+                            <p>
+                                This helps us provide better care by having a more complete medical history. You can add any missing
+                                doctors to the list.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Privacy and security:</h3>
+                        <div class="info-note">
+                            <p>
+                                <strong>Note:</strong> By approving, you're authorizing us to contact these doctors on your behalf.
+                                All data will be securely transferred and stored according to privacy regulations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" (click)="onNo()">No</button>
+                <button class="btn-primary" (click)="onYes()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
