@@ -16,16 +16,14 @@ export class AuthService extends AbstractApiService {
   userId = computed(() => this._session()?.user.id);
   userEmail = computed(() => this._session()?.user.email);
 
-  // Google Fit OAuth configuration
-  private readonly GOOGLE_FIT_CLIENT_ID = environment.googleFit.clientId;
-  private readonly GOOGLE_FIT_REDIRECT_URI = environment.googleFit.redirectUri;
-  private readonly GOOGLE_FIT_SCOPES = environment.googleFit.scopes;
+  // Promise that resolves when the initial session check is complete
+  private sessionInitialized: Promise<void>;
 
   constructor() {
     super();
 
     // Initialize session on service creation
-    this.initSession();
+    this.sessionInitialized = this.initSession();
 
     // Set up auth state change listener
     this.authChanges((event, session) => {
@@ -33,38 +31,25 @@ export class AuthService extends AbstractApiService {
     });
   }
 
-  private async initSession(): Promise<void> {
+  /**
+   * Initialize the session from Supabase on app startup
+   * @returns Promise that resolves when session initialization is complete
+   */
+  async initSession(): Promise<void> {
     try {
-      if (!this._supabase) {
-        throw new Error('Supabase client not found');
-      }
-
-      // Get the current session
-      const { data: { session }, error } = await this._supabase.auth.getSession();
-      
-      if (error) {
-        console.error('Error getting session:', error);
-        throw error;
-      }
-
-      if (session) {
-        this._session.set(session);
-      } else {
-        // Try to refresh the session
-        const { data: refreshData, error: refreshError } = await this._supabase.auth.refreshSession();
-        if (refreshError) {
-          console.error('Error refreshing session:', refreshError);
-          throw refreshError;
-        }
-        if (refreshData.session) {
-          this._session.set(refreshData.session);
-        }
-      }
+      const { data } = await this._supabase.auth.getSession();
+      this._session.set(data.session);
     } catch (error) {
-      console.error('Error initializing session:', error);
-      // Don't throw the error, just log it
-      // This allows the app to continue even if session initialization fails
+      console.error('Error fetching initial session:', error);
+      this._session.set(null);
     }
+  }
+
+  /**
+   * Get a Promise that resolves when the initial session check is complete
+   */
+  async waitForInitialization(): Promise<void> {
+    return this.sessionInitialized;
   }
 
   async signUp(email: string, password: string, returnUrl?: string) {
@@ -209,78 +194,5 @@ export class AuthService extends AbstractApiService {
     // Navigate to the return URL if provided, or to /app if not
     const redirectTo = returnUrl || '/app';
     this.router.navigate([redirectTo]);
-  }
-
-  /**
-   * Initiates Google Fit authentication flow
-   * @returns URL to redirect to for Google Fit authentication
-   */
-  getGoogleFitAuthUrl(): string {
-    const scopeStr = this.GOOGLE_FIT_SCOPES.join(' ');
-    const params = new URLSearchParams({
-      client_id: this.GOOGLE_FIT_CLIENT_ID,
-      redirect_uri: this.GOOGLE_FIT_REDIRECT_URI,
-      response_type: 'code',
-      scope: scopeStr,
-      access_type: 'offline',
-      prompt: 'consent',
-    });
-    
-    return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
-  }
-
-  /**
-   * Handles the OAuth callback from Google Fit
-   * @param code The authorization code from Google
-   * @returns Promise resolving to the OAuth tokens
-   */
-  async handleGoogleFitCallback(code: string): Promise<any> {
-    try {
-      // Exchange the code for tokens
-      const response = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          code: code,
-          client_id: this.GOOGLE_FIT_CLIENT_ID,
-          client_secret: '', // This should be handled securely on the server side
-          redirect_uri: this.GOOGLE_FIT_REDIRECT_URI,
-          grant_type: 'authorization_code'
-        }).toString()
-      });
-
-      if (!response.ok) {
-        throw new Error(`Token exchange failed: ${await response.text()}`);
-      }
-
-      const tokenData = await response.json();
-      
-      // Store the tokens in localStorage or preferably in a more secure way
-      // This is just for demonstration - in production, handle tokens securely
-      localStorage.setItem('googlefit_tokens', JSON.stringify(tokenData));
-      
-      return tokenData;
-    } catch (error) {
-      console.error('Error handling Google Fit callback:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Check if user has connected Google Fit
-   * @returns boolean indicating if Google Fit is connected
-   */
-  isGoogleFitConnected(): boolean {
-    const tokens = localStorage.getItem('googlefit_tokens');
-    return !!tokens;
-  }
-
-  /**
-   * Disconnect Google Fit integration
-   */
-  disconnectGoogleFit(): void {
-    localStorage.removeItem('googlefit_tokens');
   }
 }
