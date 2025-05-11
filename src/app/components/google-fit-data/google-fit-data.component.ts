@@ -239,14 +239,11 @@ export class GoogleFitDataComponent implements OnInit {
   async loadGoogleFitData() {
     this.isLoading = true;
     this.hasError = false;
-    
     try {
-      // First, fetch and store all data using the new secure method
+      // Fetch and store all data using the edge function
       await this.googleFitService.fetchAndStoreAllData();
-      
       // Then load the data from Supabase
       await this.loadHealthDataFromSupabase();
-      
       this.isLoading = false;
     } catch (error) {
       this.isLoading = false;

@@ -257,14 +257,12 @@ export class NewAppointmentComponent implements OnInit {
     }
   }
   
-  connectGoogleFit() {
-    // Store current state to return here after connection
-    this.router.navigateByUrl('/app/googlefit', { 
-      state: { 
-        appointmentComponent: this,
-        returnUrl: '/app/new-appointment'
-      }
-    });
+  async connectGoogleFit() {
+    try {
+      await this.googleFitService.initiateGoogleFitAuth();
+    } catch (error) {
+      console.error('Error connecting to Google Fit:', error);
+    }
   }
   
   // This will be called from the GoogleFit component after connection
@@ -280,11 +278,5 @@ export class NewAppointmentComponent implements OnInit {
     // Process appointment confirmation
     // Then navigate to confirmation page
     this.router.navigateByUrl('/app/appointments');
-  }
-
-  demoConnectGoogleFit() {
-    // For demo: just set the flag and store in localStorage
-    localStorage.setItem('googlefit_provider_token', 'demo-token');
-    this.isGoogleFitConnected = true;
   }
 }

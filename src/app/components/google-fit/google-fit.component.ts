@@ -143,69 +143,54 @@ export class GoogleFitComponent implements OnInit {
       this.appointmentComponent = navigation.extras.state['appointmentComponent'];
       this.returnUrl = navigation.extras.state['returnUrl'] || this.returnUrl;
     }
-    
-    this.checkConnection()
+    this.checkConnection();
   }
 
   async checkConnection(): Promise<void> {
     try {
-      this.loading = true
-      this.isConnected = await this.googleFitService.hasLinkedGoogleFit()
+      this.loading = true;
+      this.isConnected = await this.googleFitService.hasLinkedGoogleFit();
     } catch (error) {
-      console.error('Error checking Google Fit connection:', error)
-      this.error = 'Failed to check Google Fit connection status.'
+      console.error('Error checking Google Fit connection:', error);
+      this.error = 'Failed to check Google Fit connection status.';
     } finally {
-      this.loading = false
+      this.loading = false;
     }
   }
 
   async connect(): Promise<void> {
     try {
-      this.error = null
-      await this.googleFitService.initiateGoogleFitAuth()
+      this.error = null;
+      await this.googleFitService.initiateGoogleFitAuth();
       // The page will redirect to Google's OAuth page
     } catch (error) {
-      console.error('Error connecting to Google Fit:', error)
-      this.error = 'Failed to connect to Google Fit. Please try again.'
+      console.error('Error connecting to Google Fit:', error);
+      this.error = 'Failed to connect to Google Fit. Please try again.';
     }
   }
 
   async syncData(): Promise<void> {
     try {
-      this.error = null
-      this.isSyncing = true
-      const success = await this.googleFitService.fetchAndStoreAllData()
-      
-      if (success) {
-        // Show success message or update UI
-      } else {
-        this.error = 'Failed to sync data. Please try again.'
+      this.error = null;
+      this.isSyncing = true;
+      const success = await this.googleFitService.fetchAndStoreAllData();
+      if (!success) {
+        this.error = 'Failed to sync data. Please try again.';
       }
     } catch (error) {
-      console.error('Error syncing data:', error)
-      this.error = 'An error occurred while syncing data.'
+      console.error('Error syncing data:', error);
+      this.error = 'An error occurred while syncing data.';
     } finally {
-      this.isSyncing = false
+      this.isSyncing = false;
     }
   }
 
   async disconnect(): Promise<void> {
-    // This would be implemented in a real app
-    alert('This feature is not implemented in this demo.')
-    // In a real implementation, you would:
-    // 1. Delete the tokens from the provider_tokens table
-    // 2. Update the UI to show disconnected state
+    // TODO: Implement disconnect using an edge function to delete provider tokens
+    alert('Disconnect is not implemented yet.');
   }
-  
+
   returnToAppointment(): void {
-    // Update the appointment component if it exists
-    if (this.appointmentComponent && this.isConnected) {
-      if (this.appointmentComponent.completeGoogleFitStep) {
-        this.appointmentComponent.completeGoogleFitStep();
-      }
-    }
-    
-    // Navigate back to the appointment flow
     this.router.navigateByUrl(this.returnUrl);
   }
 }
