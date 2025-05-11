@@ -1,0 +1,14 @@
+@if (isVisible()) {
+<div class="modal-backdrop">
+    <div class="modal-container">
+        <div class="modal-content">
+            <h2>May we ask your previous doctors for additional data?</h2>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" (click)="onNo()">No</button>
+                <button class="btn-primary" (click)="onYes()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

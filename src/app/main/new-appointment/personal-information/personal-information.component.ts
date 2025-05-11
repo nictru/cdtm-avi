@@ -9,6 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../services/supabase.service';
+import { RelevantDoctorsComponent } from '../relevant-doctors/relevant-doctors.component';
 
 // Define the interface for form data
 interface PersonalInfo {
@@ -29,7 +30,7 @@ interface PersonalInfo {
 @Component({
   selector: 'app-personal-information',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RelevantDoctorsComponent],
   templateUrl: './personal-information.component.html',
   styleUrl: './personal-information.component.css',
 })
@@ -53,6 +54,9 @@ export class PersonalInformationComponent {
   acceptTerms = signal<boolean>(false);
   allowTreatmentInfo = signal<boolean>(false);
   allowReminders = signal<boolean>(false);
+
+  // Signal to control the visibility of the doctors modal
+  showDoctorsModal = signal<boolean>(false);
 
   // Computed signal for the full personal info object
   personalInfo = computed<PersonalInfo>(() => ({
@@ -144,18 +148,28 @@ export class PersonalInformationComponent {
     this.goBack.emit();
   }
 
-  // Method to emit complete booking event
-  onCompleteBooking() {
+  // Method called when user clicks "Continue" button
+  onContinueClick() {
     if (this.isFormValid()) {
-      console.log(
-        'Form is valid, completing booking with:',
-        this.personalInfo()
-      );
-      this.completeBooking.emit(this.personalInfo());
+      // Show the doctors modal instead of completing booking immediately
+      this.showDoctorsModal.set(true);
     } else {
       // Handle validation error
       console.error('Form validation failed');
       // You could display an error message to the user here
     }
+  }
+
+  // Method called when user clicks "Yes" on doctors modal
+  onDoctorsYes() {
+    console.log('User approved requesting data from previous doctors');
+    this.showDoctorsModal.set(false);
+    this.completeBooking.emit(this.personalInfo());
+  }
+
+  // Method called when user clicks "No" on doctors modal
+  onDoctorsNo() {
+    this.showDoctorsModal.set(false);
+    this.completeBooking.emit(this.personalInfo());
   }
 }
