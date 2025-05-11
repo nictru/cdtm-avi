@@ -5,7 +5,8 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 100px); /* Adjust for header/navigation height */
+  height: calc(100vh - var(--header-height) - 40px); /* Account for top and bottom padding */
+  overflow: hidden;
 }
 
 /* Tabs styling */
@@ -38,12 +39,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .tab-pane {
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .tab-pane h2 {
@@ -307,4 +310,21 @@
   .message {
     max-width: 90%;
   }
+}
+
+/* Special styling for chat tab */
+.tab-pane:has(app-chat) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tab-pane:has(app-chat) h2 {
+  margin-bottom: 16px;
+}
+
+.tab-pane:has(app-chat) app-chat {
+  flex: 1;
+  display: flex;
 }

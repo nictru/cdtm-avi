@@ -1,0 +1,102 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  /* Use a percentage-based height instead of fixed calculation */
+  height: 100%;
+  width: 100%;
+  /* Ensure minimum height for the container */
+  min-height: 400px;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto; /* Only messages should scroll */
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* Ensure chat messages area doesn't push input field out of view */
+  max-height: calc(100% - 70px); /* Reserve space for input field */
+}
+
+.message {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.message.user {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.message.user .message-avatar {
+  margin-right: 0;
+  margin-left: 10px;
+  background-color: #007bff;
+  color: white;
+}
+
+.message-content {
+  background-color: #f1f1f1;
+  padding: 10px 15px;
+  border-radius: 18px;
+  max-width: 70%;
+}
+
+.message.user .message-content {
+  background-color: #007bff;
+  color: white;
+}
+
+.message-time {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 5px;
+}
+
+.message.user .message-time {
+  color: #ccc;
+}
+
+.chat-input {
+  display: flex;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  /* Ensure input area has a defined height */
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+.message-input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+}
+
+.send-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #0069d9;
+}

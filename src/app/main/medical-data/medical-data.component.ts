@@ -4,11 +4,12 @@ import {
   MedicalRecordsService,
   DocumentWithMedicalRecord,
 } from '../../services/medical-records/medical-records.service';
+import { ChatComponent } from './chat/chat.component';
 
 @Component({
   selector: 'app-medical-data',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ChatComponent],
   templateUrl: './medical-data.component.html',
   styleUrl: './medical-data.component.css',
 })
