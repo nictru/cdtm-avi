@@ -35,18 +35,6 @@ export const routes: Routes = [
         path: 'mobile-upload/:session_id',
         loadComponent: () => import('./components/mobile-camera/mobile-camera.component').then(m => m.MobileCameraComponent)
       },
-      {
-        path: 'googlefit',
-        loadComponent: () => import('./components/google-fit/google-fit.component').then(m => m.GoogleFitComponent)
-      },
-      {
-        path: 'googlefit/callback',
-        loadComponent: () => import('./components/google-fit-callback/google-fit-callback.component').then(m => m.GoogleFitCallbackComponent)
-      },
-      {
-        path: 'googlefit/data',
-        loadComponent: () => import('./components/google-fit-data/google-fit-data.component').then(m => m.GoogleFitDataComponent)
-      },
     ],
   },
 ];
