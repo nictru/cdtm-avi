@@ -15,8 +15,8 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 600px;
+  width: 95%;
+  max-width: 900px;
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -25,10 +25,69 @@
   padding: 20px;
 }
 
+.modal-layout {
+  display: flex;
+  gap: 30px;
+}
+
+.left-column {
+  flex: 1;
+}
+
+.right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.right-column > div {
+  height: fit-content;
+}
+
+.right-column h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
 h2 {
   font-size: 1.5rem;
   margin-bottom: 20px;
   color: #2c3e50;
+}
+
+.description {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f0f7fb;
+  border-left: 4px solid #3498db;
+  border-radius: 0 4px 4px 0;
+  height: fit-content;
+}
+
+.description p {
+  margin: 8px 0;
+  line-height: 1.5;
+  color: #34495e;
+}
+
+.info-note {
+  margin-top: auto;
+  padding: 15px;
+  background-color: #fef9e7;
+  border-left: 4px solid #f1c40f;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9rem;
+}
+
+.info-note p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.info-note strong {
+  color: #d35400;
 }
 
 h3 {
@@ -39,6 +98,8 @@ h3 {
 
 .doctors-list {
   margin-bottom: 20px;
+  max-height: 250px;
+  overflow-y: auto;
 }
 
 .doctors-list ul {
@@ -146,4 +207,19 @@ input:focus {
 
 .btn-secondary:hover {
   background-color: #7f8c8d;
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .modal-layout {
+    flex-direction: column;
+  }
+
+  .modal-container {
+    max-width: 95%;
+  }
+
+  .right-column {
+    padding-top: 0;
+  }
 }
