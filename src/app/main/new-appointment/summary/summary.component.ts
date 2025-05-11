@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AppointmentsService } from '../../../services/appointments/appointments.service';
 
 interface PersonalInfo {
   title: string;
@@ -24,6 +25,8 @@ interface PersonalInfo {
   standalone: true,
 })
 export class SummaryComponent {
+  private appointmentsService = inject(AppointmentsService);
+
   @Input() appointmentType: string | undefined;
   @Input() prettyAppointmentType: string | undefined;
   @Input() appointmentInfo:
@@ -79,8 +82,33 @@ export class SummaryComponent {
     return `${birthDay}/${birthMonth}/${birthYear}`;
   }
 
-  onBookNow(): void {
-    this.bookAppointment.emit();
+  async onBookNow(): Promise<void> {
+    if (this.appointmentInfo) {
+      try {
+        // Format date as YYYY-MM-DD for the database
+        const date = this.appointmentInfo.date.toISOString().split('T')[0];
+
+        // Format time as HH:MM:SS for the database
+        const timeStr = this.appointmentInfo.date.toTimeString().split(' ')[0];
+
+        // Save the appointment to the database
+        await this.appointmentsService.saveAppointment({
+          practice: this.appointmentInfo.practice,
+          doctor: this.appointmentInfo.doctor,
+          reason: this.prettyAppointmentType || 'Consultation',
+          date: date,
+          time: timeStr,
+        });
+
+        // Emit event to parent component for navigation
+        this.bookAppointment.emit();
+      } catch (error) {
+        console.error('Error saving appointment:', error);
+        alert('Failed to save appointment. Please try again.');
+      }
+    } else {
+      alert('Appointment details are missing.');
+    }
   }
 
   onCancel(): void {

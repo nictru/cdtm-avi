@@ -185,24 +185,20 @@ export class NewAppointmentComponent {
       info: this.appointmentInfo$(),
       personalInfo: this.personalInfo$(),
     });
-    // Here you would typically send the data to your backend
-    // and navigate to a confirmation page
-    alert('Appointment booked successfully!');
-    this.router.navigate(['/appointments']);
+
+    // Navigate to appointments page after successful booking
+    this.router.navigate(['/app']);
   }
 
   // Method to handle booking cancellation
   cancelBooking() {
-    console.log('Booking cancelled');
-    // Reset the form or navigate away
-    this.appointmentType$.set(undefined);
-    this.appointmentInfo$.set(undefined);
-    this.relevantDocuments$.set(false);
-    this.personalData$.set(false);
-    this.personalInfo$.set(undefined);
-    this.completed$.set(false);
+    console.log('Going back to personal information step');
 
-    // Navigate back to home or appointments page
-    this.router.navigate(['/']);
+    // Based on currentStep$ logic, to go back to the personal information step:
+    // 1. Keep appointmentType$, appointmentInfo$, and relevantDocuments$ as they are
+    // 2. Set completed$ to false to exit step 4
+    // 3. Set personalData$ to false to enter step 3
+    this.completed$.set(false);
+    this.personalData$.set(false);
   }
 }
