@@ -56,7 +56,7 @@ export class RelevantDocumentsComponent {
 
     // Check if for every currentURL there is an existingName that is a suffix of the currentURL
     return currentURLs.every((url) =>
-      existingNames.some((name) => url.endsWith(encodeURIComponent(name)))
+      existingNames.some((name) => url.endsWith(name))
     );
   });
 

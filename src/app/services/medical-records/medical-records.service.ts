@@ -111,7 +111,7 @@ export class MedicalRecordsService extends AbstractApiService {
     const userId = this.authService.userId();
     if (!userId) return;
 
-    return this._supabase.channel(`patient_docs:${userId}`).on(
+    return this._supabase.channel(`medical_docs:${userId}`).on(
       'postgres_changes',
       {
         event: '*',

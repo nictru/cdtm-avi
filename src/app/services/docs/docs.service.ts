@@ -56,6 +56,8 @@ export class DocsService extends AbstractApiService {
     const userId = this.authService.userId();
     if (!userId) return;
 
+    console.log('Subscribing to user docs for user:', userId);
+
     return this._supabase.channel(`patient_docs:${userId}`).on(
       'postgres_changes',
       {
@@ -64,7 +66,10 @@ export class DocsService extends AbstractApiService {
         table: 'patient_docs',
         filter: `owner=eq.${userId}`,
       },
-      () => this.userDocsResource.reload()
+      () => {
+        console.log('User docs changed');
+        this.userDocsResource.reload();
+      }
     );
   });
 
