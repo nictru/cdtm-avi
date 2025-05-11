@@ -23,9 +23,9 @@ import { Router } from '@angular/router';
   styleUrl: './new-appointment.component.css',
   standalone: true,
 })
-export class NewAppointmentComponent implements OnInit {
+export class NewAppointmentComponent {
   private router = inject(Router);
-  
+
   appointmentType$ = signal<string | undefined>(undefined);
   prettyAppointmentType$ = computed(() => {
     const appointmentType = this.appointmentType$();
@@ -57,18 +57,11 @@ export class NewAppointmentComponent implements OnInit {
 
   currentStep = 1;
 
-  constructor() {}
-
-  ngOnInit(): void {
-    // No initialization needed after removing health data/Google Fit logic
-  }
-
   currentStep$ = computed<0 | 1 | 2 | 3 | 4 | 5>(() => {
     // Step 0: Reason for visit (appointmentType not selected)
     // Step 1: Date and time selection (includes confirmation)
     // Step 2: Relevant documents
     // Step 3: Personal information
-    // Step 4: Health data (Google Fit)
     // Step 5: Summary and booking
     if (!this.appointmentType$()) {
       return 0;
@@ -213,13 +206,13 @@ export class NewAppointmentComponent implements OnInit {
       this.currentStep++;
     }
   }
-  
+
   previousStep() {
     if (this.currentStep > 1) {
       this.currentStep--;
     }
   }
-  
+
   confirmAppointment() {
     // Process appointment confirmation
     // Then navigate to confirmation page
