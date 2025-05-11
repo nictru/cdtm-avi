@@ -176,7 +176,6 @@ export class NewAppointmentComponent {
     );
     // Move to the personal information step
     this.relevantDocuments$.set(true);
-    this.personalData$.set(true);
   }
 
   // Method to complete the personal data step
@@ -208,7 +207,7 @@ export class NewAppointmentComponent {
     console.log('Going back to personal information step');
 
     // Set completed$ to false to exit summary step
-    this.completed$.set(false);
+    this.goToStep(3);
   }
 
   confirmAppointment() {
