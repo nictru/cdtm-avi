@@ -69,21 +69,26 @@ export class GoogleFitService {
       }
 
       // Get the auth callback information
-      const { data, error } = await supabase.auth.getSession();
+      let { data: { session }, error } = await supabase.auth.getSession();
       
       if (error) {
         console.error('Error retrieving session:', error);
         throw error;
       }
       
-      if (!data.session) {
+      if (!session) {
         console.error('No session found');
-        throw new Error('No session found');
+        // Try to refresh the session
+        const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+        if (refreshError || !refreshData.session) {
+          throw new Error('No session found and refresh failed');
+        }
+        session = refreshData.session;
       }
       
       // Check if we have provider token in the session
-      const providerToken = data.session.provider_token;
-      const providerRefreshToken = data.session.provider_refresh_token;
+      const providerToken = session.provider_token;
+      const providerRefreshToken = session.provider_refresh_token;
       
       if (!providerToken) {
         console.error('No provider token found');

@@ -21,14 +21,11 @@ export class AuthService extends AbstractApiService {
   private readonly GOOGLE_FIT_REDIRECT_URI = environment.googleFit.redirectUri;
   private readonly GOOGLE_FIT_SCOPES = environment.googleFit.scopes;
 
-  // Promise that resolves when the initial session check is complete
-  private sessionInitialized: Promise<void>;
-
   constructor() {
     super();
 
     // Initialize session on service creation
-    this.sessionInitialized = this.initSession();
+    this.initSession();
 
     // Set up auth state change listener
     this.authChanges((event, session) => {
@@ -36,25 +33,38 @@ export class AuthService extends AbstractApiService {
     });
   }
 
-  /**
-   * Initialize the session from Supabase on app startup
-   * @returns Promise that resolves when session initialization is complete
-   */
-  async initSession(): Promise<void> {
+  private async initSession(): Promise<void> {
     try {
-      const { data } = await this._supabase.auth.getSession();
-      this._session.set(data.session);
-    } catch (error) {
-      console.error('Error fetching initial session:', error);
-      this._session.set(null);
-    }
-  }
+      if (!this._supabase) {
+        throw new Error('Supabase client not found');
+      }
 
-  /**
-   * Get a Promise that resolves when the initial session check is complete
-   */
-  async waitForInitialization(): Promise<void> {
-    return this.sessionInitialized;
+      // Get the current session
+      const { data: { session }, error } = await this._supabase.auth.getSession();
+      
+      if (error) {
+        console.error('Error getting session:', error);
+        throw error;
+      }
+
+      if (session) {
+        this._session.set(session);
+      } else {
+        // Try to refresh the session
+        const { data: refreshData, error: refreshError } = await this._supabase.auth.refreshSession();
+        if (refreshError) {
+          console.error('Error refreshing session:', refreshError);
+          throw refreshError;
+        }
+        if (refreshData.session) {
+          this._session.set(refreshData.session);
+        }
+      }
+    } catch (error) {
+      console.error('Error initializing session:', error);
+      // Don't throw the error, just log it
+      // This allows the app to continue even if session initialization fails
+    }
   }
 
   async signUp(email: string, password: string, returnUrl?: string) {
