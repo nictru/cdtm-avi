@@ -23,6 +23,14 @@ export interface MedicalRecord {
   doctor_email: string;
 }
 
+export interface Bloodtest {
+  id: number;
+  type: string;
+  value: number;
+  unit: string;
+  patient_doc: number;
+}
+
 export interface DocumentWithMedicalRecord {
   // Document fields
   id: number;
@@ -35,6 +43,9 @@ export interface DocumentWithMedicalRecord {
 
   // Medical record fields in a nested object
   medical_record?: MedicalRecord;
+
+  // Bloodtests in a nested array
+  bloodtests?: Bloodtest[];
 }
 
 @Injectable({
@@ -55,9 +66,9 @@ export class MedicalRecordsService extends AbstractApiService {
         params.request
       );
 
-      // Using our custom SQL function to get documents with medical records
+      // Using our custom SQL function to get documents with medical records and bloodtests
       const { data, error } = await this._supabase.rpc(
-        'get_documents_with_medical_records',
+        'get_documents_with_medical_records_and_bloodtests',
         { user_id: params.request }
       );
 
@@ -88,6 +99,7 @@ export class MedicalRecordsService extends AbstractApiService {
           text: item.text,
           processed: item.processed,
           medical_record: medicalRecord,
+          bloodtests: item.bloodtests || [],
         };
       });
     },
@@ -129,10 +141,27 @@ export class MedicalRecordsService extends AbstractApiService {
     );
   });
 
+  // Subscription for bloodtests table
+  bloodtestsSubscription = computed(() => {
+    const userId = this.authService.userId();
+    if (!userId) return;
+
+    return this._supabase.channel(`bloodtests:${userId}`).on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'bloodtests',
+      },
+      () => this.userDocsWithMedicalRecordsResource.reload()
+    );
+  });
+
   // Effect to manage subscriptions
   private subscriptionEffect = effect(() => {
     const docsSub = this.docsSubscription();
     const medicalRecordsSub = this.medicalRecordsSubscription();
+    const bloodtestsSub = this.bloodtestsSubscription();
 
     if (docsSub) {
       docsSub.subscribe();
@@ -140,6 +169,10 @@ export class MedicalRecordsService extends AbstractApiService {
 
     if (medicalRecordsSub) {
       medicalRecordsSub.subscribe();
+    }
+
+    if (bloodtestsSub) {
+      bloodtestsSub.subscribe();
     }
   });
 }
