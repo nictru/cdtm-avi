@@ -24,7 +24,7 @@ export class MedicalDataComponent {
   private medicalRecordsService = inject(MedicalRecordsService);
   private allergiesService = inject(AllergiesService);
 
-  activeTab = 'general'; // Either 'general', 'documents', or 'chat'
+  activeTab = signal('general'); // Either 'general', 'documents', or 'chat'
 
   // Access the documents with medical records resource
   userDocs = this.medicalRecordsService.userDocsWithMedicalRecordsResource;
@@ -41,7 +41,7 @@ export class MedicalDataComponent {
   };
 
   setActiveTab(tab: string) {
-    this.activeTab = tab;
+    this.activeTab.set(tab);
   }
 
   showAddAllergyDialog() {
