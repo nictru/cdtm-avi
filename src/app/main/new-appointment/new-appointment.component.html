@@ -58,7 +58,7 @@
     <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalData($event)">
     </app-personal-information>
     }
-    @if (currentStep$() === 5) {
+    @if (currentStep$() === 4) {
     <app-summary [appointmentType]="appointmentType$()" [prettyAppointmentType]="prettyAppointmentType$()"
       [appointmentInfo]="appointmentInfo$()" [personalInfo]="personalInfo$()"
       (bookAppointment)="bookAppointment()" (cancelBooking)="cancelBooking()">
