@@ -1,261 +1,153 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
+// google-fit-connect.component.ts
+import { Component, OnInit, inject } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { ActivatedRoute, Router } from '@angular/router'
+import { AuthService } from '../../services/auth/auth.service'
+import { environment } from '../../../environments/environment'
+import { GoogleFitService } from '../../services/google-fit.service'
 
 @Component({
   selector: 'app-google-fit',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="google-fit-container">
-      <div *ngIf="!isCallback" class="connect-container">
-        <div class="header">
-          <h2>Connect Google Fit</h2>
-          <p>Connect your Google Fit account to share your health data with your doctor.</p>
-        </div>
-        
-        <div class="info-section">
-          <h3>Why connect Google Fit?</h3>
-          <ul>
-            <li>Share your activity data with your doctor</li>
-            <li>Monitor your heart rate over time</li>
-            <li>Track your sleep patterns</li>
-          </ul>
-          
-          <h3>Data we access:</h3>
-          <ul>
-            <li>Physical activity data</li>
-            <li>Heart rate measurements</li>
-            <li>Sleep data</li>
-          </ul>
-          
-          <p class="privacy-note">
-            Your data is secure and will only be shared with your healthcare provider.
-            You can disconnect Google Fit at any time.
-          </p>
-        </div>
-        
-        <div class="actions">
-          <button 
-            *ngIf="!isConnected" 
-            (click)="connectGoogleFit()" 
-            class="connect-button">
-            Connect Google Fit
-          </button>
-          
-          <div *ngIf="isConnected" class="connected-status">
-            <span class="connected-badge">Connected</span>
-            <button (click)="disconnectGoogleFit()" class="disconnect-button">
-              Disconnect
-            </button>
-          </div>
-          
-          <button (click)="skipConnection()" class="skip-button">
-            Skip this step
-          </button>
-        </div>
+    <div class="p-6 bg-white rounded-lg shadow-md">
+      <h2 class="text-xl font-bold mb-4">Google Fit Integration</h2>
+      
+      <div *ngIf="loading" class="flex justify-center my-4">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
       </div>
       
-      <div *ngIf="isCallback" class="callback-container">
-        <div *ngIf="isLoading" class="loading">
-          <p>Processing your Google Fit connection...</p>
-          <!-- Add loading spinner here if desired -->
+      <div *ngIf="!loading">
+        <div *ngIf="isConnected" class="mb-4">
+          <div class="flex items-center mb-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 mr-2 bg-green-500 rounded-full">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </span>
+            <span class="text-green-700 font-medium">Connected to Google Fit</span>
+          </div>
+          
+          <p class="text-gray-600 mb-4">Your Google Fit data is being synced securely.</p>
+          
+          <div class="flex flex-col space-y-2">
+            <button 
+              (click)="syncData()" 
+              [disabled]="isSyncing"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-300 flex items-center justify-center">
+              <span *ngIf="isSyncing" class="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></span>
+              {{ isSyncing ? 'Syncing...' : 'Sync Data Now' }}
+            </button>
+            
+            <button 
+              (click)="disconnect()" 
+              class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+              Disconnect Google Fit
+            </button>
+          </div>
         </div>
         
-        <div *ngIf="!isLoading && hasError" class="error">
-          <h3>Connection Error</h3>
-          <p>{{ errorMessage }}</p>
-          <button (click)="retryConnection()" class="retry-button">
-            Try Again
+        <div *ngIf="!isConnected" class="mb-4">
+          <div class="flex items-center mb-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 mr-2 bg-yellow-500 rounded-full">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+            </span>
+            <span class="text-gray-700 font-medium">Not connected to Google Fit</span>
+          </div>
+          
+          <p class="text-gray-600 mb-4">
+            Connect your Google Fit account to automatically import your health data.
+            Your anonymous identity will be preserved.
+          </p>
+          
+          <button 
+            (click)="connect()" 
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Connect Google Fit
           </button>
         </div>
         
-        <div *ngIf="!isLoading && !hasError" class="success">
-          <h3>Successfully Connected!</h3>
-          <p>Your Google Fit account has been connected.</p>
-          <button (click)="continueToNextStep()" class="continue-button">
-            Continue
-          </button>
+        <div *ngIf="error" class="mt-4 p-3 bg-red-100 text-red-700 rounded">
+          {{ error }}
         </div>
       </div>
     </div>
   `,
-  styles: [`
-    .google-fit-container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-    
-    .header {
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    
-    .header h2 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .info-section {
-      background-color: #f5f5f5;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    .info-section h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
-    
-    .info-section ul {
-      margin-bottom: 1.5rem;
-      padding-left: 1.5rem;
-    }
-    
-    .info-section li {
-      margin-bottom: 0.5rem;
-    }
-    
-    .privacy-note {
-      font-size: 0.9rem;
-      color: #666;
-      border-top: 1px solid #ddd;
-      padding-top: 1rem;
-      margin-top: 1rem;
-    }
-    
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      align-items: center;
-    }
-    
-    button {
-      padding: 0.75rem 1.5rem;
-      border-radius: 4px;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      min-width: 200px;
-    }
-    
-    .connect-button {
-      background-color: #4285F4;
-      color: white;
-    }
-    
-    .skip-button {
-      background-color: transparent;
-      color: #666;
-      text-decoration: underline;
-    }
-    
-    .connected-status {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    
-    .connected-badge {
-      background-color: #34A853;
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.9rem;
-    }
-    
-    .disconnect-button {
-      background-color: #EA4335;
-      color: white;
-    }
-    
-    .callback-container {
-      text-align: center;
-      padding: 2rem;
-    }
-    
-    .loading, .error, .success {
-      padding: 2rem;
-    }
-    
-    .retry-button {
-      background-color: #4285F4;
-      color: white;
-      margin-top: 1rem;
-    }
-    
-    .continue-button {
-      background-color: #34A853;
-      color: white;
-      margin-top: 1rem;
-    }
-  `]
 })
 export class GoogleFitComponent implements OnInit {
-  private authService = inject(AuthService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private authService = inject(AuthService)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private googleFitService = inject(GoogleFitService)
 
-  isCallback = false;
-  isLoading = false;
-  hasError = false;
-  errorMessage = '';
-  isConnected = false;
+  loading = true
+  isConnected = false
+  isSyncing = false
+  error: string | null = null
 
-  ngOnInit() {
-    // Check if this is a callback from Google OAuth
-    this.route.queryParams.subscribe(params => {
-      if (params['code']) {
-        this.isCallback = true;
-        this.handleCallback(params['code']);
-      } else {
-        // Check if Google Fit is already connected
-        this.isConnected = this.authService.isGoogleFitConnected();
-      }
-    });
+  // Google OAuth configuration
+  private readonly GOOGLE_FIT_CLIENT_ID = environment.googleFit.clientId
+  private readonly GOOGLE_FIT_REDIRECT_URI = environment.googleFit.redirectUri
+  private readonly GOOGLE_FIT_SCOPES = [
+    'https://www.googleapis.com/auth/fitness.activity.read',
+    'https://www.googleapis.com/auth/fitness.heart_rate.read',
+    'https://www.googleapis.com/auth/fitness.sleep.read'
+  ]
+
+  ngOnInit(): void {
+    this.checkConnection()
   }
 
-  connectGoogleFit() {
-    const authUrl = this.authService.getGoogleFitAuthUrl();
-    window.location.href = authUrl;
-  }
-
-  async handleCallback(code: string) {
-    this.isLoading = true;
-    this.hasError = false;
-    
+  async checkConnection(): Promise<void> {
     try {
-      await this.authService.handleGoogleFitCallback(code);
-      this.isConnected = true;
-      this.isLoading = false;
+      this.loading = true
+      this.isConnected = await this.googleFitService.hasLinkedGoogleFit()
     } catch (error) {
-      this.hasError = true;
-      this.isLoading = false;
-      this.errorMessage = 'Failed to connect to Google Fit. Please try again.';
-      console.error('Google Fit connection error:', error);
+      console.error('Error checking Google Fit connection:', error)
+      this.error = 'Failed to check Google Fit connection status.'
+    } finally {
+      this.loading = false
     }
   }
 
-  disconnectGoogleFit() {
-    this.authService.disconnectGoogleFit();
-    this.isConnected = false;
+  async connect(): Promise<void> {
+    try {
+      this.error = null
+      await this.googleFitService.initiateGoogleFitAuth()
+      // The page will redirect to Google's OAuth page
+    } catch (error) {
+      console.error('Error connecting to Google Fit:', error)
+      this.error = 'Failed to connect to Google Fit. Please try again.'
+    }
   }
 
-  retryConnection() {
-    this.connectGoogleFit();
+  async syncData(): Promise<void> {
+    try {
+      this.error = null
+      this.isSyncing = true
+      const success = await this.googleFitService.fetchAndStoreAllData()
+      
+      if (success) {
+        // Show success message or update UI
+      } else {
+        this.error = 'Failed to sync data. Please try again.'
+      }
+    } catch (error) {
+      console.error('Error syncing data:', error)
+      this.error = 'An error occurred while syncing data.'
+    } finally {
+      this.isSyncing = false
+    }
   }
 
-  skipConnection() {
-    this.continueToNextStep();
+  async disconnect(): Promise<void> {
+    // This would be implemented in a real app
+    alert('This feature is not implemented in this demo.')
+    // In a real implementation, you would:
+    // 1. Delete the tokens from the provider_tokens table
+    // 2. Update the UI to show disconnected state
   }
-
-  continueToNextStep() {
-    // Navigate to the next step in the appointment booking process
-    this.router.navigate(['/app/new-appointment']);
-  }
-} 
+}

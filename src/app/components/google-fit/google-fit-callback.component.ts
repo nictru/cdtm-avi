@@ -117,7 +117,7 @@ export class GoogleFitCallbackComponent implements OnInit {
   }
 
   continueToNextStep() {
-    // Navigate to the next step in the appointment booking process
+    // Navigate back to the appointment flow
     this.router.navigate(['/app/new-appointment']);
   }
-} 
+}

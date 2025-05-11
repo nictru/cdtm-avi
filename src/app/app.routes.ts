@@ -41,7 +41,11 @@ export const routes: Routes = [
       },
       {
         path: 'googlefit/callback',
-        loadComponent: () => import('./components/google-fit/google-fit-callback.component').then(m => m.GoogleFitCallbackComponent)
+        loadComponent: () => import('./components/google-fit-callback/google-fit-callback.component').then(m => m.GoogleFitCallbackComponent)
+      },
+      {
+        path: 'googlefit/data',
+        loadComponent: () => import('./components/google-fit-data/google-fit-data.component').then(m => m.GoogleFitDataComponent)
       },
     ],
   },
