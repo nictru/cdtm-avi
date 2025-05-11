@@ -55,16 +55,17 @@
     </app-relevant-documents>
     }
     @if (currentStep$() === 3) {
-    <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalData($event)">
-    </app-personal-information>
-    }
-    @if (currentStep$() === 4) {
-    <div class="health-data-container">
+    <div class="health-data-container max-w-lg mx-auto">
       <h2 class="text-2xl font-semibold mb-4">Health Data</h2>
       <p class="text-gray-600 mb-6">Connect your health devices to share data with your doctor (optional).</p>
-      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6 max-w-md">
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
         <div class="flex items-center mb-4">
-          <img src="assets/icons/google-fit.svg" alt="Google Fit" class="w-10 h-10 mr-4" />
+          <img 
+            src="assets/icons/google-fit.svg" 
+            alt="Google Fit" 
+            class="w-10 h-10 mr-4"
+            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Fit_icon.svg';"
+          />
           <div>
             <h3 class="text-lg font-medium">Google Fit</h3>
             <p class="text-gray-600">Share your activity, heart rate, and sleep data</p>
@@ -86,10 +87,15 @@
         <ng-template #connectBtn>
           <button
             type="button"
-            (click)="connectGoogleFit()"
+            (click)="demoConnectGoogleFit()"
             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
           >
-            <img src="assets/icons/google-fit.svg" alt="Google Fit" class="w-6 h-6 mr-2" />
+            <img 
+              src="assets/icons/google-fit.svg" 
+              alt="Google Fit" 
+              class="w-6 h-6 mr-2"
+              onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Fit_icon.svg';"
+            />
             Connect Google Fit
           </button>
         </ng-template>
@@ -108,7 +114,7 @@
           </div>
         </div>
       </div>
-      <div class="flex justify-between mt-8 max-w-md">
+      <div class="flex justify-between mt-8">
         <button
           type="button"
           (click)="goToStep(3)"
@@ -125,6 +131,10 @@
         </button>
       </div>
     </div>
+    }
+    @if (currentStep$() === 4) {
+    <app-personal-information (goBack)="goToStep(3)" (completeBooking)="completePersonalData($event)">
+    </app-personal-information>
     }
     @if (currentStep$() === 5) {
     <app-summary [appointmentType]="appointmentType$()" [prettyAppointmentType]="prettyAppointmentType$()"

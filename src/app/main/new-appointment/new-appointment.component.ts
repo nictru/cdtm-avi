@@ -281,4 +281,10 @@ export class NewAppointmentComponent implements OnInit {
     // Then navigate to confirmation page
     this.router.navigateByUrl('/app/appointments');
   }
+
+  demoConnectGoogleFit() {
+    // For demo: just set the flag and store in localStorage
+    localStorage.setItem('googlefit_provider_token', 'demo-token');
+    this.isGoogleFitConnected = true;
+  }
 }
