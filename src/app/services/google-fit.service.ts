@@ -71,8 +71,14 @@ export class GoogleFitService {
       // Get the auth callback information
       const { data, error } = await supabase.auth.getSession();
       
-      if (error || !data.session) {
-        throw error || new Error('No session found');
+      if (error) {
+        console.error('Error retrieving session:', error);
+        throw error;
+      }
+      
+      if (!data.session) {
+        console.error('No session found');
+        throw new Error('No session found');
       }
       
       // Check if we have provider token in the session
@@ -80,6 +86,7 @@ export class GoogleFitService {
       const providerRefreshToken = data.session.provider_refresh_token;
       
       if (!providerToken) {
+        console.error('No provider token found');
         throw new Error('No provider token found');
       }
 
@@ -265,5 +272,29 @@ export class GoogleFitService {
     };
     
     return activityMap[activityType] || `Activity (${activityType})`;
+  }
+
+  async refreshSession(): Promise<void> {
+    try {
+      const supabase = this.supabaseService.supabase;
+      if (!supabase) {
+        throw new Error('Supabase client not found');
+      }
+
+      const { data, error } = await supabase.auth.refreshSession();
+      
+      if (error) {
+        console.error('Error refreshing session:', error);
+        throw error;
+      }
+      
+      if (!data.session) {
+        console.error('No session found after refresh');
+        throw new Error('No session found after refresh');
+      }
+    } catch (error) {
+      console.error('Error refreshing session:', error);
+      throw error;
+    }
   }
 } 
