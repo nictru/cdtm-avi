@@ -1,7 +1,33 @@
 <div class="documents-container" [class.split-view]="activeDocUrl.value()" style="height: 100%;">
   <div class="documents-list" style="height: 100%;">
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="Search documents..." [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)">
+      </div>
+      <div class="search-mode-toggle">
+        <button [class.active]="searchMode() === 'fast'" (click)="setSearchMode('fast')">Fast</button>
+        <button [class.active]="searchMode() === 'deep'" (click)="setSearchMode('deep')">Deep</button>
+      </div>
+    </div>
+
+    @if (searchMode() === 'deep' && isSearching()) {
+    <div class="search-loading">
+      <i class="fas fa-spinner fa-spin"></i>
+      <span>Performing deep search...</span>
+    </div>
+    }
+
+    @if (searchError()) {
+    <div class="search-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ searchError() }}</span>
+    </div>
+    }
+
     <div class="documents-scroll">
-      @for (doc of userDocs.value(); track doc.id) {
+      @for (doc of filteredDocs(); track doc.id) {
       <div class="document-item" [class.active]="activeDocId() === doc.id" (click)="setActiveDoc(doc.id)">
         <div class="document-icon">
           <i class="fas fa-file-alt"></i>
@@ -28,7 +54,13 @@
         </div>
       </div>
       } @empty {
+      @if (searchQuery() && searchMode() === 'deep' && !isSearching() && filteredDocs().length === 0) {
+      <p class="no-documents">No documents found matching your search.</p>
+      } @else if (searchQuery() && searchMode() === 'fast' && filteredDocs().length === 0) {
+      <p class="no-documents">No documents found matching your search.</p>
+      } @else {
       <p class="no-documents">No documents available.</p>
+      }
       }
     </div>
   </div>
