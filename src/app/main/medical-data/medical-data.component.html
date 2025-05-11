@@ -23,41 +23,7 @@
 
         <!-- Documents Tab -->
         <div class="tab-pane" *ngIf="activeTab === 'documents'">
-            <h2>Documents</h2>
-            <div class="documents-list">
-                @if (userDocs.value().length === 0) {
-                <p class="no-documents">No documents available.</p>
-                } @else {
-                @for (doc of userDocs.value(); track doc.id) {
-                <div class="document-item">
-                    <div class="document-icon">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <div class="document-details">
-                        <div class="document-header">
-                            <h3>{{ extractDocumentName(doc.doc_name) }}</h3>
-                            <span class="document-type">{{ doc.doc_type }}</span>
-                        </div>
-
-                        @if (doc.medical_record) {
-                        <div class="medical-record-details">
-                            <h4>{{ doc.medical_record.title }}</h4>
-                            <p class="hospital">{{ doc.medical_record.hospital_or_agency }}</p>
-                            <div class="meta-info">
-                                <span class="date">Date: {{ doc.medical_record.date_of_issue | date:'mediumDate'
-                                    }}</span>
-                                <span class="doctor">Doctor: {{ doc.medical_record.doctor_name }}</span>
-                            </div>
-                            <p class="summary">{{ doc.medical_record.summary }}</p>
-                        </div>
-                        }
-
-                        <p class="document-date">Uploaded: {{ doc.created_at | date:'medium' }}</p>
-                    </div>
-                </div>
-                }
-                }
-            </div>
+            <app-documents></app-documents>
         </div>
 
         <!-- Chat Tab -->

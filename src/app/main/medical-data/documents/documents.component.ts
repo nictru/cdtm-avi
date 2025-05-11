@@ -1,30 +1,22 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import {
   MedicalRecordsService,
   DocumentWithMedicalRecord,
-} from '../../services/medical-records/medical-records.service';
-import { ChatComponent } from './chat/chat.component';
-import { DocumentsComponent } from './documents/documents.component';
+} from '../../../services/medical-records/medical-records.service';
 
 @Component({
-  selector: 'app-medical-data',
+  selector: 'app-documents',
   standalone: true,
-  imports: [CommonModule, ChatComponent, DocumentsComponent],
-  templateUrl: './medical-data.component.html',
-  styleUrl: './medical-data.component.css',
+  imports: [CommonModule, DatePipe],
+  templateUrl: './documents.component.html',
+  styleUrl: './documents.component.css',
 })
-export class MedicalDataComponent {
+export class DocumentsComponent {
   private medicalRecordsService = inject(MedicalRecordsService);
-
-  activeTab = 'general'; // Either 'general', 'documents', or 'chat'
 
   // Access the documents with medical records resource
   userDocs = this.medicalRecordsService.userDocsWithMedicalRecordsResource;
-
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
-  }
 
   /**
    * Extracts the document name after the second underscore
