@@ -7,6 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   MedicalRecordsService,
   DocumentWithMedicalRecord,
@@ -17,7 +18,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 @Component({
   selector: 'app-documents',
   standalone: true,
-  imports: [CommonModule, DatePipe, PdfViewerModule],
+  imports: [CommonModule, DatePipe, PdfViewerModule, FormsModule],
   templateUrl: './documents.component.html',
   styleUrl: './documents.component.css',
 })
@@ -27,6 +28,117 @@ export class DocumentsComponent {
 
   // Access the documents with medical records resource
   userDocs = this.medicalRecordsService.userDocsWithMedicalRecordsResource;
+
+  // Search functionality
+  searchQuery = signal<string>('');
+  searchMode = signal<'fast' | 'deep'>('fast');
+
+  // Filtered documents based on search query and mode
+  filteredDocs = computed(() => {
+    const docs = this.userDocs.value();
+    const query = this.searchQuery().toLowerCase().trim();
+
+    if (!query) return docs;
+
+    if (this.searchMode() === 'fast') {
+      // Fast search: rank by number of occurrences across all fields
+      const rankedDocs = docs
+        .map((doc) => {
+          const occurrences = this.countOccurrences(doc, query);
+          return { doc, occurrences };
+        })
+        .filter((item) => item.occurrences > 0)
+        .sort((a, b) => b.occurrences - a.occurrences);
+
+      return rankedDocs.map((item) => item.doc);
+    } else {
+      // Deep search: search in all document fields including medical record data
+      return docs.filter((doc) => {
+        // Search in document name and type
+        if (
+          this.extractDocumentName(doc.doc_name)
+            .toLowerCase()
+            .includes(query) ||
+          doc.doc_type?.toLowerCase().includes(query)
+        ) {
+          return true;
+        }
+
+        // Search in medical record fields if available
+        if (doc.medical_record) {
+          return (
+            doc.medical_record.title?.toLowerCase().includes(query) ||
+            doc.medical_record.summary?.toLowerCase().includes(query) ||
+            doc.medical_record.hospital_or_agency
+              ?.toLowerCase()
+              .includes(query) ||
+            doc.medical_record.doctor_name?.toLowerCase().includes(query)
+          );
+        }
+
+        return false;
+      });
+    }
+  });
+
+  /**
+   * Counts the number of occurrences of the query in all text fields of the document
+   */
+  private countOccurrences(
+    doc: DocumentWithMedicalRecord,
+    query: string
+  ): number {
+    let count = 0;
+
+    // Check document name and type
+    count += this.countStringOccurrences(
+      this.extractDocumentName(doc.doc_name).toLowerCase(),
+      query
+    );
+    count += this.countStringOccurrences(
+      doc.doc_type?.toLowerCase() || '',
+      query
+    );
+
+    // Check medical record fields if available
+    if (doc.medical_record) {
+      count += this.countStringOccurrences(
+        doc.medical_record.title?.toLowerCase() || '',
+        query
+      );
+      count += this.countStringOccurrences(
+        doc.medical_record.summary?.toLowerCase() || '',
+        query
+      );
+      count += this.countStringOccurrences(
+        doc.medical_record.hospital_or_agency?.toLowerCase() || '',
+        query
+      );
+      count += this.countStringOccurrences(
+        doc.medical_record.doctor_name?.toLowerCase() || '',
+        query
+      );
+    }
+
+    return count;
+  }
+
+  /**
+   * Counts the number of non-overlapping occurrences of a substring in a string
+   */
+  private countStringOccurrences(str: string, subStr: string): number {
+    if (!str || !subStr) return 0;
+
+    let count = 0;
+    let position = 0;
+
+    while ((position = str.indexOf(subStr, position)) !== -1) {
+      count++;
+      position += subStr.length;
+    }
+
+    return count;
+  }
 
   activeDocId = signal<number | undefined>(undefined);
   activeDocPath = computed(
@@ -62,6 +174,10 @@ export class DocumentsComponent {
 
   closeDocument(): void {
     this.activeDocId.set(undefined);
+  }
+
+  setSearchMode(mode: 'fast' | 'deep'): void {
+    this.searchMode.set(mode);
   }
 
   /**
