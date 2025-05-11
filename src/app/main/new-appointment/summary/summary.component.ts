@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppointmentsService } from '../../../services/appointments/appointments.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 interface PersonalInfo {
   title: string;
@@ -26,6 +27,7 @@ interface PersonalInfo {
 })
 export class SummaryComponent {
   private appointmentsService = inject(AppointmentsService);
+  private authService = inject(AuthService);
 
   @Input() appointmentType: string | undefined;
   @Input() prettyAppointmentType: string | undefined;
@@ -90,6 +92,10 @@ export class SummaryComponent {
 
         // Format time as HH:MM:SS for the database
         const timeStr = this.appointmentInfo.date.toTimeString().split(' ')[0];
+
+        if (!this.authService.isLoggedIn()) {
+          await this.authService.signInAnonymously();
+        }
 
         // Save the appointment to the database
         await this.appointmentsService.saveAppointment({
