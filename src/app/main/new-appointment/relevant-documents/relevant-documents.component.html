@@ -27,9 +27,13 @@
     <div class="action-buttons">
         <button class="back-btn" (click)="onGoBack()">Back</button>
         <button class="continue-btn" [disabled]="!allProcessed() && uploadedFileUrls().length > 0"
-            (click)="onContinue()">Continue</button>
+            (click)="onContinueClick()">Continue</button>
     </div>
 </div>
+
+<!-- Relevant Doctors Modal -->
+<app-relevant-doctors [isVisible]="showDoctorsModal()" (yes)="onDoctorsYes()" (no)="onDoctorsNo()">
+</app-relevant-doctors>
 
 <style>
     .document-chip-grid {

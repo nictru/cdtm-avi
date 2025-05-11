@@ -76,10 +76,6 @@
 
   <div class="action-buttons">
     <button class="back-btn" (click)="onGoBack()">Back</button>
-    <button class="continue-btn" (click)="onContinueClick()" [disabled]="!isFormValid()">Continue</button>
+    <button class="continue-btn" (click)="onCompleteBooking()" [disabled]="!isFormValid()">Continue</button>
   </div>
 </div>
-
-<!-- Relevant Doctors Modal -->
-<app-relevant-doctors [isVisible]="showDoctorsModal()" (yes)="onDoctorsYes()" (no)="onDoctorsNo()">
-</app-relevant-doctors>
