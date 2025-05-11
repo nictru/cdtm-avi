@@ -59,6 +59,22 @@
   font-weight: 600;
 }
 
+.logout-button {
+  background-color: transparent;
+  color: #7950F2;
+  border: 1px solid #7950F2;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #7950F2;
+  color: white;
+}
+
 .menu-icon {
   display: none;
 }

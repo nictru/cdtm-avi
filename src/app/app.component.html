@@ -19,6 +19,8 @@
     </div>
     <a routerLink="/app/new-appointment" class="book-appointment">Book appointment</a>
   </nav>
+  } @else {
+  <button class="logout-button" (click)="logout()">Log out</button>
   }
 </div>
 <router-outlet></router-outlet>
