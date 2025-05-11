@@ -1,9 +1,17 @@
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  resource,
+  signal,
+} from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
   MedicalRecordsService,
   DocumentWithMedicalRecord,
 } from '../../../services/medical-records/medical-records.service';
+import { StorageService } from '../../../services/storage/storage.service';
 
 @Component({
   selector: 'app-documents',
@@ -14,9 +22,42 @@ import {
 })
 export class DocumentsComponent {
   private medicalRecordsService = inject(MedicalRecordsService);
+  private storageService = inject(StorageService);
 
   // Access the documents with medical records resource
   userDocs = this.medicalRecordsService.userDocsWithMedicalRecordsResource;
+
+  activeDocId = signal<number | undefined>(undefined);
+  activeDocPath = computed(
+    () =>
+      this.userDocs.value().find((doc) => doc.id === this.activeDocId())
+        ?.doc_name
+  );
+
+  constructor() {
+    effect(() => {
+      console.log(this.activeDocUrl.value());
+    });
+  }
+
+  activeDocUrl = resource({
+    request: this.activeDocPath,
+    loader: async (params) => {
+      if (!params.request) {
+        return undefined;
+      }
+      return this.storageService.getSignedUrl(
+        'patient-docs',
+        params.request,
+        60 * 60 * 24 * 30
+      );
+    },
+  });
+
+  setActiveDoc(docId: number): void {
+    // Toggle active state (if clicking the same document again, deselect it)
+    this.activeDocId.set(this.activeDocId() === docId ? undefined : docId);
+  }
 
   /**
    * Extracts the document name after the second underscore

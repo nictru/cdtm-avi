@@ -1,9 +1,6 @@
 <div class="documents-list">
-  @if (userDocs.value().length === 0) {
-  <p class="no-documents">No documents available.</p>
-  } @else {
   @for (doc of userDocs.value(); track doc.id) {
-  <div class="document-item">
+  <div class="document-item" [class.active]="activeDocId() === doc.id" (click)="setActiveDoc(doc.id)">
     <div class="document-icon">
       <i class="fas fa-file-alt"></i>
     </div>
@@ -28,6 +25,7 @@
       <p class="document-date">Uploaded: {{ doc.created_at | date:'medium' }}</p>
     </div>
   </div>
-  }
+  } @empty {
+  <p class="no-documents">No documents available.</p>
   }
 </div>
