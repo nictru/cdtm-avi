@@ -55,90 +55,12 @@
     </app-relevant-documents>
     }
     @if (currentStep$() === 3) {
-    <div class="health-data-container max-w-lg mx-auto">
-      <h2 class="text-2xl font-semibold mb-4">Health Data</h2>
-      <p class="text-gray-600 mb-6">Connect your health devices to share data with your doctor (optional).</p>
-      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-        <div class="flex items-center mb-4">
-          <img 
-            src="assets/icons/google-fit.svg" 
-            alt="Google Fit" 
-            class="w-10 h-10 mr-4"
-            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Fit_icon.svg';"
-          />
-          <div>
-            <h3 class="text-lg font-medium">Google Fit</h3>
-            <p class="text-gray-600">Share your activity, heart rate, and sleep data</p>
-          </div>
-        </div>
-        <ng-container *ngIf="isGoogleFitConnected; else connectBtn">
-          <div class="flex items-center mb-4 bg-green-50 p-4 rounded-lg">
-            <span class="inline-flex items-center justify-center w-8 h-8 mr-3 bg-green-500 rounded-full">
-              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </span>
-            <div>
-              <p class="text-green-700">Connected to Google Fit</p>
-              <p class="text-sm text-green-600">Your health data will be shared with your doctor</p>
-            </div>
-          </div>
-        </ng-container>
-        <ng-template #connectBtn>
-          <button
-            type="button"
-            (click)="connectGoogleFit()"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
-          >
-            <img 
-              src="assets/icons/google-fit.svg" 
-              alt="Google Fit" 
-              class="w-6 h-6 mr-2"
-              onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Fit_icon.svg';"
-            />
-            Connect Google Fit
-          </button>
-        </ng-template>
-        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-4">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="ml-3">
-              <p class="text-sm text-blue-700">
-                Connecting your health data is optional. You can skip this step if you prefer not to share this information.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-between mt-8">
-        <button
-          type="button"
-          (click)="goToStep(3)"
-          class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          (click)="skipHealthDataStep()"
-          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          {{ isGoogleFitConnected ? 'Continue' : 'Skip' }}
-        </button>
-      </div>
-    </div>
-    }
-    @if (currentStep$() === 4) {
-    <app-personal-information (goBack)="goToStep(3)" (completeBooking)="completePersonalData($event)">
+    <app-personal-information (goBack)="goToStep(2)" (completeBooking)="completePersonalData($event)">
     </app-personal-information>
     }
     @if (currentStep$() === 5) {
     <app-summary [appointmentType]="appointmentType$()" [prettyAppointmentType]="prettyAppointmentType$()"
-      [appointmentInfo]="appointmentInfo$()" [personalInfo]="personalInfo$()" [isGoogleFitConnected]="isGoogleFitConnected"
+      [appointmentInfo]="appointmentInfo$()" [personalInfo]="personalInfo$()"
       (bookAppointment)="bookAppointment()" (cancelBooking)="cancelBooking()">
     </app-summary>
     }
